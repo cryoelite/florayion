@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "866204326214",
+    "firebase_url": "https://florayion.firebaseio.com",
+    "project_id": "florayion",
+    "storage_bucket": "florayion.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:866204326214:android:eb0b5e29a02c0e4f69ad47",
+        "android_client_info": {
+          "package_name": "go.cryoelite.florayion"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "866204326214-r5vlo4cpjfaik4tpi0r68isp8kf1idn1.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCY6Y4HdZFLFmOMcr0u7KNfi7Kv9LbzlXk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "866204326214-r5vlo4cpjfaik4tpi0r68isp8kf1idn1.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
