@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'Routes/StartupLogo.dart';
 import 'Routes/LoginRoute.dart';
+import 'Routes/MainRoute.dart';
 
 
 void main() => runApp(MainRouteFunc());
@@ -14,7 +15,7 @@ class MainRouteFunc extends StatelessWidget {
       routes: {
         '/': (context)=> StartupLogo(),
         '/first': (context)=> LoginRoute(),
-        /* '/second': (context)=> LoginRouteB(), */
+        '/second': (context)=> MainRoute(),
       },
     );
   }

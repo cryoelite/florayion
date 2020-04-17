@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:gradient_widgets/gradient_widgets.dart';
 
+import './LoadingRoute.dart';
+import '../logindata/LoginData.dart';
+
 class LoginRoute extends StatefulWidget {
   @override
   _LoginRouteState createState() => _LoginRouteState();
@@ -9,6 +12,7 @@ class LoginRoute extends StatefulWidget {
 class _LoginRouteState extends State<LoginRoute> {
   var i = 0;
   var j = 0;
+  bool loader = false;
   final enteredName = TextEditingController();
   final enteredPas = TextEditingController();
   void setter() {
@@ -19,21 +23,41 @@ class _LoginRouteState extends State<LoginRoute> {
     );
   }
 
-  void authentize() {
+  void authentize() async {
     final name = enteredName.text;
     final pass = enteredPas.text;
+    final loginData = LoginData(name, pass);
     if (name.isEmpty || pass.isEmpty) {
       return;
     } else {
-      enteredName.clear();
-      i = 1;
-      return;
+      setState(
+        () {
+          loader = true;
+        },
+      );
+
+      var checker = await loginData.checkData();
+      print(checker);
+      if (checker == 1) {
+        Navigator.pushNamedAndRemoveUntil(
+          context,
+          '/second',
+          (_) => false,
+        );
+      } else {
+        setter();
+      }
+      setState(
+        () {
+          loader = false;
+        },
+      );
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return loader ? Loading(): Container(
       decoration: BoxDecoration(
         gradient: LinearGradient(
           begin: Alignment.topLeft,
@@ -101,13 +125,13 @@ class _LoginRouteState extends State<LoginRoute> {
               ),
             ],
           ),
-          j == 0 ? buildCard() : buildCard2(),
+          j == 0 ? loginBox() : registerBox(),
         ],
       ),
     );
   }
 
-  Card buildCard() {
+  Card loginBox() {
     return Card(
       margin: EdgeInsets.only(
         top: 0.0,
@@ -119,12 +143,12 @@ class _LoginRouteState extends State<LoginRoute> {
       ),
       child: Container(
         width: 300,
-        height: 200,
+        height: 250,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
-            i == 1 ? buildColumn() : buildColumn2(),
+            i == 1 ? invalidLogin() : inputLogin(),
             GradientButton(
               increaseWidthBy: 150,
               increaseHeightBy: 4,
@@ -147,7 +171,7 @@ class _LoginRouteState extends State<LoginRoute> {
     );
   }
 
-  Card buildCard2() {
+  Card registerBox() {
     return Card(
       margin: EdgeInsets.only(
         top: 0.0,
@@ -164,7 +188,7 @@ class _LoginRouteState extends State<LoginRoute> {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
-            buildColumn3(),
+            inputRegister(),
             GradientButton(
               increaseWidthBy: 150,
               increaseHeightBy: 4,
@@ -187,7 +211,7 @@ class _LoginRouteState extends State<LoginRoute> {
     );
   }
 
-  Column buildColumn() {
+  Column invalidLogin() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       mainAxisAlignment: MainAxisAlignment.center,
@@ -232,7 +256,7 @@ class _LoginRouteState extends State<LoginRoute> {
     );
   }
 
-  Column buildColumn2() {
+  Column inputLogin() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       mainAxisAlignment: MainAxisAlignment.center,
@@ -268,7 +292,7 @@ class _LoginRouteState extends State<LoginRoute> {
     );
   }
 
-  Column buildColumn3() {
+  Column inputRegister() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       mainAxisAlignment: MainAxisAlignment.center,
