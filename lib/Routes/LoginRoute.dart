@@ -121,7 +121,7 @@ class _LoginRouteState extends State<LoginRoute> {
                       opacity: j == 0 ? 1.0 : 0.5,
                       duration: Duration(milliseconds: 200),
                       child: Container(
-                        margin: EdgeInsets.only(left: 45.0),
+                        width: (MediaQuery.of(context).size.width) / 2,
                         child: GradientCard(
                           gradient: Gradients.hotLinear,
                           child: FlatButton(
@@ -145,7 +145,7 @@ class _LoginRouteState extends State<LoginRoute> {
                         milliseconds: 200,
                       ),
                       child: Container(
-                        margin: EdgeInsets.only(left: 110.0),
+                        width: (MediaQuery.of(context).size.width) / 2,
                         child: GradientCard(
                           gradient: Gradients.hotLinear,
                           child: FlatButton(
