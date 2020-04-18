@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class LoginData {
+  int i = 0;
   final String userName;
   final String userPp;
   var checker;
@@ -13,11 +14,16 @@ class LoginData {
     if (checker == null || !checker.exists) {
       return 0;
     } else {
-      if (pper.documents[0][userName] == userPp) {
-        return 1;
-      } else {
-        return 0;
+      for (var i = 0; i < pper.documents.length; i++) {
+        if (pper.documents[i][userName] != null) {
+          if (pper.documents[i][userName] == userPp) {
+            return 1;
+          } else {
+            return 0;
+          }
+        }
       }
     }
+    return 0;
   }
 }

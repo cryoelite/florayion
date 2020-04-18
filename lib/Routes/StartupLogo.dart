@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-import './LoginRoute.dart';
 
 class StartupLogo extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    Future<LoginRoute>.delayed(
+    Future<void>.delayed(
       Duration(seconds: 5),
       () {
         Navigator.pushNamedAndRemoveUntil(
