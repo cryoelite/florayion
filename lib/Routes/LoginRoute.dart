@@ -3,6 +3,7 @@ import 'package:gradient_widgets/gradient_widgets.dart';
 
 import './LoadingRoute.dart';
 import '../logindata/LoginData.dart';
+import 'package:florayion/logindata/RegisterData.dart';
 
 class LoginRoute extends StatefulWidget {
   @override
@@ -10,6 +11,7 @@ class LoginRoute extends StatefulWidget {
 }
 
 class _LoginRouteState extends State<LoginRoute> {
+  var k = 0;
   var i = 0;
   var j = 0;
   bool loader = false;
@@ -35,9 +37,7 @@ class _LoginRouteState extends State<LoginRoute> {
           loader = true;
         },
       );
-
       var checker = await loginData.checkData();
-      print(checker);
       if (checker == 1) {
         Navigator.pushNamedAndRemoveUntil(
           context,
@@ -55,80 +55,120 @@ class _LoginRouteState extends State<LoginRoute> {
     }
   }
 
+  void registerize() async {
+    final name = enteredName.text;
+    final pass = enteredPas.text;
+    final registerData = RegisterData(name, pass);
+    if (name.isEmpty || pass.isEmpty) {
+      return;
+    } else {
+      setState(
+        () {
+          loader = true;
+        },
+      );
+
+      var checker = await registerData.registerData();
+      if (checker == 1) {
+        print("sad");
+        Navigator.pushNamedAndRemoveUntil(
+          context,
+          '/second',
+          (_) => false,
+        );
+      } else {
+        print("sds");
+        setState(
+          () {
+            loader = false;
+            k = 1;
+          },
+        );
+      }
+      setState(
+        () {
+          loader = false;
+        },
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    return loader ? Loading(): Container(
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-          colors: [
-            Color(0xCCF3377A),
-            Color(0xFF9C3788),
-            Color(0xFC6B3890),
-          ],
-        ),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              AnimatedOpacity(
-                opacity: j == 0 ? 1.0 : 0.5,
-                duration: Duration(milliseconds: 200),
-                child: Container(
-                  margin: EdgeInsets.only(left: 45.0),
-                  child: GradientCard(
-                    gradient: Gradients.hotLinear,
-                    child: FlatButton(
-                      onPressed: () {
-                        setState(
-                          () {
-                            j = 0;
-                          },
-                        );
-                      },
-                      child: Text(
-                        "Login",
+    return loader
+        ? Loading()
+        : Container(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+                colors: [
+                  Color(0xCCF3377A),
+                  Color(0xFF9C3788),
+                  Color(0xFC6B3890),
+                ],
+              ),
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    AnimatedOpacity(
+                      opacity: j == 0 ? 1.0 : 0.5,
+                      duration: Duration(milliseconds: 200),
+                      child: Container(
+                        margin: EdgeInsets.only(left: 45.0),
+                        child: GradientCard(
+                          gradient: Gradients.hotLinear,
+                          child: FlatButton(
+                            onPressed: () {
+                              setState(
+                                () {
+                                  j = 0;
+                                },
+                              );
+                            },
+                            child: Text(
+                              "Login",
+                            ),
+                          ),
+                        ),
                       ),
                     ),
-                  ),
-                ),
-              ),
-              AnimatedOpacity(
-                opacity: j == 1 ? 1.0 : 0.5,
-                duration: Duration(
-                  milliseconds: 200,
-                ),
-                child: Container(
-                  margin: EdgeInsets.only(left: 110.0),
-                  child: GradientCard(
-                    gradient: Gradients.hotLinear,
-                    child: FlatButton(
-                      onPressed: () {
-                        setState(
-                          () {
-                            j = 1;
-                          },
-                        );
-                      },
-                      child: Text(
-                        "Register",
+                    AnimatedOpacity(
+                      opacity: j == 1 ? 1.0 : 0.5,
+                      duration: Duration(
+                        milliseconds: 200,
+                      ),
+                      child: Container(
+                        margin: EdgeInsets.only(left: 110.0),
+                        child: GradientCard(
+                          gradient: Gradients.hotLinear,
+                          child: FlatButton(
+                            onPressed: () {
+                              setState(
+                                () {
+                                  j = 1;
+                                },
+                              );
+                            },
+                            child: Text(
+                              "Register",
+                            ),
+                          ),
+                        ),
                       ),
                     ),
-                  ),
+                  ],
                 ),
-              ),
-            ],
-          ),
-          j == 0 ? loginBox() : registerBox(),
-        ],
-      ),
-    );
+                j == 0 ? loginBox() : registerBox(),
+              ],
+            ),
+          );
   }
 
   Card loginBox() {
@@ -183,17 +223,17 @@ class _LoginRouteState extends State<LoginRoute> {
       ),
       child: Container(
         width: 300,
-        height: 200,
+        height: 250,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
-            inputRegister(),
+            k == 1 ? invalidRegister() : inputRegister(),
             GradientButton(
               increaseWidthBy: 150,
               increaseHeightBy: 4,
               callback: () {
-                authentize();
+                registerize();
               },
               gradient: Gradients.hotLinear,
               child: GradientText(
@@ -306,7 +346,7 @@ class _LoginRouteState extends State<LoginRoute> {
             ),
             controller: enteredName,
             onSubmitted: (_) {
-              authentize();
+              registerize();
             },
           ),
         ),
@@ -316,11 +356,58 @@ class _LoginRouteState extends State<LoginRoute> {
             obscureText: true,
             textAlign: TextAlign.center,
             decoration: new InputDecoration(
-              hintText: "Passwordasdas",
+              hintText: "Password",
             ),
             controller: enteredPas,
             onSubmitted: (_) {
-              authentize();
+              registerize();
+            },
+          ),
+        ),
+      ],
+    );
+  }
+
+  Column invalidRegister() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: <Widget>[
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Center(
+            child: Text(
+              "Already Registered User !",
+              style: TextStyle(
+                color: Colors.red,
+              ),
+            ),
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: TextField(
+            textAlign: TextAlign.center,
+            decoration: new InputDecoration(
+              hintText: "Phone Number",
+            ),
+            controller: enteredName,
+            onSubmitted: (_) {
+              registerize();
+            },
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: TextField(
+            obscureText: true,
+            textAlign: TextAlign.center,
+            decoration: new InputDecoration(
+              hintText: "Password",
+            ),
+            controller: enteredPas,
+            onSubmitted: (_) {
+              registerize();
             },
           ),
         ),

@@ -9,17 +9,15 @@ class LoginData {
   final userData = Firestore.instance.collection('userAU');
   Future<int> checkData() async {
     checker = await userData.document(userName).get();
+    QuerySnapshot pper = await userData.getDocuments();
     if (checker == null || !checker.exists) {
       return 0;
     } else {
-      print(await checker);
-      return 1;
-      /* pper = await checker
-      if (pper != null && pper.exists) {
+      if (pper.documents[0][userName] == userPp) {
         return 1;
       } else {
         return 0;
-      } */
+      }
     }
   }
 }
