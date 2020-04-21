@@ -11,7 +11,6 @@ class RegisterData {
       await userData.document(userName).setData({
         userName: userPp,
       });
-      print("wessss");
       return 1;
     } else{
       return 0;

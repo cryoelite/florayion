@@ -3,7 +3,8 @@ import 'package:gradient_widgets/gradient_widgets.dart';
 
 import './LoadingRoute.dart';
 import '../logindata/LoginData.dart';
-import 'package:florayion/logindata/RegisterData.dart';
+import '../logindata/RegisterData.dart';
+import '../LoginData/tempData.dart';
 
 class LoginRoute extends StatefulWidget {
   @override
@@ -39,6 +40,7 @@ class _LoginRouteState extends State<LoginRoute> {
       );
       var checker = await loginData.checkData();
       if (checker == 1) {
+        UserName.setter(name);
         Navigator.pushNamedAndRemoveUntil(
           context,
           '/second',
@@ -273,6 +275,7 @@ class _LoginRouteState extends State<LoginRoute> {
               hintText: "Phone Number",
             ),
             controller: enteredName,
+            keyboardType: TextInputType.phone,
             onSubmitted: (_) {
               authentize();
             },
@@ -309,6 +312,7 @@ class _LoginRouteState extends State<LoginRoute> {
               hintText: "Phone Number",
             ),
             controller: enteredName,
+            keyboardType: TextInputType.phone,
             onSubmitted: (_) {
               authentize();
             },
@@ -345,6 +349,7 @@ class _LoginRouteState extends State<LoginRoute> {
               hintText: "Phone Number",
             ),
             controller: enteredName,
+            keyboardType: TextInputType.phone,
             onSubmitted: (_) {
               registerize();
             },
@@ -392,6 +397,7 @@ class _LoginRouteState extends State<LoginRoute> {
               hintText: "Phone Number",
             ),
             controller: enteredName,
+            keyboardType: TextInputType.phone,
             onSubmitted: (_) {
               registerize();
             },

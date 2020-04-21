@@ -1,28 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:gradient_app_bar/gradient_app_bar.dart';
 import 'package:gradient_widgets/gradient_widgets.dart';
+import '../CollectorData/CollectorData.dart';
 
 class MainRoute extends StatefulWidget {
-  final List<DropdownMenuItem<String>> ff = [
-    DropdownMenuItem<String>(
-      child: Text(
-        "Flora",
-      ),
-      value: "Flora",
-    ),
-    DropdownMenuItem<String>(
-      child: Text("Fauna"),
-      value: "Fauna",
-    )
-  ];
-
   @override
   _MainRouteState createState() => _MainRouteState();
 }
 
 class _MainRouteState extends State<MainRoute> {
-  String selector;
-  void collector() {}
+  var ffsubmitted;
+  var speciesubmitted;
+  var specieChecker = 0;
+  String selectorff;
+  String selectorSpecie;
+  final enteredSpecie = TextEditingController();
+
+  void collector() {
+    var alpha = CollectorData(ffsubmitted, speciesubmitted);
+    alpha.setter();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Material(
@@ -52,35 +50,125 @@ class _MainRouteState extends State<MainRoute> {
           color: Colors.black,
           child: GradientCard(
             gradient: Gradients.taitanum,
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.start,
+            child: Column(
               children: <Widget>[
-                Card(
-                  color: Colors.grey,
-                  margin: EdgeInsets.only(top: 10),
-                  child: DropdownButtonHideUnderline(
-                    child: ButtonTheme(
-                      alignedDropdown: true,
-                      child: Theme(
-                        data: Theme.of(context)
-                            .copyWith(canvasColor: Colors.grey),
-                        child: DropdownButton(
-                          value: selector,
-                          hint: Text(
-                            "Type of Occurence",
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: <Widget>[
+                    Card(
+                      child: SizedBox(
+                        width: 1,
+                        height: 1,
+                      ),
+                    ),
+                    Card(
+                      color: Colors.white70,
+                      margin: EdgeInsets.only(top: 10, left: 5),
+                      child: ButtonTheme(
+                        alignedDropdown: true,
+                        child: Theme(
+                          data: Theme.of(context)
+                              .copyWith(canvasColor: Colors.white70),
+                          child: DropdownButton(
+                            value: selectorff,
+                            hint: SizedBox(
+                              width: 120,
+                              height: 24,
+                              child: Text(
+                                "Type of Occurence",
+                              ),
+                            ),
+                            style: TextStyle(
+                              color: Colors.black,
+                            ),
+                            items: CollectorData.ff
+                                .map<DropdownMenuItem<String>>((val) {
+                              return DropdownMenuItem<String>(
+                                  child: Text(val), value: val);
+                            }).toList(),
+                            onChanged: (val) {
+                              setState(() {
+                                selectorff = val;
+                                ffsubmitted = val;
+                              });
+                            },
                           ),
-                          style: TextStyle(color: Colors.black),
-                          items: widget.ff,
-                          onChanged: (val) {
-                            selector = val;
-                            setState(() {});
-                          },
                         ),
                       ),
                     ),
-                  ),
+                    Card(
+                      color: Colors.white70,
+                      margin: EdgeInsets.only(
+                        top: 10,
+                        left: 20,
+                      ),
+                      child: SizedBox(
+                        width: 180,
+                        height: 48,
+                        child: Row(
+                          children: <Widget>[
+                            Expanded(
+                              child: Padding(
+                                padding: const EdgeInsets.only(left: 2.0),
+                                child: TextField(
+                                  decoration: InputDecoration(
+                                    hintText: specieChecker == 0
+                                        ? "Specie Name"
+                                        : "Already Exists !",
+                                  ),
+                                  controller: enteredSpecie,
+                                  onSubmitted: (_) {
+                                    final specieName = enteredSpecie.text;
+                                    enteredSpecie.clear();
+                                    if (!CollectorData.specie
+                                        .contains(specieName)) {
+                                      print("sss");
+                                      specieChecker = 0;
+                                      CollectorData.specie.add(specieName);
+                                    } else {
+                                      specieChecker = 1;
+                                    }
+                                    setState(() {});
+                                  },
+                                ),
+                              ),
+                            ),
+                            PopupMenuButton<String>(
+                              color: Colors.white70,
+                              captureInheritedThemes: true,
+                              icon: Icon(Icons.arrow_drop_down),
+                              onSelected: (value) {
+                                enteredSpecie.text = value;
+                                speciesubmitted = value;
+                              },
+                              itemBuilder: (BuildContext context) {
+                                return CollectorData.specie
+                                    .map<PopupMenuItem<String>>((String val) {
+                                  return PopupMenuItem<String>(
+                                      child: Text(val), value: val);
+                                }).toList();
+                              },
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    GradientButton(
+                      child: Text(
+                        "Submit",
+                      ),
+                      callback: () {
+                        collector();
+                      },
+                    ),
+                  ],
+                )
               ],
             ),
           ),
