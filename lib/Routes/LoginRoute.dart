@@ -27,25 +27,39 @@ class _LoginRouteState extends State<LoginRoute> {
   }
 
   void authentize() async {
-    final name = enteredName.text;
+    final tempname = enteredName.text;
     final pass = enteredPas.text;
-    final loginData = LoginData(name, pass);
-    if (name.isEmpty || pass.isEmpty) {
+    if (tempname.isEmpty || pass.isEmpty) {
       return;
     } else {
-      setState(
-        () {
-          loader = true;
-        },
-      );
-      var checker = await loginData.checkData();
-      if (checker == 1) {
-        UserName.setter(name);
-        Navigator.pushNamedAndRemoveUntil(
-          context,
-          '/second',
-          (_) => false,
+      final nameR = [];
+      for (var typer = 0; typer < tempname.length; typer++) {
+        nameR.add(tempname[typer]);
+      }
+      if (nameR[0] == "0") {
+        nameR.removeAt(0);
+      } else if (nameR[0] == "+") {
+        nameR.removeRange(0, 3);
+      }
+      final name = nameR.join("");
+      if (name.length == 10) {
+        final loginData = LoginData(name, pass);
+        setState(
+          () {
+            loader = true;
+          },
         );
+        var checker = await loginData.checkData();
+        if (checker == 1) {
+          UserName.setter(name);
+          Navigator.pushNamedAndRemoveUntil(
+            context,
+            '/second',
+            (_) => false,
+          );
+        } else {
+          setter();
+        }
       } else {
         setter();
       }
@@ -58,40 +72,54 @@ class _LoginRouteState extends State<LoginRoute> {
   }
 
   void registerize() async {
-    final name = enteredName.text;
+    final tempname = enteredName.text;
     final pass = enteredPas.text;
-    final registerData = RegisterData(name, pass);
-    if (name.isEmpty || pass.isEmpty) {
+    if (tempname.isEmpty || pass.isEmpty) {
       return;
     } else {
-      setState(
-        () {
-          loader = true;
-        },
-      );
-
-      var checker = await registerData.registerData();
-      if (checker == 1) {
-        print("sad");
-        Navigator.pushNamedAndRemoveUntil(
-          context,
-          '/second',
-          (_) => false,
+      final nameR = [];
+      for (var typer = 0; typer < tempname.length; typer++) {
+        nameR.add(tempname[typer]);
+      }
+      if (nameR[0] == "0") {
+        nameR.removeAt(0);
+      } else if (nameR[0] == "+") {
+        nameR.removeRange(0, 3);
+      }
+      final name = nameR.join("");
+      if (name.length == 10) {
+        final registerData = RegisterData(name, pass);
+        setState(
+          () {
+            loader = true;
+          },
         );
-      } else {
-        print("sds");
+
+        var checker = await registerData.registerData();
+        if (checker == 1) {
+          Navigator.pushNamedAndRemoveUntil(
+            context,
+            '/second',
+            (_) => false,
+          );
+        } else {
+          setState(
+            () {
+              loader = false;
+              k = 1;
+            },
+          );
+        }
         setState(
           () {
             loader = false;
-            k = 1;
           },
         );
+      } else {
+        setState(() {
+          k = 2;
+        });
       }
-      setState(
-        () {
-          loader = false;
-        },
-      );
     }
   }
 
@@ -230,7 +258,7 @@ class _LoginRouteState extends State<LoginRoute> {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
-            k == 1 ? invalidRegister() : inputRegister(),
+            register(),
             GradientButton(
               increaseWidthBy: 150,
               increaseHeightBy: 4,
@@ -336,88 +364,134 @@ class _LoginRouteState extends State<LoginRoute> {
     );
   }
 
-  Column inputRegister() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: <Widget>[
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: TextField(
-            textAlign: TextAlign.center,
-            decoration: new InputDecoration(
-              hintText: "Phone Number",
+  Column register() {
+    if (k == 0) {
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: TextField(
+              textAlign: TextAlign.center,
+              decoration: new InputDecoration(
+                hintText: "Phone Number",
+              ),
+              controller: enteredName,
+              keyboardType: TextInputType.phone,
+              onSubmitted: (_) {
+                registerize();
+              },
             ),
-            controller: enteredName,
-            keyboardType: TextInputType.phone,
-            onSubmitted: (_) {
-              registerize();
-            },
           ),
-        ),
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: TextField(
-            obscureText: true,
-            textAlign: TextAlign.center,
-            decoration: new InputDecoration(
-              hintText: "Password",
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: TextField(
+              obscureText: true,
+              textAlign: TextAlign.center,
+              decoration: new InputDecoration(
+                hintText: "Password",
+              ),
+              controller: enteredPas,
+              onSubmitted: (_) {
+                registerize();
+              },
             ),
-            controller: enteredPas,
-            onSubmitted: (_) {
-              registerize();
-            },
           ),
-        ),
-      ],
-    );
-  }
-
-  Column invalidRegister() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: <Widget>[
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Center(
-            child: Text(
-              "Already Registered User !",
-              style: TextStyle(
-                color: Colors.red,
+        ],
+      );
+    } else if (k == 1) {
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Center(
+              child: Text(
+                "Already Registered User !",
+                style: TextStyle(
+                  color: Colors.red,
+                ),
               ),
             ),
           ),
-        ),
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: TextField(
-            textAlign: TextAlign.center,
-            decoration: new InputDecoration(
-              hintText: "Phone Number",
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: TextField(
+              textAlign: TextAlign.center,
+              decoration: new InputDecoration(
+                hintText: "Phone Number",
+              ),
+              controller: enteredName,
+              keyboardType: TextInputType.phone,
+              onSubmitted: (_) {
+                registerize();
+              },
             ),
-            controller: enteredName,
-            keyboardType: TextInputType.phone,
-            onSubmitted: (_) {
-              registerize();
-            },
           ),
-        ),
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: TextField(
-            obscureText: true,
-            textAlign: TextAlign.center,
-            decoration: new InputDecoration(
-              hintText: "Password",
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: TextField(
+              obscureText: true,
+              textAlign: TextAlign.center,
+              decoration: new InputDecoration(
+                hintText: "Password",
+              ),
+              controller: enteredPas,
+              onSubmitted: (_) {
+                registerize();
+              },
             ),
-            controller: enteredPas,
-            onSubmitted: (_) {
-              registerize();
-            },
           ),
-        ),
-      ],
-    );
+        ],
+      );
+    } else {
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Center(
+              child: Text(
+                "Please input 10-digit phone number",
+                style: TextStyle(
+                  color: Colors.red,
+                ),
+              ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: TextField(
+              textAlign: TextAlign.center,
+              decoration: new InputDecoration(
+                hintText: "Phone Number",
+              ),
+              controller: enteredName,
+              keyboardType: TextInputType.phone,
+              onSubmitted: (_) {
+                registerize();
+              },
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: TextField(
+              obscureText: true,
+              textAlign: TextAlign.center,
+              decoration: new InputDecoration(
+                hintText: "Password",
+              ),
+              controller: enteredPas,
+              onSubmitted: (_) {
+                registerize();
+              },
+            ),
+          ),
+        ],
+      );
+    }
   }
 }
