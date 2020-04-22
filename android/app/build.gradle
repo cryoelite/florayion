@@ -39,6 +39,8 @@ android {
 
     defaultConfig {
         // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
+        versionCode 1
+        versionName "1.0"
         applicationId "go.cryoelite.florayion"
         minSdkVersion 21
         targetSdkVersion 28

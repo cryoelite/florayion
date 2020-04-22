@@ -1,18 +1,39 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:get_version/get_version.dart';
 
+import 'package:florayion/versioner.dart';
 
 class StartupLogo extends StatelessWidget {
+  checkVersion() async {
+    final currentVersion = await GetVersion.projectCode;
+    final checker = VersionAllowed(currentVersion);
+
+    if (await checker.vChecker() == 1) {
+      return 1;
+    } else {
+      return 0;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     Future<void>.delayed(
       Duration(seconds: 5),
-      () {
-        Navigator.pushNamedAndRemoveUntil(
-          context,
-          '/first',
-          (_) => false,
-        );
+      () async {
+        if (await checkVersion() == 1) {
+          Navigator.pushNamedAndRemoveUntil(
+            context,
+            '/first',
+            (_) => false,
+          );
+        } else {
+          Navigator.pushNamedAndRemoveUntil(
+            context,
+            '/third',
+            (_) => false,
+          );
+        }
       },
     );
     SystemChrome.setPreferredOrientations(
