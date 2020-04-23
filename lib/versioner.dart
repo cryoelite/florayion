@@ -8,8 +8,7 @@ class VersionAllowed {
   Future<int> vChecker() async {
     final currentVersion = int.parse(temp);
     final QuerySnapshot checker = await version.getDocuments();
-    if(currentVersion>await checker.documents[0]["version"]){
-      print("yaa");
+    if(currentVersion>=await checker.documents[0]["version"]){
       print(currentVersion);
       return 1;
     }
