@@ -9,7 +9,7 @@ class CollectorData {
 
   CollectorData(this.tempff, this.tempSpecie);
   static final specie = ["Cow", "BhauBhau"];
-  static final ff = ["Flora", "Fauna"];
+  static final ff = ["Flora", "Fauna","Disturbance"];
   final userData = Firestore.instance.collection('userData');
   Future setter() async {
     Position pos = await Geolocator()
@@ -25,6 +25,5 @@ class CollectorData {
       },
       merge: true,
     );
-    print("yo");
   }
 }
