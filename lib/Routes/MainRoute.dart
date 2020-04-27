@@ -9,16 +9,31 @@ class MainRoute extends StatefulWidget {
 }
 
 class _MainRouteState extends State<MainRoute> {
+  var i = 0;
+  var specieList;
+  var tempSS;
   var ffsubmitted;
   var speciesubmitted;
   var specieChecker = 0;
+  var subSpecieSubmitted;
+  String selectorSS;
   String selectorff;
   String selectorSpecie;
   final enteredSpecie = TextEditingController();
+  var alpha = CollectorData();
 
   void collector() {
-    var alpha = CollectorData(ffsubmitted, speciesubmitted);
+    alpha.collectorDataInit(ffsubmitted, speciesubmitted);
     alpha.setter();
+  }
+
+  initiator() async {
+    specieList = await alpha.getFFSpecie(
+        subSpecieSubmitted,
+        speciesubmitted != "Flora" && speciesubmitted != "Disturbance"
+            ? i = 1
+            : i);
+    debugPrint("gg");
   }
 
   @override
@@ -88,15 +103,53 @@ class _MainRouteState extends State<MainRoute> {
                                   child: Text(val), value: val);
                             }).toList(),
                             onChanged: (val) {
-                              setState(() {
-                                selectorff = val;
-                                ffsubmitted = val;
-                              });
+                              selectorff = val;
+                              ffsubmitted = val;
+                              tempSS = subspecieType();
+                              if (selectorSS != null) {
+                                selectorSS = null;
+                                subSpecieSubmitted=null;
+                              }
+                              setState(() {});
                             },
                           ),
                         ),
                       ),
                     ),
+                    Card(
+                      color: Colors.white70,
+                      margin: EdgeInsets.only(top: 10, left: 5),
+                      child: ButtonTheme(
+                        alignedDropdown: true,
+                        child: Theme(
+                          data: Theme.of(context)
+                              .copyWith(canvasColor: Colors.white70),
+                          child: DropdownButton(
+                            value: selectorSS,
+                            hint: SizedBox(
+                              width: 120,
+                              height: 24,
+                              child: Text(
+                                "Sub-Specie Type",
+                              ),
+                            ),
+                            style: TextStyle(
+                              color: Colors.black,
+                            ),
+                            items: tempSS,
+                            onChanged: (val) {
+                              selectorSS = val;
+                              subSpecieSubmitted = val;
+                              setState(() {});
+                            },
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                Row(
+                  children: <Widget>[
                     Card(
                       color: Colors.white70,
                       margin: EdgeInsets.only(
@@ -119,6 +172,7 @@ class _MainRouteState extends State<MainRoute> {
                                   ),
                                   controller: enteredSpecie,
                                   onSubmitted: (_) {
+                                    /* 
                                     final specieName = enteredSpecie.text;
                                     enteredSpecie.clear();
                                     if (!CollectorData.specie
@@ -129,27 +183,41 @@ class _MainRouteState extends State<MainRoute> {
                                     } else {
                                       specieChecker = 1;
                                     }
-                                    setState(() {});
+                                    setState(() {}); */
                                   },
                                 ),
                               ),
                             ),
-                            PopupMenuButton<String>(
-                              color: Colors.white70,
-                              captureInheritedThemes: true,
-                              icon: Icon(Icons.arrow_drop_down),
-                              onSelected: (value) {
-                                enteredSpecie.text = value;
-                                speciesubmitted = value;
-                              },
-                              itemBuilder: (BuildContext context) {
-                                return CollectorData.specie
-                                    .map<PopupMenuItem<String>>((String val) {
-                                  return PopupMenuItem<String>(
-                                      child: Text(val), value: val);
-                                }).toList();
-                              },
-                            ),
+                            (speciesubmitted == null ||
+                                    subSpecieSubmitted == null)
+                                ? FutureBuilder(
+                                    future: initiator(),
+                                    builder: (context, snapshot) {
+                                      if (snapshot.hasData == null &&
+                                          snapshot.connectionState ==
+                                              ConnectionState.none) {
+                                        return Container();
+                                      }
+                                      return PopupMenuButton<String>(
+                                        color: Colors.white70,
+                                        captureInheritedThemes: true,
+                                        icon: Icon(Icons.arrow_drop_down),
+                                        onSelected: (value) {
+                                          enteredSpecie.text = value;
+                                          speciesubmitted = value;
+                                        },
+                                        itemBuilder: (BuildContext context) {
+                                          return specieList
+                                              .map<PopupMenuItem<String>>(
+                                                  (String val) {
+                                            return PopupMenuItem<String>(
+                                                child: Text(val), value: val);
+                                          }).toList();
+                                        },
+                                      );
+                                    },
+                                  )
+                                : Container(),
                           ],
                         ),
                       ),
@@ -175,5 +243,17 @@ class _MainRouteState extends State<MainRoute> {
         ),
       ),
     );
+  }
+
+  subspecieType() {
+    if (selectorff == "Flora") {
+      return CollectorData.subTypeFlora.map<DropdownMenuItem<String>>((val) {
+        return DropdownMenuItem<String>(child: Text(val), value: val);
+      }).toList();
+    } else if (selectorff == "Fauna") {
+      return CollectorData.subTypeFauna.map<DropdownMenuItem<String>>((val) {
+        return DropdownMenuItem<String>(child: Text(val), value: val);
+      }).toList();
+    }
   }
 }
