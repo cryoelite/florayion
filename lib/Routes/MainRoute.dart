@@ -33,7 +33,10 @@ class _MainRouteState extends State<MainRoute> {
         speciesubmitted != "Flora" && speciesubmitted != "Disturbance"
             ? i = 1
             : i);
-    debugPrint("gg");
+    specieList = await specieList.map<PopupMenuItem<String>>((dynamic val) {
+      return PopupMenuItem<String>(child: Text(val), value: val);
+    }).toList();
+    print("gg");
   }
 
   @override
@@ -108,7 +111,7 @@ class _MainRouteState extends State<MainRoute> {
                               tempSS = subspecieType();
                               if (selectorSS != null) {
                                 selectorSS = null;
-                                subSpecieSubmitted=null;
+                                subSpecieSubmitted = null;
                               }
                               setState(() {});
                             },
@@ -188,8 +191,8 @@ class _MainRouteState extends State<MainRoute> {
                                 ),
                               ),
                             ),
-                            (speciesubmitted == null ||
-                                    subSpecieSubmitted == null)
+                            (speciesubmitted != null ||
+                                    subSpecieSubmitted != null)
                                 ? FutureBuilder(
                                     future: initiator(),
                                     builder: (context, snapshot) {
@@ -207,12 +210,7 @@ class _MainRouteState extends State<MainRoute> {
                                           speciesubmitted = value;
                                         },
                                         itemBuilder: (BuildContext context) {
-                                          return specieList
-                                              .map<PopupMenuItem<String>>(
-                                                  (String val) {
-                                            return PopupMenuItem<String>(
-                                                child: Text(val), value: val);
-                                          }).toList();
+                                          return specieList;
                                         },
                                       );
                                     },
