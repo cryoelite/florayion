@@ -43,8 +43,8 @@ class SubmitterData {
             .document(id.toString())
             .setData(
             {
-              "Disturbance": this.tempsubmitVal,
               "FFType": this.tempff,
+              "Disturbance": this.tempsubmitVal,
               "Location":
                   ("${pos.latitude.toString()} + ${pos.longitude.toString()}"),
             },

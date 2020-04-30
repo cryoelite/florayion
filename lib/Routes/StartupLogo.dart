@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:get_version/get_version.dart';
 
 import 'package:florayion/versioner.dart';
+import '../LoginData/tempData.dart';
 
 class StartupLogo extends StatelessWidget {
   checkVersion() async {
@@ -22,11 +23,20 @@ class StartupLogo extends StatelessWidget {
       Duration(seconds: 5),
       () async {
         if (await checkVersion() == 1) {
-          Navigator.pushNamedAndRemoveUntil(
-            context,
-            '/first',
-            (_) => false,
-          );
+          final checker=await UserName.checker();
+          if ( checker == 1) {
+            Navigator.pushNamedAndRemoveUntil(
+              context,
+              '/second',
+              (_) => false,
+            );
+          } else {
+            Navigator.pushNamedAndRemoveUntil(
+              context,
+              '/first',
+              (_) => false,
+            );
+          }
         } else {
           Navigator.pushNamedAndRemoveUntil(
             context,
