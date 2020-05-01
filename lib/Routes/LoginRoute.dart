@@ -139,64 +139,76 @@ class _LoginRouteState extends State<LoginRoute> {
                 ],
               ),
             ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
+            child: Center(
+              child: SizedBox(
+                height: (MediaQuery.of(context).size.height)-450,
+                width: (MediaQuery.of(context).size.width)-80,
+                child: Stack(
                   children: <Widget>[
-                    AnimatedOpacity(
-                      opacity: j == 0 ? 1.0 : 0.5,
-                      duration: Duration(milliseconds: 200),
-                      child: Container(
-                        width: (MediaQuery.of(context).size.width) / 2,
-                        child: GradientCard(
-                          gradient: Gradients.hotLinear,
-                          child: FlatButton(
-                            onPressed: () {
-                              setState(
-                                () {
-                                  j = 0;
-                                },
-                              );
-                            },
-                            child: Text(
-                              "Login",
+                    Positioned(
+                      top: 1,
+                      left: 1,
+                      child: AnimatedOpacity(
+                        opacity: j == 0 ? 1.0 : 0.5,
+                        duration: Duration(milliseconds: 200),
+                        child: Container(
+                          margin: EdgeInsets.only(bottom: 1.0),
+                          width: 140,
+                          child: GradientCard(
+                            gradient: Gradients.hotLinear,
+                            child: FlatButton(
+                              onPressed: () {
+                                setState(
+                                  () {
+                                    j = 0;
+                                  },
+                                );
+                              },
+                              child: Text(
+                                "Login",
+                              ),
                             ),
                           ),
                         ),
                       ),
                     ),
-                    AnimatedOpacity(
-                      opacity: j == 1 ? 1.0 : 0.5,
-                      duration: Duration(
-                        milliseconds: 200,
-                      ),
-                      child: Container(
-                        width: (MediaQuery.of(context).size.width) / 2,
-                        child: GradientCard(
-                          gradient: Gradients.hotLinear,
-                          child: FlatButton(
-                            onPressed: () {
-                              setState(
-                                () {
-                                  j = 1;
-                                },
-                              );
-                            },
-                            child: Text(
-                              "Register",
+                    Positioned(
+                      top: 1,
+                      right: 5,
+                      child: AnimatedOpacity(
+                        opacity: j == 1 ? 1.0 : 0.5,
+                        duration: Duration(
+                          milliseconds: 200,
+                        ),
+                        child: Container(
+                          margin: EdgeInsets.only(bottom: 1.0),
+                          width: 140,
+                          child: GradientCard(
+                            gradient: Gradients.hotLinear,
+                            child: FlatButton(
+                              onPressed: () {
+                                setState(
+                                  () {
+                                    j = 1;
+                                  },
+                                );
+                              },
+                              child: Text(
+                                "Register",
+                              ),
                             ),
                           ),
                         ),
                       ),
+                    ),
+                    Positioned(
+                      bottom: 7,
+                      left: 5,
+                      child: j == 0 ? loginBox() : registerBox(),
                     ),
                   ],
                 ),
-                j == 0 ? loginBox() : registerBox(),
-              ],
+              ),
             ),
           );
   }
@@ -287,7 +299,7 @@ class _LoginRouteState extends State<LoginRoute> {
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
         Padding(
-          padding: const EdgeInsets.all(8.0),
+          padding: const EdgeInsets.only(top: 8.0, bottom: 8.0),
           child: Center(
             child: Text(
               "Wrong Credentials !",
@@ -296,7 +308,7 @@ class _LoginRouteState extends State<LoginRoute> {
           ),
         ),
         Padding(
-          padding: const EdgeInsets.all(8.0),
+          padding: const EdgeInsets.only(top: 8.0, bottom: 8.0),
           child: TextField(
             textAlign: TextAlign.center,
             decoration: new InputDecoration(
@@ -310,7 +322,7 @@ class _LoginRouteState extends State<LoginRoute> {
           ),
         ),
         Padding(
-          padding: const EdgeInsets.all(8.0),
+          padding: const EdgeInsets.only(top: 8.0, bottom: 8.0),
           child: TextField(
             obscureText: true,
             textAlign: TextAlign.center,
@@ -333,7 +345,7 @@ class _LoginRouteState extends State<LoginRoute> {
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
         Padding(
-          padding: const EdgeInsets.all(8.0),
+          padding: const EdgeInsets.only(top: 8.0, bottom: 8.0),
           child: TextField(
             textAlign: TextAlign.center,
             decoration: new InputDecoration(
@@ -347,7 +359,7 @@ class _LoginRouteState extends State<LoginRoute> {
           ),
         ),
         Padding(
-          padding: const EdgeInsets.all(8.0),
+          padding: const EdgeInsets.only(top: 8.0, bottom: 8.0),
           child: TextField(
             obscureText: true,
             textAlign: TextAlign.center,
@@ -371,7 +383,7 @@ class _LoginRouteState extends State<LoginRoute> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           Padding(
-            padding: const EdgeInsets.all(8.0),
+            padding: const EdgeInsets.only(top: 8.0, bottom: 8.0),
             child: TextField(
               textAlign: TextAlign.center,
               decoration: new InputDecoration(
@@ -385,7 +397,7 @@ class _LoginRouteState extends State<LoginRoute> {
             ),
           ),
           Padding(
-            padding: const EdgeInsets.all(8.0),
+            padding: const EdgeInsets.only(top: 8.0, bottom: 8.0),
             child: TextField(
               obscureText: true,
               textAlign: TextAlign.center,
@@ -406,7 +418,7 @@ class _LoginRouteState extends State<LoginRoute> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           Padding(
-            padding: const EdgeInsets.all(8.0),
+            padding: const EdgeInsets.only(top: 8.0, bottom: 8.0),
             child: Center(
               child: Text(
                 "Already Registered User !",
@@ -417,7 +429,7 @@ class _LoginRouteState extends State<LoginRoute> {
             ),
           ),
           Padding(
-            padding: const EdgeInsets.all(8.0),
+            padding: const EdgeInsets.only(top: 8.0, bottom: 8.0),
             child: TextField(
               textAlign: TextAlign.center,
               decoration: new InputDecoration(
@@ -431,7 +443,7 @@ class _LoginRouteState extends State<LoginRoute> {
             ),
           ),
           Padding(
-            padding: const EdgeInsets.all(8.0),
+            padding: const EdgeInsets.only(top: 8.0, bottom: 8.0),
             child: TextField(
               obscureText: true,
               textAlign: TextAlign.center,
@@ -452,7 +464,7 @@ class _LoginRouteState extends State<LoginRoute> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           Padding(
-            padding: const EdgeInsets.all(8.0),
+            padding: const EdgeInsets.only(top: 8.0, bottom: 8.0),
             child: Center(
               child: Text(
                 "Please input 10-digit phone number",
@@ -463,7 +475,7 @@ class _LoginRouteState extends State<LoginRoute> {
             ),
           ),
           Padding(
-            padding: const EdgeInsets.all(8.0),
+            padding: const EdgeInsets.only(top: 8.0, bottom: 8.0),
             child: TextField(
               textAlign: TextAlign.center,
               decoration: new InputDecoration(
@@ -477,7 +489,7 @@ class _LoginRouteState extends State<LoginRoute> {
             ),
           ),
           Padding(
-            padding: const EdgeInsets.all(8.0),
+            padding: const EdgeInsets.only(top: 8.0, bottom: 8.0),
             child: TextField(
               obscureText: true,
               textAlign: TextAlign.center,
