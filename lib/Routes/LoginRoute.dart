@@ -5,6 +5,7 @@ import './LoadingRoute.dart';
 import '../logindata/LoginData.dart';
 import '../logindata/RegisterData.dart';
 import '../LoginData/tempData.dart';
+import '../routeConfig.dart';
 
 class LoginRoute extends StatefulWidget {
   @override
@@ -15,6 +16,7 @@ class _LoginRouteState extends State<LoginRoute> {
   var k = 0;
   var i = 0;
   var j = 0;
+
   bool loader = false;
   final enteredName = TextEditingController();
   final enteredPas = TextEditingController();
@@ -125,6 +127,7 @@ class _LoginRouteState extends State<LoginRoute> {
 
   @override
   Widget build(BuildContext context) {
+    RouterConf().init(context);
     return loader
         ? Loading()
         : Container(
@@ -141,8 +144,8 @@ class _LoginRouteState extends State<LoginRoute> {
             ),
             child: Center(
               child: SizedBox(
-                height: (MediaQuery.of(context).size.height)-450,
-                width: (MediaQuery.of(context).size.width)-80,
+                height: (RouterConf.blockV) * 40,
+                width: (RouterConf.blockH) * 80,
                 child: Stack(
                   children: <Widget>[
                     Positioned(
@@ -152,8 +155,9 @@ class _LoginRouteState extends State<LoginRoute> {
                         opacity: j == 0 ? 1.0 : 0.5,
                         duration: Duration(milliseconds: 200),
                         child: Container(
+                          height: (RouterConf.blockV) * 7.3,
+                          width: (RouterConf.blockV) * 17,
                           margin: EdgeInsets.only(bottom: 1.0),
-                          width: 140,
                           child: GradientCard(
                             gradient: Gradients.hotLinear,
                             child: FlatButton(
@@ -182,7 +186,8 @@ class _LoginRouteState extends State<LoginRoute> {
                         ),
                         child: Container(
                           margin: EdgeInsets.only(bottom: 1.0),
-                          width: 140,
+                          height: (RouterConf.blockV) * 7.3,
+                          width: (RouterConf.blockV) * 17,
                           child: GradientCard(
                             gradient: Gradients.hotLinear,
                             child: FlatButton(
@@ -214,6 +219,8 @@ class _LoginRouteState extends State<LoginRoute> {
   }
 
   Card loginBox() {
+    print(
+        "ayay ${(MediaQuery.of(context).size.width)} and ${(MediaQuery.of(context).size.height)}");
     return Card(
       margin: EdgeInsets.only(
         top: 0.0,
@@ -224,8 +231,8 @@ class _LoginRouteState extends State<LoginRoute> {
         borderRadius: BorderRadius.circular(10),
       ),
       child: Container(
-        width: 300,
-        height: 250,
+        width: (RouterConf.blockH) * 77,
+        height: (RouterConf.blockV) * 32,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -264,8 +271,8 @@ class _LoginRouteState extends State<LoginRoute> {
         borderRadius: BorderRadius.circular(10),
       ),
       child: Container(
-        width: 300,
-        height: 250,
+        width: (RouterConf.blockH) * 77,
+        height: (RouterConf.blockV) * 32,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -308,11 +315,14 @@ class _LoginRouteState extends State<LoginRoute> {
           ),
         ),
         Padding(
-          padding: const EdgeInsets.only(top: 8.0, bottom: 8.0),
+          padding: EdgeInsets.only(top: 8.0, bottom: (RouterConf.blockV) * 6),
           child: TextField(
             textAlign: TextAlign.center,
             decoration: new InputDecoration(
               hintText: "Phone Number",
+              hintStyle: TextStyle(
+                fontSize: (RouterConf.blockV) * 3,
+              ),
             ),
             controller: enteredName,
             keyboardType: TextInputType.phone,
@@ -322,12 +332,15 @@ class _LoginRouteState extends State<LoginRoute> {
           ),
         ),
         Padding(
-          padding: const EdgeInsets.only(top: 8.0, bottom: 8.0),
+          padding: EdgeInsets.only(top: 8.0, bottom: (RouterConf.blockV) * 4),
           child: TextField(
             obscureText: true,
             textAlign: TextAlign.center,
             decoration: new InputDecoration(
               hintText: "Password",
+              hintStyle: TextStyle(
+                fontSize: (RouterConf.blockV) * 3,
+              ),
             ),
             controller: enteredPas,
             onSubmitted: (_) {
@@ -345,11 +358,14 @@ class _LoginRouteState extends State<LoginRoute> {
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
         Padding(
-          padding: const EdgeInsets.only(top: 8.0, bottom: 8.0),
+          padding: EdgeInsets.only(top: 8.0, bottom: RouterConf.blockV * 6),
           child: TextField(
             textAlign: TextAlign.center,
             decoration: new InputDecoration(
               hintText: "Phone Number",
+              hintStyle: TextStyle(
+                fontSize: (RouterConf.blockV) * 3,
+              ),
             ),
             controller: enteredName,
             keyboardType: TextInputType.phone,
@@ -359,12 +375,15 @@ class _LoginRouteState extends State<LoginRoute> {
           ),
         ),
         Padding(
-          padding: const EdgeInsets.only(top: 8.0, bottom: 8.0),
+          padding: EdgeInsets.only(top: 8.0, bottom: RouterConf.blockV * 4),
           child: TextField(
             obscureText: true,
             textAlign: TextAlign.center,
             decoration: new InputDecoration(
               hintText: "Password",
+              hintStyle: TextStyle(
+                fontSize: (RouterConf.blockV) * 3,
+              ),
             ),
             controller: enteredPas,
             onSubmitted: (_) {
@@ -383,11 +402,14 @@ class _LoginRouteState extends State<LoginRoute> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           Padding(
-            padding: const EdgeInsets.only(top: 8.0, bottom: 8.0),
+            padding: EdgeInsets.only(top: 8.0, bottom: (RouterConf.blockV) * 6),
             child: TextField(
               textAlign: TextAlign.center,
               decoration: new InputDecoration(
                 hintText: "Phone Number",
+                hintStyle: TextStyle(
+                  fontSize: (RouterConf.blockV) * 3,
+                ),
               ),
               controller: enteredName,
               keyboardType: TextInputType.phone,
@@ -397,12 +419,15 @@ class _LoginRouteState extends State<LoginRoute> {
             ),
           ),
           Padding(
-            padding: const EdgeInsets.only(top: 8.0, bottom: 8.0),
+            padding: EdgeInsets.only(top: 8.0, bottom: (RouterConf.blockV) * 4),
             child: TextField(
               obscureText: true,
               textAlign: TextAlign.center,
               decoration: new InputDecoration(
                 hintText: "Password",
+                hintStyle: TextStyle(
+                  fontSize: (RouterConf.blockV) * 3,
+                ),
               ),
               controller: enteredPas,
               onSubmitted: (_) {
@@ -429,11 +454,14 @@ class _LoginRouteState extends State<LoginRoute> {
             ),
           ),
           Padding(
-            padding: const EdgeInsets.only(top: 8.0, bottom: 8.0),
+            padding: EdgeInsets.only(top: 8.0, bottom: (RouterConf.blockV) * 6),
             child: TextField(
               textAlign: TextAlign.center,
               decoration: new InputDecoration(
                 hintText: "Phone Number",
+                hintStyle: TextStyle(
+                  fontSize: (RouterConf.blockV) * 3,
+                ),
               ),
               controller: enteredName,
               keyboardType: TextInputType.phone,
@@ -443,12 +471,15 @@ class _LoginRouteState extends State<LoginRoute> {
             ),
           ),
           Padding(
-            padding: const EdgeInsets.only(top: 8.0, bottom: 8.0),
+            padding: EdgeInsets.only(top: 8.0, bottom: (RouterConf.blockV) * 4),
             child: TextField(
               obscureText: true,
               textAlign: TextAlign.center,
               decoration: new InputDecoration(
                 hintText: "Password",
+                hintStyle: TextStyle(
+                  fontSize: (RouterConf.blockV) * 3,
+                ),
               ),
               controller: enteredPas,
               onSubmitted: (_) {
@@ -475,11 +506,14 @@ class _LoginRouteState extends State<LoginRoute> {
             ),
           ),
           Padding(
-            padding: const EdgeInsets.only(top: 8.0, bottom: 8.0),
+            padding: EdgeInsets.only(top: 8.0, bottom: (RouterConf.blockV) * 6),
             child: TextField(
               textAlign: TextAlign.center,
               decoration: new InputDecoration(
                 hintText: "Phone Number",
+                hintStyle: TextStyle(
+                  fontSize: (RouterConf.blockV) * 3,
+                ),
               ),
               controller: enteredName,
               keyboardType: TextInputType.phone,
@@ -489,12 +523,15 @@ class _LoginRouteState extends State<LoginRoute> {
             ),
           ),
           Padding(
-            padding: const EdgeInsets.only(top: 8.0, bottom: 8.0),
+            padding: EdgeInsets.only(top: 8.0, bottom: (RouterConf.blockV) * 4),
             child: TextField(
               obscureText: true,
               textAlign: TextAlign.center,
               decoration: new InputDecoration(
                 hintText: "Password",
+                hintStyle: TextStyle(
+                  fontSize: (RouterConf.blockV) * 3,
+                ),
               ),
               controller: enteredPas,
               onSubmitted: (_) {
