@@ -3,7 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:get_version/get_version.dart';
 
 import 'package:florayion/versioner.dart';
-import '../LoginData/tempData.dart';
+import '../LoginData/localData.dart';
 
 class StartupLogo extends StatelessWidget {
   checkVersion() async {

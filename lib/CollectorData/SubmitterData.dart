@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:geolocator/geolocator.dart';
 
-import '../LoginData/tempData.dart';
+import '../LoginData/localData.dart';
 
 class SubmitterData {
   var id = 0;

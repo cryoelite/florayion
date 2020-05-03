@@ -4,7 +4,7 @@ import 'package:gradient_widgets/gradient_widgets.dart';
 import './LoadingRoute.dart';
 import '../logindata/LoginData.dart';
 import '../logindata/RegisterData.dart';
-import '../LoginData/tempData.dart';
+import '../LoginData/localData.dart';
 import '../routeConfig.dart';
 
 class LoginRoute extends StatefulWidget {
@@ -219,8 +219,6 @@ class _LoginRouteState extends State<LoginRoute> {
   }
 
   Card loginBox() {
-    print(
-        "ayay ${(MediaQuery.of(context).size.width)} and ${(MediaQuery.of(context).size.height)}");
     return Card(
       margin: EdgeInsets.only(
         top: 0.0,
@@ -306,7 +304,7 @@ class _LoginRouteState extends State<LoginRoute> {
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
         Padding(
-          padding: const EdgeInsets.only(top: 8.0, bottom: 8.0),
+          padding: EdgeInsets.only(top: (RouterConf.blockV) * 1, bottom: (RouterConf.blockV) * 1),
           child: Center(
             child: Text(
               "Wrong Credentials !",
@@ -314,40 +312,7 @@ class _LoginRouteState extends State<LoginRoute> {
             ),
           ),
         ),
-        Padding(
-          padding: EdgeInsets.only(top: 8.0, bottom: (RouterConf.blockV) * 6),
-          child: TextField(
-            textAlign: TextAlign.center,
-            decoration: new InputDecoration(
-              hintText: "Phone Number",
-              hintStyle: TextStyle(
-                fontSize: (RouterConf.blockV) * 3,
-              ),
-            ),
-            controller: enteredName,
-            keyboardType: TextInputType.phone,
-            onSubmitted: (_) {
-              authentize();
-            },
-          ),
-        ),
-        Padding(
-          padding: EdgeInsets.only(top: 8.0, bottom: (RouterConf.blockV) * 4),
-          child: TextField(
-            obscureText: true,
-            textAlign: TextAlign.center,
-            decoration: new InputDecoration(
-              hintText: "Password",
-              hintStyle: TextStyle(
-                fontSize: (RouterConf.blockV) * 3,
-              ),
-            ),
-            controller: enteredPas,
-            onSubmitted: (_) {
-              authentize();
-            },
-          ),
-        ),
+        loginMain(),
       ],
     );
   }
@@ -356,42 +321,7 @@ class _LoginRouteState extends State<LoginRoute> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       mainAxisAlignment: MainAxisAlignment.center,
-      children: <Widget>[
-        Padding(
-          padding: EdgeInsets.only(top: 8.0, bottom: RouterConf.blockV * 6),
-          child: TextField(
-            textAlign: TextAlign.center,
-            decoration: new InputDecoration(
-              hintText: "Phone Number",
-              hintStyle: TextStyle(
-                fontSize: (RouterConf.blockV) * 3,
-              ),
-            ),
-            controller: enteredName,
-            keyboardType: TextInputType.phone,
-            onSubmitted: (_) {
-              authentize();
-            },
-          ),
-        ),
-        Padding(
-          padding: EdgeInsets.only(top: 8.0, bottom: RouterConf.blockV * 4),
-          child: TextField(
-            obscureText: true,
-            textAlign: TextAlign.center,
-            decoration: new InputDecoration(
-              hintText: "Password",
-              hintStyle: TextStyle(
-                fontSize: (RouterConf.blockV) * 3,
-              ),
-            ),
-            controller: enteredPas,
-            onSubmitted: (_) {
-              authentize();
-            },
-          ),
-        ),
-      ],
+      children: <Widget>[loginMain()],
     );
   }
 
@@ -401,40 +331,7 @@ class _LoginRouteState extends State<LoginRoute> {
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
-          Padding(
-            padding: EdgeInsets.only(top: 8.0, bottom: (RouterConf.blockV) * 6),
-            child: TextField(
-              textAlign: TextAlign.center,
-              decoration: new InputDecoration(
-                hintText: "Phone Number",
-                hintStyle: TextStyle(
-                  fontSize: (RouterConf.blockV) * 3,
-                ),
-              ),
-              controller: enteredName,
-              keyboardType: TextInputType.phone,
-              onSubmitted: (_) {
-                registerize();
-              },
-            ),
-          ),
-          Padding(
-            padding: EdgeInsets.only(top: 8.0, bottom: (RouterConf.blockV) * 4),
-            child: TextField(
-              obscureText: true,
-              textAlign: TextAlign.center,
-              decoration: new InputDecoration(
-                hintText: "Password",
-                hintStyle: TextStyle(
-                  fontSize: (RouterConf.blockV) * 3,
-                ),
-              ),
-              controller: enteredPas,
-              onSubmitted: (_) {
-                registerize();
-              },
-            ),
-          ),
+          registerMain(),
         ],
       );
     } else if (k == 1) {
@@ -443,7 +340,7 @@ class _LoginRouteState extends State<LoginRoute> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           Padding(
-            padding: const EdgeInsets.only(top: 8.0, bottom: 8.0),
+            padding: EdgeInsets.only(top: (RouterConf.blockV) * 1, bottom: (RouterConf.blockV) * 1),
             child: Center(
               child: Text(
                 "Already Registered User !",
@@ -453,40 +350,7 @@ class _LoginRouteState extends State<LoginRoute> {
               ),
             ),
           ),
-          Padding(
-            padding: EdgeInsets.only(top: 8.0, bottom: (RouterConf.blockV) * 6),
-            child: TextField(
-              textAlign: TextAlign.center,
-              decoration: new InputDecoration(
-                hintText: "Phone Number",
-                hintStyle: TextStyle(
-                  fontSize: (RouterConf.blockV) * 3,
-                ),
-              ),
-              controller: enteredName,
-              keyboardType: TextInputType.phone,
-              onSubmitted: (_) {
-                registerize();
-              },
-            ),
-          ),
-          Padding(
-            padding: EdgeInsets.only(top: 8.0, bottom: (RouterConf.blockV) * 4),
-            child: TextField(
-              obscureText: true,
-              textAlign: TextAlign.center,
-              decoration: new InputDecoration(
-                hintText: "Password",
-                hintStyle: TextStyle(
-                  fontSize: (RouterConf.blockV) * 3,
-                ),
-              ),
-              controller: enteredPas,
-              onSubmitted: (_) {
-                registerize();
-              },
-            ),
-          ),
+          registerMain(),
         ],
       );
     } else {
@@ -495,7 +359,7 @@ class _LoginRouteState extends State<LoginRoute> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           Padding(
-            padding: const EdgeInsets.only(top: 8.0, bottom: 8.0),
+            padding: EdgeInsets.only(top: (RouterConf.blockV) * 1, bottom: (RouterConf.blockV) * 1),
             child: Center(
               child: Text(
                 "Please input 10-digit phone number",
@@ -505,42 +369,91 @@ class _LoginRouteState extends State<LoginRoute> {
               ),
             ),
           ),
-          Padding(
-            padding: EdgeInsets.only(top: 8.0, bottom: (RouterConf.blockV) * 6),
-            child: TextField(
-              textAlign: TextAlign.center,
-              decoration: new InputDecoration(
-                hintText: "Phone Number",
-                hintStyle: TextStyle(
-                  fontSize: (RouterConf.blockV) * 3,
-                ),
-              ),
-              controller: enteredName,
-              keyboardType: TextInputType.phone,
-              onSubmitted: (_) {
-                registerize();
-              },
-            ),
-          ),
-          Padding(
-            padding: EdgeInsets.only(top: 8.0, bottom: (RouterConf.blockV) * 4),
-            child: TextField(
-              obscureText: true,
-              textAlign: TextAlign.center,
-              decoration: new InputDecoration(
-                hintText: "Password",
-                hintStyle: TextStyle(
-                  fontSize: (RouterConf.blockV) * 3,
-                ),
-              ),
-              controller: enteredPas,
-              onSubmitted: (_) {
-                registerize();
-              },
-            ),
-          ),
+          registerMain(),
         ],
       );
     }
+  }
+
+  Column loginMain() {
+    return Column(
+      children: <Widget>[
+        Padding(
+          padding: EdgeInsets.only(top: (RouterConf.blockV) * 1, bottom: (RouterConf.blockV) * 3),
+          child: TextField(
+            textAlign: TextAlign.center,
+            decoration: new InputDecoration(
+              hintText: "Phone Number",
+              hintStyle: TextStyle(
+                fontSize: (RouterConf.blockV) * 3,
+              ),
+            ),
+            controller: enteredName,
+            keyboardType: TextInputType.phone,
+            onSubmitted: (_) {
+              authentize();
+            },
+          ),
+        ),
+        Padding(
+          padding: EdgeInsets.only(top: (RouterConf.blockV) * 1, bottom: (RouterConf.blockV) * 3),
+          child: TextField(
+            obscureText: true,
+            textAlign: TextAlign.center,
+            decoration: new InputDecoration(
+              hintText: "Password",
+              hintStyle: TextStyle(
+                fontSize: (RouterConf.blockV) * 3,
+              ),
+            ),
+            controller: enteredPas,
+            onSubmitted: (_) {
+              authentize();
+            },
+          ),
+        ),
+      ],
+    );
+  }
+
+  Column registerMain() {
+    return Column(
+      children: <Widget>[
+        Padding(
+          padding: EdgeInsets.only(top: (RouterConf.blockV) * 1, bottom: (RouterConf.blockV) * 3),
+          child: TextField(
+            textAlign: TextAlign.center,
+            decoration: new InputDecoration(
+              hintText: "Phone Number",
+              hintStyle: TextStyle(
+                fontSize: (RouterConf.blockV) * 3,
+              ),
+            ),
+            controller: enteredName,
+            keyboardType: TextInputType.phone,
+            onSubmitted: (_) {
+              registerize();
+            },
+          ),
+        ),
+        Padding(
+          padding: EdgeInsets.only(top: (RouterConf.blockV) * 1, bottom: (RouterConf.blockV) * 3),
+          child: TextField(
+            obscureText: true,
+            textAlign: TextAlign.center,
+            decoration: new InputDecoration(
+              hintText: "Password",
+              hintStyle: TextStyle(
+                fontSize: (RouterConf.blockV) * 3,
+              ),
+            ),
+            controller: enteredPas,
+            onSubmitted: (_) {
+              registerize();
+            },
+          ),
+        ),
+      ],
+    );
   }
 }
