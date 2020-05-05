@@ -1,3 +1,4 @@
+import 'package:florayion/CollectorData/localFFData.dart';
 import 'package:flutter/material.dart';
 import 'package:gradient_app_bar/gradient_app_bar.dart';
 import 'package:gradient_widgets/gradient_widgets.dart';
@@ -13,7 +14,7 @@ class MainRoute extends StatefulWidget {
 
 class _MainRouteState extends State<MainRoute> {
   var i = 0;
-
+  
   var specieList;
   var tempSS;
   var ffsubmitted;
@@ -52,6 +53,7 @@ class _MainRouteState extends State<MainRoute> {
 
   @override
   Widget build(BuildContext context) {
+    LocalFF.init();
     RouterConf().init(context);
     return Material(
       child: Scaffold(
