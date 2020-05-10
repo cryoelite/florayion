@@ -4,6 +4,7 @@ import 'package:get_version/get_version.dart';
 
 import 'package:florayion/versioner.dart';
 import '../LoginData/localData.dart';
+import 'package:florayion/CollectorData/localFFData.dart';
 
 class StartupLogo extends StatelessWidget {
   checkVersion() async {
@@ -19,6 +20,7 @@ class StartupLogo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    LocalFF.init();
     Future<void>.delayed(
       Duration(seconds: 5),
       () async {

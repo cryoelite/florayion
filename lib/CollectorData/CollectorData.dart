@@ -1,4 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'dart:io';
+
+import '../CollectorData/localFFData.dart';
 
 class CollectorData {
   final specieData = Firestore.instance.collection('MainData');
@@ -8,15 +11,21 @@ class CollectorData {
 
   Future getFFSpecie(String subSpecie, int i) async {
     if (i == 0) {
-      final ffdat = await specieData.document('FloraSpecies').get();
-      final xSpecie = await ffdat[subSpecie];
-      print("ayayaya $i $ffdat");
-      return await xSpecie;
+      List<String> fileya;
+      final path = await LocalFF.localPath;
+      final floraFile = File('$path/floraDat.txt');
+      fileya = floraFile.readAsLinesSync();
+      final temp=fileya[(fileya.indexWhere((elem) => elem==subSpecie))+1];
+      final xSpecie=(temp.substring(1,temp.length-1)).split(", ");
+      return xSpecie;
     } else {
-      final ffdat = await specieData.document('FaunaSpecies').get();
-      final xSpecie = await ffdat[subSpecie];
-      print("ayayaya $i $xSpecie");
-      return await xSpecie;
+      List<String> fileya;
+      final path = await LocalFF.localPath;
+      final faunaFile = File('$path/faunaDat.txt');
+      fileya = faunaFile.readAsLinesSync();
+      final temp=fileya[(fileya.indexWhere((elem) => elem==subSpecie))+1];
+      final xSpecie=(temp.substring(1,temp.length-1)).split(", ");
+      return xSpecie;
     }
   }
 }

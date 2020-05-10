@@ -2,10 +2,11 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'dart:io';
 import 'package:path_provider/path_provider.dart';
 
-class LocalFF {
-  
+import '../CollectorData/CollectorData.dart';
 
-  static Future<String> get _localPath async {
+class LocalFF {
+  static var checker = 0;
+  static Future<String> get localPath async {
     final dir = await getTemporaryDirectory();
     print("hm ${dir.path}");
     return dir.path;
@@ -15,14 +16,23 @@ class LocalFF {
     final specieData = Firestore.instance.collection('MainData');
     final floraDat = await specieData.document('FloraSpecies').get();
     final faunaDat = await specieData.document('FaunaSpecies').get();
-    final path = await _localPath;
+    final path = await localPath;
     final floraFile = File('$path/floraDat.txt');
-    if (await floraFile.exists()) {
-      print("ya");
-      print(floraFile.readAsStringSync());
-    } else {
-      floraFile.writeAsStringSync((floraDat.data).toString());
-      print("na");
+    final faunaFile = File('$path/faunaDat.txt');
+
+    for (var i = 0; i < CollectorData.subTypeFlora.length; i++) {
+      floraFile.writeAsStringSync("${CollectorData.subTypeFlora[i]}\n",
+          mode: FileMode.append);
+      floraFile.writeAsStringSync(
+          "${(floraDat[CollectorData.subTypeFlora[i]]).toString()}\n",
+          mode: FileMode.append);
+    }
+    for (var i = 0; i < CollectorData.subTypeFauna.length; i++) {
+      faunaFile.writeAsStringSync("${CollectorData.subTypeFauna[i]}\n",
+          mode: FileMode.append);
+      faunaFile.writeAsStringSync(
+          "${(faunaDat[CollectorData.subTypeFauna[i]]).toString()}\n",
+          mode: FileMode.append);
     }
   }
 }

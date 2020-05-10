@@ -1,4 +1,3 @@
-import 'package:florayion/CollectorData/localFFData.dart';
 import 'package:flutter/material.dart';
 import 'package:gradient_app_bar/gradient_app_bar.dart';
 import 'package:gradient_widgets/gradient_widgets.dart';
@@ -14,7 +13,7 @@ class MainRoute extends StatefulWidget {
 
 class _MainRouteState extends State<MainRoute> {
   var i = 0;
-  
+
   var specieList;
   var tempSS;
   var ffsubmitted;
@@ -42,7 +41,7 @@ class _MainRouteState extends State<MainRoute> {
   initiator() async {
     specieList = await fetchData.getFFSpecie(subSpecieSubmitted,
         ffsubmitted != "Flora" && ffsubmitted != "Disturbance" ? 1 : 0);
-    specieList = await specieList.map<PopupMenuItem<String>>((dynamic val) {
+    specieList = specieList.map<PopupMenuItem<String>>((dynamic val) {
       return PopupMenuItem<String>(
           child:
               Text(val, style: TextStyle(fontSize: (RouterConf.blockV) * 1.9)),
@@ -53,7 +52,6 @@ class _MainRouteState extends State<MainRoute> {
 
   @override
   Widget build(BuildContext context) {
-    LocalFF.init();
     RouterConf().init(context);
     return Material(
       child: Scaffold(
@@ -108,42 +106,50 @@ class _MainRouteState extends State<MainRoute> {
                                   .copyWith(canvasColor: Colors.white70),
                               child: SizedBox(
                                 width: (RouterConf.blockV) * 22,
-                                height: (RouterConf.blockV) * 6,
-                                child: DropdownButton(
-                                  value: selectorff,
-                                  hint: Text(
-                                    "Type of Occurence",
-                                    style: TextStyle(
-                                        fontSize: (RouterConf.blockV) * 1.9),
-                                  ),
-                                  style: TextStyle(
-                                    color: Colors.black,
-                                  ),
-                                  items: CollectorData.ff
-                                      .map<DropdownMenuItem<String>>((val) {
-                                    return DropdownMenuItem<String>(
-                                        child: Text(
-                                          val,
-                                          style: TextStyle(
-                                              fontSize:
-                                                  (RouterConf.blockV) * 1.9),
-                                        ),
-                                        value: val);
-                                  }).toList(),
-                                  onChanged: (val) {
-                                    selectorff = val;
-                                    ffsubmitted = val;
-                                    tempSS = subspecieType();
-                                    if (selectorSS != null) {
-                                      selectorSS = null;
-                                      subSpecieSubmitted = null;
-                                      enteredSpecie.text="";
-                                    }
-                                    if (enteredSpecie.text != null) {
-                                      enteredSpecie.clear();
-                                    }
-                                    setState(() {});
-                                  },
+                                height: (RouterConf.blockV) * 6.4,
+                                child: Flex(
+                                  direction: Axis.vertical,
+                                  mainAxisSize: MainAxisSize.max,
+                                  children: <Widget>[
+                                    DropdownButton(
+                                      value: selectorff,
+                                      hint: Text(
+                                        "Type of Occurence",
+                                        style: TextStyle(
+                                            fontSize:
+                                                (RouterConf.blockV) * 1.9),
+                                      ),
+                                      style: TextStyle(
+                                        color: Colors.black,
+                                      ),
+                                      items: CollectorData.ff
+                                          .map<DropdownMenuItem<String>>((val) {
+                                        return DropdownMenuItem<String>(
+                                            child: Text(
+                                              val,
+                                              style: TextStyle(
+                                                  fontSize:
+                                                      (RouterConf.blockV) *
+                                                          1.9),
+                                            ),
+                                            value: val);
+                                      }).toList(),
+                                      onChanged: (val) {
+                                        selectorff = val;
+                                        ffsubmitted = val;
+                                        tempSS = subspecieType();
+                                        if (selectorSS != null) {
+                                          selectorSS = null;
+                                          subSpecieSubmitted = null;
+                                          enteredSpecie.text = "";
+                                        }
+                                        if (enteredSpecie.text != null) {
+                                          enteredSpecie.clear();
+                                        }
+                                        setState(() {});
+                                      },
+                                    ),
+                                  ],
                                 ),
                               ),
                             ),
@@ -166,22 +172,28 @@ class _MainRouteState extends State<MainRoute> {
                                   .copyWith(canvasColor: Colors.white70),
                               child: SizedBox(
                                 width: (RouterConf.blockV) * 20,
-                                height: (RouterConf.blockV) * 6,
-                                child: DropdownButton(
-                                  value: selectorSS,
-                                  hint: Text(
-                                    "Sub-Specie Type",
-                                  ),
-                                  style: TextStyle(
-                                    color: Colors.black,
-                                  ),
-                                  items: tempSS,
-                                  onChanged: (val) {
-                                    enteredSpecie.text="";
-                                    selectorSS = val;
-                                    subSpecieSubmitted = val;
-                                    setState(() {});
-                                  },
+                                height: (RouterConf.blockV) * 6.4,
+                                child: Flex(
+                                  direction: Axis.vertical,
+                                  mainAxisSize: MainAxisSize.max,
+                                  children: <Widget>[
+                                    DropdownButton(
+                                      value: selectorSS,
+                                      hint: Text(
+                                        "Sub-Specie Type",
+                                      ),
+                                      style: TextStyle(
+                                        color: Colors.black,
+                                      ),
+                                      items: tempSS,
+                                      onChanged: (val) {
+                                        enteredSpecie.text = "";
+                                        selectorSS = val;
+                                        subSpecieSubmitted = val;
+                                        setState(() {});
+                                      },
+                                    ),
+                                  ],
                                 ),
                               ),
                             ),
