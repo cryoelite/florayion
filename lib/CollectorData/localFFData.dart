@@ -34,5 +34,6 @@ class LocalFF {
           "${(faunaDat[CollectorData.subTypeFauna[i]]).toString()}\n",
           mode: FileMode.append);
     }
+    print("yayayayaya");
   }
 }

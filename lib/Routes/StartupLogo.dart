@@ -5,6 +5,7 @@ import 'package:get_version/get_version.dart';
 import 'package:florayion/versioner.dart';
 import '../LoginData/localData.dart';
 import 'package:florayion/CollectorData/localFFData.dart';
+import '../routeConfig.dart';
 
 class StartupLogo extends StatelessWidget {
   checkVersion() async {
@@ -20,13 +21,14 @@ class StartupLogo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    RouterConf().init(context);
     LocalFF.init();
     Future<void>.delayed(
       Duration(seconds: 5),
       () async {
         if (await checkVersion() == 1) {
-          final checker=await UserName.checker();
-          if ( checker == 1) {
+          final checker = await UserName.checker();
+          if (checker == 1) {
             Navigator.pushNamedAndRemoveUntil(
               context,
               '/second',
@@ -64,14 +66,12 @@ class StartupLogo extends StatelessWidget {
 
   Container buildContainer() {
     return Container(
+      height: double.infinity,
+      width: double.infinity,
       child: Center(
-        child: Stack(
-          children: <Widget>[
-            Image.asset(
-              'lib/ImageAsset/xx.png',
-            ),
-          ],
-        ),
+        child: Image.asset(
+            'lib/ImageAsset/xx.png',
+          ),
       ),
     );
   }

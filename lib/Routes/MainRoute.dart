@@ -47,7 +47,6 @@ class _MainRouteState extends State<MainRoute> {
               Text(val, style: TextStyle(fontSize: (RouterConf.blockV) * 1.9)),
           value: val);
     }).toList();
-    print("gg");
   }
 
   @override
