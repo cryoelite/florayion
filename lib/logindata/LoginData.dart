@@ -1,5 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+import 'package:florayion/LoginData/keySign.dart';
+import '../LoginData/localData.dart';
+
 class LoginData {
   int i = 0;
   final String userName;
@@ -17,6 +20,9 @@ class LoginData {
       for (var i = 0; i < pper.documents.length; i++) {
         if (pper.documents[i][userName] != null) {
           if (pper.documents[i][userName] == userPp) {
+            final encr = ENCRV(userName);
+            UserName.setter(userName);
+            UserName.writeIn(encr.encrvDo());
             return 1;
           } else {
             return 0;

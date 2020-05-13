@@ -4,7 +4,7 @@ import 'package:gradient_widgets/gradient_widgets.dart';
 import './LoadingRoute.dart';
 import '../logindata/LoginData.dart';
 import '../logindata/RegisterData.dart';
-import '../LoginData/localData.dart';
+
 import '../routeConfig.dart';
 
 class LoginRoute extends StatefulWidget {
@@ -53,7 +53,6 @@ class _LoginRouteState extends State<LoginRoute> {
         );
         var checker = await loginData.checkData();
         if (checker == 1) {
-          UserName.setter(name);
           Navigator.pushNamedAndRemoveUntil(
             context,
             '/second',
@@ -304,7 +303,8 @@ class _LoginRouteState extends State<LoginRoute> {
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
         Padding(
-          padding: EdgeInsets.only(top: (RouterConf.blockV) * 1, bottom: (RouterConf.blockV) * 1),
+          padding: EdgeInsets.only(
+              top: (RouterConf.blockV) * 1, bottom: (RouterConf.blockV) * 1),
           child: Center(
             child: Text(
               "Wrong Credentials !",
@@ -340,7 +340,8 @@ class _LoginRouteState extends State<LoginRoute> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           Padding(
-            padding: EdgeInsets.only(top: (RouterConf.blockV) * 1, bottom: (RouterConf.blockV) * 1),
+            padding: EdgeInsets.only(
+                top: (RouterConf.blockV) * 1, bottom: (RouterConf.blockV) * 1),
             child: Center(
               child: Text(
                 "Already Registered User !",
@@ -359,7 +360,8 @@ class _LoginRouteState extends State<LoginRoute> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           Padding(
-            padding: EdgeInsets.only(top: (RouterConf.blockV) * 1, bottom: (RouterConf.blockV) * 1),
+            padding: EdgeInsets.only(
+                top: (RouterConf.blockV) * 1, bottom: (RouterConf.blockV) * 1),
             child: Center(
               child: Text(
                 "Please input 10-digit phone number",
@@ -379,7 +381,8 @@ class _LoginRouteState extends State<LoginRoute> {
     return Column(
       children: <Widget>[
         Padding(
-          padding: EdgeInsets.only(top: (RouterConf.blockV) * 1, bottom: (RouterConf.blockV) * 3),
+          padding: EdgeInsets.only(
+              top: (RouterConf.blockV) * 1, bottom: (RouterConf.blockV) * 3),
           child: TextField(
             textAlign: TextAlign.center,
             decoration: new InputDecoration(
@@ -396,7 +399,8 @@ class _LoginRouteState extends State<LoginRoute> {
           ),
         ),
         Padding(
-          padding: EdgeInsets.only(top: (RouterConf.blockV) * 1, bottom: (RouterConf.blockV) * 3),
+          padding: EdgeInsets.only(
+              top: (RouterConf.blockV) * 1, bottom: (RouterConf.blockV) * 3),
           child: TextField(
             obscureText: true,
             textAlign: TextAlign.center,
@@ -420,7 +424,8 @@ class _LoginRouteState extends State<LoginRoute> {
     return Column(
       children: <Widget>[
         Padding(
-          padding: EdgeInsets.only(top: (RouterConf.blockV) * 1, bottom: (RouterConf.blockV) * 3),
+          padding: EdgeInsets.only(
+              top: (RouterConf.blockV) * 1, bottom: (RouterConf.blockV) * 3),
           child: TextField(
             textAlign: TextAlign.center,
             decoration: new InputDecoration(
@@ -437,7 +442,8 @@ class _LoginRouteState extends State<LoginRoute> {
           ),
         ),
         Padding(
-          padding: EdgeInsets.only(top: (RouterConf.blockV) * 1, bottom: (RouterConf.blockV) * 3),
+          padding: EdgeInsets.only(
+              top: (RouterConf.blockV) * 1, bottom: (RouterConf.blockV) * 3),
           child: TextField(
             obscureText: true,
             textAlign: TextAlign.center,

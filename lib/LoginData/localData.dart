@@ -7,7 +7,6 @@ class UserName {
   static setter(String temp) {
     name = temp;
     isLoggedin = true;
-    writeIn();
   }
 
   static Future<String> get _localPath async {
@@ -20,9 +19,10 @@ class UserName {
     return File('$path/userData.txt');
   }
 
-  static Future<File> writeIn() async {
+  static Future<File> writeIn(String encr) async {
     final file = await _localFile;
-    return file.writeAsString('uid: $name \nstatus: $isLoggedin');
+    return file
+        .writeAsString('uid: $name \nstatus: $isLoggedin \nrandVal: $encr',mode: FileMode.write);
   }
 
   static Future<int> checker() async {
