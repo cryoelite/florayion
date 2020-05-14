@@ -2,8 +2,7 @@ import 'package:data_connection_checker/data_connection_checker.dart';
 import 'dart:async';
 
 class LVC {
-  static var clr = StreamController<bool>.broadcast();
-  static StreamSubscription<bool> tempStream;
+  var clr = StreamController<bool>.broadcast();
   bool status;
   bool get thatStatus => status;
   Future<void> checker() async {
@@ -11,10 +10,18 @@ class LVC {
     clr.sink.add(status);
   }
 
-  Stream<bool> get strClr => clr.stream;
-  LVC() {
-    Timer.periodic(Duration(seconds: 3), (_) {
+  Timer timeIt;
+  void startTimer() {
+    timeIt = Timer.periodic(Duration(seconds: 3), (_) {
+      print("lol");
       checker();
     });
+  }
+
+  Stream<bool> get strClr => clr.stream;
+  void disabler() async {
+    print("thy is done!");
+    await clr.close();
+    timeIt.cancel();
   }
 }

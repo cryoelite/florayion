@@ -5,7 +5,6 @@ import 'package:gradient_widgets/gradient_widgets.dart';
 import '../CollectorData/CollectorData.dart';
 import 'package:florayion/CollectorData/SubmitterData.dart';
 import '../routeConfig.dart';
-import '../liveChecker.dart';
 
 class MainRoute extends StatefulWidget {
   @override
@@ -13,7 +12,6 @@ class MainRoute extends StatefulWidget {
 }
 
 class _MainRouteState extends State<MainRoute> {
-  
   var i = 0;
 
   var specieList;
@@ -53,7 +51,6 @@ class _MainRouteState extends State<MainRoute> {
 
   @override
   Widget build(BuildContext context) {
-    LVC.tempStream.cancel;
     RouterConf().init(context);
     return Material(
       child: Scaffold(

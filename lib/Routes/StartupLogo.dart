@@ -1,6 +1,9 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get_version/get_version.dart';
+import 'package:data_connection_checker/data_connection_checker.dart';
 
 import 'package:florayion/versioner.dart';
 
@@ -15,25 +18,35 @@ class StartupLogo extends StatefulWidget {
 }
 
 class _StartupLogoState extends State<StartupLogo> {
-  void streamFunc(BuildContext context) {
-    Stream lvcStream = LVC().strClr;
-    final stream = lvcStream.listen((event) {
-      print("$event");
-      if (event == true) {
-        setState(() {
-          proceeder(context);
-        });
-      } else {
-        setState(() {
+  final lvcobject = LVC();
+  void streamFunc(BuildContext context) async {
+    if (await DataConnectionChecker().hasConnection == true) {
+      StreamSubscription<bool> stream;
+      lvcobject.startTimer();
+      proceeder(context);
+      Stream lvcStream = lvcobject.strClr;
+      stream = lvcStream.listen((event) {
+        print("$event");
+        if (event == false) {
+          stream.cancel();
           Navigator.pushNamedAndRemoveUntil(
             context,
             '/second',
             (_) => false,
           );
-        });
+        }
+      });
+      if (await lvcStream.isEmpty == false) {
+        stream.cancel();
+        lvcobject.disabler();
       }
-    });
-    LVC.tempStream = stream;
+    } else {
+      Navigator.pushNamedAndRemoveUntil(
+        context,
+        '/second',
+        (_) => false,
+      );
+    }
   }
 
   checkVersion() async {
@@ -82,6 +95,7 @@ class _StartupLogoState extends State<StartupLogo> {
     Future<void>.delayed(
       Duration(seconds: 5),
       () async {
+        lvcobject.disabler();
         if (await checkVersion() == 1) {
           final checker = await UserName.checker();
           if (checker == 1) {
