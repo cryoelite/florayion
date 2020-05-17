@@ -6,7 +6,6 @@ import 'package:get_version/get_version.dart';
 import 'package:data_connection_checker/data_connection_checker.dart';
 
 import 'package:florayion/versioner.dart';
-
 import '../LoginData/localData.dart';
 import 'package:florayion/CollectorData/localFFData.dart';
 import '../routeConfig.dart';
@@ -18,32 +17,51 @@ class StartupLogo extends StatefulWidget {
 }
 
 class _StartupLogoState extends State<StartupLogo> {
-  final lvcobject = LVC();
+  var localDataChecker;
+  var lvcObject = LVC();
   void streamFunc(BuildContext context) async {
+    localDataChecker = await UserName.checker();
     if (await DataConnectionChecker().hasConnection == true) {
-      StreamSubscription<bool> stream;
-      lvcobject.startTimer();
       proceeder(context);
-      Stream lvcStream = lvcobject.strClr;
-      stream = lvcStream.listen((event) {
-        print("$event");
-        if (event == false) {
-          stream.cancel();
-          Navigator.pushNamedAndRemoveUntil(
-            context,
-            '/second',
-            (_) => false,
-          );
-        }
-      });
-      if (await lvcStream.isEmpty == false) {
-        stream.cancel();
-        lvcobject.disabler();
-      }
+      streamer();
     } else {
+      loginChecker();
+    }
+  }
+
+  void streamer() {
+    StreamSubscription<bool> stream;
+    lvcObject.startTimer();
+    Stream lvcStream = lvcObject.strClr;
+    stream = lvcStream.listen((event) {
+      print("$event");
+      if (event == false) {
+        loginChecker();
+        streamCloser(stream);
+        disabler(lvcObject);
+      }
+    });
+  }
+
+  void streamCloser(StreamSubscription<bool> stream) {
+    stream.cancel();
+  }
+
+  void disabler(LVC obj) {
+    obj.disabler();
+  }
+
+  void loginChecker() {
+    if (localDataChecker == 1) {
       Navigator.pushNamedAndRemoveUntil(
         context,
         '/second',
+        (_) => false,
+      );
+    } else {
+      Navigator.pushNamedAndRemoveUntil(
+        context,
+        '/fourth',
         (_) => false,
       );
     }
@@ -95,10 +113,9 @@ class _StartupLogoState extends State<StartupLogo> {
     Future<void>.delayed(
       Duration(seconds: 5),
       () async {
-        lvcobject.disabler();
+        disabler(lvcObject);
         if (await checkVersion() == 1) {
-          final checker = await UserName.checker();
-          if (checker == 1) {
+          if (localDataChecker == 1) {
             Navigator.pushNamedAndRemoveUntil(
               context,
               '/second',

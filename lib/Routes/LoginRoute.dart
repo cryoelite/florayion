@@ -124,8 +124,13 @@ class _LoginRouteState extends State<LoginRoute> {
     }
   }
 
+  void signal() {
+    print("ohohoho");
+  }
+
   @override
   Widget build(BuildContext context) {
+    signal();
     RouterConf().init(context);
     return loader
         ? Loading()
