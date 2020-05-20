@@ -16,23 +16,15 @@ class _LogCheckerState extends State<LogChecker> {
     stream = lvcStream.listen((event) {
       print("$event");
       if (event == true) {
+        stream.cancel();
+        lvcObject.disabler();
         Navigator.pushNamedAndRemoveUntil(
           context,
           '/first',
           (_) => false,
         );
-        streamCloser(stream);
-        disabler(lvcObject);
       }
     });
-  }
-
-  void streamCloser(StreamSubscription<bool> stream) {
-    stream.cancel();
-  }
-
-  void disabler(LVC obj) {
-    obj.disabler();
   }
 
   @override
@@ -49,7 +41,8 @@ class _LogCheckerState extends State<LogChecker> {
         child: Card(
           elevation: 8,
           child: Center(
-            child: Text("Please Login before using the app in offline mode."),
+            child: Text(
+                "You are offline and not logged in. Please check connectivity."),
           ),
         ),
       ),

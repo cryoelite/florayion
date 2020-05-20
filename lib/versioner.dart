@@ -9,11 +9,11 @@ class VersionAllowed {
     final currentVersion = int.parse(temp);
     final QuerySnapshot checker = await version.getDocuments();
     if(currentVersion>=await checker.documents[0]["version"]){
-      print(currentVersion);
+
       return 1;
     }
     else{
-      print(currentVersion);
+
       return 0;
     }
   }

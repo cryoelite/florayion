@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gradient_widgets/gradient_widgets.dart';
+import 'package:data_connection_checker/data_connection_checker.dart';
 
 import './LoadingRoute.dart';
 import '../logindata/LoginData.dart';
@@ -124,13 +125,24 @@ class _LoginRouteState extends State<LoginRoute> {
     }
   }
 
-  void signal() {
-    print("ohohoho");
+  void checker(String option) async {
+    if (await DataConnectionChecker().hasConnection == true) {
+      if (option == "register") {
+        registerize();
+      } else {
+        authentize();
+      }
+    } else {
+      Navigator.pushNamedAndRemoveUntil(
+        context,
+        '/fourth',
+        (_) => false,
+      );
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    signal();
     RouterConf().init(context);
     return loader
         ? Loading()
@@ -244,7 +256,7 @@ class _LoginRouteState extends State<LoginRoute> {
               increaseWidthBy: 150,
               increaseHeightBy: 4,
               callback: () {
-                authentize();
+                checker("login");
               },
               gradient: Gradients.hotLinear,
               child: GradientText(
@@ -284,7 +296,7 @@ class _LoginRouteState extends State<LoginRoute> {
               increaseWidthBy: 150,
               increaseHeightBy: 4,
               callback: () {
-                registerize();
+                checker("register");
               },
               gradient: Gradients.hotLinear,
               child: GradientText(
@@ -399,7 +411,7 @@ class _LoginRouteState extends State<LoginRoute> {
             controller: enteredName,
             keyboardType: TextInputType.phone,
             onSubmitted: (_) {
-              authentize();
+              checker("login");
             },
           ),
         ),
@@ -417,7 +429,7 @@ class _LoginRouteState extends State<LoginRoute> {
             ),
             controller: enteredPas,
             onSubmitted: (_) {
-              authentize();
+              checker("login");
             },
           ),
         ),
@@ -442,7 +454,7 @@ class _LoginRouteState extends State<LoginRoute> {
             controller: enteredName,
             keyboardType: TextInputType.phone,
             onSubmitted: (_) {
-              registerize();
+              checker("register");
             },
           ),
         ),
@@ -460,7 +472,7 @@ class _LoginRouteState extends State<LoginRoute> {
             ),
             controller: enteredPas,
             onSubmitted: (_) {
-              registerize();
+              checker("register");
             },
           ),
         ),

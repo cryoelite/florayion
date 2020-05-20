@@ -17,7 +17,6 @@ class SubmitterData {
         .getDocuments();
     id = idFind.documents.length;
     print(id);
-    print("yayayayayay");
     Position pos = await Geolocator()
         .getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
     this.tempff != "Disturbance"
@@ -32,7 +31,7 @@ class SubmitterData {
                 "Sub-Specie": (this.tempSubSpecie),
                 "SpecieName": (this.tempsubmitVal),
                 "Location":
-                    ("${pos.latitude.toString()} + ${pos.longitude.toString()}"),
+                    ("${pos.toJson()}"),
               },
               merge: true,
             )

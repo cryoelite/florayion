@@ -9,13 +9,13 @@ class UserName {
     isLoggedin = true;
   }
 
-  static Future<String> get _localPath async {
+  static Future<String> get localPath async {
     final dir = await getTemporaryDirectory();
     return dir.path;
   }
 
   static Future<File> get _localFile async {
-    final path = await _localPath;
+    final path = await localPath;
     return File('$path/userData.txt');
   }
 

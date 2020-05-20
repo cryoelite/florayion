@@ -8,7 +8,6 @@ class LocalFF {
   static var checker = 0;
   static Future<String> get localPath async {
     final dir = await getTemporaryDirectory();
-    print("hm ${dir.path}");
     return dir.path;
   }
 

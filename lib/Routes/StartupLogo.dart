@@ -22,6 +22,7 @@ class _StartupLogoState extends State<StartupLogo> {
   void streamFunc(BuildContext context) async {
     localDataChecker = await UserName.checker();
     if (await DataConnectionChecker().hasConnection == true) {
+      LocalFF.init();
       proceeder(context);
       streamer();
     } else {
@@ -37,18 +38,10 @@ class _StartupLogoState extends State<StartupLogo> {
       print("$event");
       if (event == false) {
         loginChecker();
-        streamCloser(stream);
-        disabler(lvcObject);
+        stream.cancel();
+        lvcObject.disabler();
       }
     });
-  }
-
-  void streamCloser(StreamSubscription<bool> stream) {
-    stream.cancel();
-  }
-
-  void disabler(LVC obj) {
-    obj.disabler();
   }
 
   void loginChecker() {
@@ -82,7 +75,7 @@ class _StartupLogoState extends State<StartupLogo> {
   Widget build(BuildContext context) {
     streamFunc(context);
     RouterConf().init(context);
-    LocalFF.init();
+
     SystemChrome.setPreferredOrientations(
       [
         DeviceOrientation.portraitUp,
@@ -113,7 +106,7 @@ class _StartupLogoState extends State<StartupLogo> {
     Future<void>.delayed(
       Duration(seconds: 5),
       () async {
-        disabler(lvcObject);
+        lvcObject.disabler();
         if (await checkVersion() == 1) {
           if (localDataChecker == 1) {
             Navigator.pushNamedAndRemoveUntil(

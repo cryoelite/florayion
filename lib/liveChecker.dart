@@ -13,7 +13,6 @@ class LVC {
   Timer timeIt;
   void startTimer() {
     timeIt = Timer.periodic(Duration(seconds: 3), (_) {
-      print("lol");
       checker();
     });
   }
