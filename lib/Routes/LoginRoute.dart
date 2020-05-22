@@ -5,6 +5,7 @@ import 'package:data_connection_checker/data_connection_checker.dart';
 import './LoadingRoute.dart';
 import '../logindata/LoginData.dart';
 import '../logindata/RegisterData.dart';
+import 'package:florayion/i_c1_icons.dart';
 
 import '../routeConfig.dart';
 
@@ -147,17 +148,7 @@ class _LoginRouteState extends State<LoginRoute> {
     return loader
         ? Loading()
         : Container(
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-                colors: [
-                  Color(0xCCF3377A),
-                  Color(0xFF9C3788),
-                  Color(0xFC6B3890),
-                ],
-              ),
-            ),
+            color: Colors.black,
             child: Center(
               child: SizedBox(
                 height: (RouterConf.blockV) * 40,
@@ -236,11 +227,13 @@ class _LoginRouteState extends State<LoginRoute> {
 
   Card loginBox() {
     return Card(
+      borderOnForeground: true,
+      shadowColor: Color(0xFFF8947D),
       margin: EdgeInsets.only(
         top: 0.0,
       ),
-      color: Colors.white,
-      elevation: 5,
+      color: Colors.black,
+      elevation: 8,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(10),
       ),
@@ -403,12 +396,25 @@ class _LoginRouteState extends State<LoginRoute> {
           child: TextField(
             textAlign: TextAlign.center,
             decoration: new InputDecoration(
-              hintText: "Phone Number",
+              hintText: "Yo",
               hintStyle: TextStyle(
-                fontSize: (RouterConf.blockV) * 3,
+                color: Colors.grey,
               ),
+              prefix: Icon(
+                IC1.user,
+                color: Color(
+                  0xFFF8947D,
+                ),
+              ),
+              labelText: "Phone Number",
+              labelStyle: TextStyle(
+                  height: -1,
+                  fontSize: (RouterConf.blockV) * 3,
+                  color: Colors.grey),
+              floatingLabelBehavior: FloatingLabelBehavior.always,
             ),
             controller: enteredName,
+            style: TextStyle(color: Colors.white),
             keyboardType: TextInputType.phone,
             onSubmitted: (_) {
               checker("login");

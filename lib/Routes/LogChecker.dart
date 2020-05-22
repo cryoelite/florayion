@@ -1,6 +1,8 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+
 import '../liveChecker.dart';
+import 'package:florayion/CollectorData/localFFData.dart';
 
 class LogChecker extends StatefulWidget {
   @override
@@ -16,6 +18,7 @@ class _LogCheckerState extends State<LogChecker> {
     stream = lvcStream.listen((event) {
       print("$event");
       if (event == true) {
+        LocalFF.init();
         stream.cancel();
         lvcObject.disabler();
         Navigator.pushNamedAndRemoveUntil(

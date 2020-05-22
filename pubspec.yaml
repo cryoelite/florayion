@@ -61,6 +61,10 @@ flutter:
   assets:
     - lib/ImageAsset/xx.png
   #  - images/a_dot_ham.jpeg
+  fonts:
+    - family:  IC1
+      fonts:
+        - asset: lib/IconAsset/IC1.ttf
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
