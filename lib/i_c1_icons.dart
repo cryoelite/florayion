@@ -16,6 +16,10 @@
 ///         Author:    P.J. Onori
 ///         License:   SIL (http://scripts.sil.org/OFL)
 ///         Homepage:  http://somerandomdude.com/work/iconic/
+/// * Entypo, Copyright (C) 2012 by Daniel Bruce
+///         Author:    Daniel Bruce
+///         License:   SIL (http://scripts.sil.org/OFL)
+///         Homepage:  http://www.entypo.com
 ///
 import 'package:flutter/widgets.dart';
 
@@ -26,4 +30,5 @@ class IC1 {
   static const _kFontPkg = null;
 
   static const IconData user = IconData(0xe800, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData key = IconData(0xe801, fontFamily: _kFontFam, fontPackage: _kFontPkg);
 }

@@ -15,14 +15,23 @@ class LocalSubmission {
     final path = await UserName.localPath;
     File localDat = File('$path/submission.txt');
     if (localDat.existsSync()) {
-      /* final info = localDat.readAsStringSync(); */
-
+      final info = localDat.readAsStringSync();
+      final currentId = int.tryParse(
+        info.substring(
+          info.lastIndexOf("id=") + 3,
+          info.indexOf(
+            "\n",
+          ),
+        ),
+      );
+      print("Current ID: $currentId");
+      localDat.writeAsStringSync(
+        "id=${(currentId + 1).toString()}\n FF=$tempff\n SubSpecie=$tempSubSpecie\n SubmitVal=$tempSubmitVal\n Position=${(pos.toJson()).toString()}\n ",
+      );
     } else {
-      localDat.writeAsStringSync("id=${id.toString()}\n");
-      localDat.writeAsStringSync("FF=$tempff\n");
-      localDat.writeAsStringSync("SubSpecie=$tempSubSpecie\n");
-      localDat.writeAsStringSync("SubmitVal=$tempSubmitVal\n");
-      localDat.writeAsStringSync("Position=${pos.toString()}\n");
+      localDat.writeAsStringSync(
+        "id=0\n FF=$tempff\n SubSpecie=$tempSubSpecie\n SubmitVal=$tempSubmitVal\n Position=${(pos.toJson()).toString()}\n ",
+      );
     }
   }
 }

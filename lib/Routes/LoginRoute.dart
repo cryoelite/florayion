@@ -151,7 +151,7 @@ class _LoginRouteState extends State<LoginRoute> {
             color: Colors.black,
             child: Center(
               child: SizedBox(
-                height: (RouterConf.blockV) * 40,
+                height: (RouterConf.blockV) * 44,
                 width: (RouterConf.blockH) * 80,
                 child: Stack(
                   children: <Widget>[
@@ -214,8 +214,9 @@ class _LoginRouteState extends State<LoginRoute> {
                       ),
                     ),
                     Positioned(
-                      bottom: 7,
-                      left: 5,
+                      bottom: (RouterConf.blockV) * 1,
+                      left: (RouterConf.blockV) * 0.95,
+                      right: (RouterConf.blockV) * 1.1,
                       child: j == 0 ? loginBox() : registerBox(),
                     ),
                   ],
@@ -228,18 +229,18 @@ class _LoginRouteState extends State<LoginRoute> {
   Card loginBox() {
     return Card(
       borderOnForeground: true,
-      shadowColor: Color(0xFFF8947D),
+      shadowColor: Color(0xFFF56395),
       margin: EdgeInsets.only(
         top: 0.0,
       ),
-      color: Colors.black,
+      color: Color(0xFF19191a),
       elevation: 8,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(10),
       ),
       child: Container(
         width: (RouterConf.blockH) * 77,
-        height: (RouterConf.blockV) * 32,
+        height: (RouterConf.blockV) * 36,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -269,17 +270,19 @@ class _LoginRouteState extends State<LoginRoute> {
 
   Card registerBox() {
     return Card(
+      borderOnForeground: true,
+      shadowColor: Color(0xFFF9AE70),
       margin: EdgeInsets.only(
         top: 0.0,
       ),
-      color: Colors.white,
-      elevation: 5,
+      color: Color(0xFF19191a),
+      elevation: 8,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(10),
       ),
       child: Container(
         width: (RouterConf.blockH) * 77,
-        height: (RouterConf.blockV) * 32,
+        height: (RouterConf.blockV) * 36,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -394,27 +397,27 @@ class _LoginRouteState extends State<LoginRoute> {
           padding: EdgeInsets.only(
               top: (RouterConf.blockV) * 1, bottom: (RouterConf.blockV) * 3),
           child: TextField(
+            cursorColor: Color(
+              0xFFF56395,
+            ),
             textAlign: TextAlign.center,
             decoration: new InputDecoration(
-              hintText: "Yo",
-              hintStyle: TextStyle(
-                color: Colors.grey,
-              ),
-              prefix: Icon(
+              prefixIconConstraints: BoxConstraints(maxHeight: 0),
+              prefixIcon: Icon(
                 IC1.user,
                 color: Color(
-                  0xFFF8947D,
+                  0xFFF56395,
                 ),
               ),
               labelText: "Phone Number",
               labelStyle: TextStyle(
-                  height: -1,
+                  height: 0,
                   fontSize: (RouterConf.blockV) * 3,
                   color: Colors.grey),
               floatingLabelBehavior: FloatingLabelBehavior.always,
             ),
-            controller: enteredName,
             style: TextStyle(color: Colors.white),
+            controller: enteredName,
             keyboardType: TextInputType.phone,
             onSubmitted: (_) {
               checker("login");
@@ -425,14 +428,26 @@ class _LoginRouteState extends State<LoginRoute> {
           padding: EdgeInsets.only(
               top: (RouterConf.blockV) * 1, bottom: (RouterConf.blockV) * 3),
           child: TextField(
-            obscureText: true,
+            cursorColor: Color(
+              0xFFF56395,
+            ),
             textAlign: TextAlign.center,
             decoration: new InputDecoration(
-              hintText: "Password",
-              hintStyle: TextStyle(
-                fontSize: (RouterConf.blockV) * 3,
+              prefixIconConstraints: BoxConstraints(maxHeight: 0),
+              prefixIcon: Icon(
+                IC1.key,
+                color: Color(
+                  0xFFF56395,
+                ),
               ),
+              labelText: "Password",
+              labelStyle: TextStyle(
+                  height: 0,
+                  fontSize: (RouterConf.blockV) * 3,
+                  color: Colors.grey),
+              floatingLabelBehavior: FloatingLabelBehavior.always,
             ),
+            style: TextStyle(color: Colors.white),
             controller: enteredPas,
             onSubmitted: (_) {
               checker("login");
@@ -450,13 +465,26 @@ class _LoginRouteState extends State<LoginRoute> {
           padding: EdgeInsets.only(
               top: (RouterConf.blockV) * 1, bottom: (RouterConf.blockV) * 3),
           child: TextField(
+            cursorColor: Color(
+              0xFFF9AE70,
+            ),
             textAlign: TextAlign.center,
             decoration: new InputDecoration(
-              hintText: "Phone Number",
-              hintStyle: TextStyle(
-                fontSize: (RouterConf.blockV) * 3,
+              prefixIconConstraints: BoxConstraints(maxHeight: 0),
+              prefixIcon: Icon(
+                IC1.user,
+                color: Color(
+                  0xFFF9AE70,
+                ),
               ),
+              labelText: "Phone Number",
+              labelStyle: TextStyle(
+                  height: 0,
+                  fontSize: (RouterConf.blockV) * 3,
+                  color: Colors.grey),
+              floatingLabelBehavior: FloatingLabelBehavior.always,
             ),
+            style: TextStyle(color: Colors.white),
             controller: enteredName,
             keyboardType: TextInputType.phone,
             onSubmitted: (_) {
@@ -468,14 +496,26 @@ class _LoginRouteState extends State<LoginRoute> {
           padding: EdgeInsets.only(
               top: (RouterConf.blockV) * 1, bottom: (RouterConf.blockV) * 3),
           child: TextField(
-            obscureText: true,
+            cursorColor: Color(
+              0xFFF9AE70,
+            ),
             textAlign: TextAlign.center,
             decoration: new InputDecoration(
-              hintText: "Password",
-              hintStyle: TextStyle(
-                fontSize: (RouterConf.blockV) * 3,
+              prefixIconConstraints: BoxConstraints(maxHeight: 0),
+              prefixIcon: Icon(
+                IC1.key,
+                color: Color(
+                  0xFFF9AE70,
+                ),
               ),
+              labelText: "Password",
+              labelStyle: TextStyle(
+                  height: 0,
+                  fontSize: (RouterConf.blockV) * 3,
+                  color: Colors.grey),
+              floatingLabelBehavior: FloatingLabelBehavior.always,
             ),
+            style: TextStyle(color: Colors.white),
             controller: enteredPas,
             onSubmitted: (_) {
               checker("register");
