@@ -77,197 +77,195 @@ class _MainRouteState extends State<MainRoute> {
         body: Container(
           height: double.infinity,
           color: Colors.black,
-          child: Image(image: Image.asset('lib/ImageAsset/ppo.jpg'),
-                      child: GradientCard(
-              gradient: Gradients.taitanum,
-              child: ListView(
-                children: <Widget>[
-                  Column(
-                    children: <Widget>[
-                      Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: <Widget>[
-                          Card(
-                            child: SizedBox(
-                              width: 1,
-                              height: 1,
-                            ),
+          child: GradientCard(
+            gradient: Gradients.taitanum,
+            child: ListView(
+              children: <Widget>[
+                Column(
+                  children: <Widget>[
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: <Widget>[
+                        Card(
+                          child: SizedBox(
+                            width: 1,
+                            height: 1,
                           ),
-                          Card(
-                            color: Colors.white70,
-                            margin: EdgeInsets.only(
-                                top: (RouterConf.blockV) * 1.4,
-                                left: (RouterConf.blockV) * 0.8),
-                            child: ButtonTheme(
-                              alignedDropdown: true,
-                              child: Theme(
-                                data: Theme.of(context)
-                                    .copyWith(canvasColor: Colors.white70),
-                                child: SizedBox(
-                                  width: (RouterConf.blockV) * 22,
-                                  height: (RouterConf.blockV) * 6.4,
-                                  child: Flex(
-                                    direction: Axis.vertical,
-                                    mainAxisSize: MainAxisSize.max,
-                                    children: <Widget>[
-                                      DropdownButton(
-                                        value: selectorff,
-                                        hint: Text(
-                                          "Type of Occurence",
-                                          style: TextStyle(
-                                              fontSize:
-                                                  (RouterConf.blockV) * 1.9),
-                                        ),
+                        ),
+                        Card(
+                          color: Colors.white70,
+                          margin: EdgeInsets.only(
+                              top: (RouterConf.blockV) * 1.4,
+                              left: (RouterConf.blockV) * 0.8),
+                          child: ButtonTheme(
+                            alignedDropdown: true,
+                            child: Theme(
+                              data: Theme.of(context)
+                                  .copyWith(canvasColor: Colors.white70),
+                              child: SizedBox(
+                                width: (RouterConf.blockV) * 22,
+                                height: (RouterConf.blockV) * 6.4,
+                                child: Flex(
+                                  direction: Axis.vertical,
+                                  mainAxisSize: MainAxisSize.max,
+                                  children: <Widget>[
+                                    DropdownButton(
+                                      value: selectorff,
+                                      hint: Text(
+                                        "Type of Occurence",
                                         style: TextStyle(
-                                          color: Colors.black,
-                                        ),
-                                        items: CollectorData.ff
-                                            .map<DropdownMenuItem<String>>((val) {
-                                          return DropdownMenuItem<String>(
-                                              child: Text(
-                                                val,
-                                                style: TextStyle(
-                                                    fontSize:
-                                                        (RouterConf.blockV) *
-                                                            1.9),
-                                              ),
-                                              value: val);
-                                        }).toList(),
-                                        onChanged: (val) {
-                                          selectorff = val;
-                                          ffsubmitted = val;
-                                          tempSS = subspecieType();
-                                          if (selectorSS != null) {
-                                            selectorSS = null;
-                                            subSpecieSubmitted = null;
-                                            enteredSpecie.text = "";
-                                          }
-                                          if (enteredSpecie.text != null) {
-                                            enteredSpecie.clear();
-                                          }
-                                          setState(() {});
-                                        },
+                                            fontSize:
+                                                (RouterConf.blockV) * 1.9),
                                       ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                      Row(
-                        children: <Widget>[
-                          Card(
-                            color: Colors.white70,
-                            margin: EdgeInsets.only(
-                              top: (RouterConf.blockV) * 15,
-                              left: (RouterConf.blockV) * 2.8,
-                            ),
-                            child: ButtonTheme(
-                              alignedDropdown: true,
-                              child: Theme(
-                                data: Theme.of(context)
-                                    .copyWith(canvasColor: Colors.white70),
-                                child: SizedBox(
-                                  width: (RouterConf.blockV) * 20,
-                                  height: (RouterConf.blockV) * 6.4,
-                                  child: Flex(
-                                    direction: Axis.vertical,
-                                    mainAxisSize: MainAxisSize.max,
-                                    children: <Widget>[
-                                      DropdownButton(
-                                        value: selectorSS,
-                                        hint: Text(
-                                          "Sub-Specie Type",
-                                        ),
-                                        style: TextStyle(
-                                          color: Colors.black,
-                                        ),
-                                        items: tempSS,
-                                        onChanged: (val) {
+                                      style: TextStyle(
+                                        color: Colors.black,
+                                      ),
+                                      items: CollectorData.ff
+                                          .map<DropdownMenuItem<String>>((val) {
+                                        return DropdownMenuItem<String>(
+                                            child: Text(
+                                              val,
+                                              style: TextStyle(
+                                                  fontSize:
+                                                      (RouterConf.blockV) *
+                                                          1.9),
+                                            ),
+                                            value: val);
+                                      }).toList(),
+                                      onChanged: (val) {
+                                        selectorff = val;
+                                        ffsubmitted = val;
+                                        tempSS = subspecieType();
+                                        if (selectorSS != null) {
+                                          selectorSS = null;
+                                          subSpecieSubmitted = null;
                                           enteredSpecie.text = "";
-                                          selectorSS = val;
-                                          subSpecieSubmitted = val;
-                                          setState(() {});
-                                        },
-                                      ),
-                                    ],
-                                  ),
+                                        }
+                                        if (enteredSpecie.text != null) {
+                                          enteredSpecie.clear();
+                                        }
+                                        setState(() {});
+                                      },
+                                    ),
+                                  ],
                                 ),
                               ),
                             ),
                           ),
-                        ],
-                      ),
-                      Row(
-                        children: <Widget>[
-                          Card(
-                            color: Colors.white70,
-                            margin: EdgeInsets.only(
-                              top: (RouterConf.blockV) * 15,
-                              left: (RouterConf.blockV) * 2.8,
-                            ),
-                            child: SizedBox(
-                              width: (RouterConf.blockV) * 38,
-                              height: (RouterConf.blockV) * 6,
-                              child: Row(
-                                children: <Widget>[
-                                  Expanded(
-                                    child: Padding(
-                                      padding: EdgeInsets.only(
-                                          left: (RouterConf.blockV) * 1),
-                                      child: TextField(
-                                        decoration: InputDecoration(
-                                            hintText: ffsubmitted != "Disturbance"
-                                                ? "Specie Names"
-                                                : "Please describe the disturbance",
-                                            hintStyle: TextStyle(
-                                                fontSize:
-                                                    (RouterConf.blockV) * 1.9)),
-                                        controller: enteredSpecie,
-                                        onSubmitted: (_) {},
+                        ),
+                      ],
+                    ),
+                    Row(
+                      children: <Widget>[
+                        Card(
+                          color: Colors.white70,
+                          margin: EdgeInsets.only(
+                            top: (RouterConf.blockV) * 15,
+                            left: (RouterConf.blockV) * 2.8,
+                          ),
+                          child: ButtonTheme(
+                            alignedDropdown: true,
+                            child: Theme(
+                              data: Theme.of(context)
+                                  .copyWith(canvasColor: Colors.white70),
+                              child: SizedBox(
+                                width: (RouterConf.blockV) * 20,
+                                height: (RouterConf.blockV) * 6.4,
+                                child: Flex(
+                                  direction: Axis.vertical,
+                                  mainAxisSize: MainAxisSize.max,
+                                  children: <Widget>[
+                                    DropdownButton(
+                                      value: selectorSS,
+                                      hint: Text(
+                                        "Sub-Specie Type",
                                       ),
+                                      style: TextStyle(
+                                        color: Colors.black,
+                                      ),
+                                      items: tempSS,
+                                      onChanged: (val) {
+                                        enteredSpecie.text = "";
+                                        selectorSS = val;
+                                        subSpecieSubmitted = val;
+                                        setState(() {});
+                                      },
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    Row(
+                      children: <Widget>[
+                        Card(
+                          color: Colors.white70,
+                          margin: EdgeInsets.only(
+                            top: (RouterConf.blockV) * 15,
+                            left: (RouterConf.blockV) * 2.8,
+                          ),
+                          child: SizedBox(
+                            width: (RouterConf.blockV) * 38,
+                            height: (RouterConf.blockV) * 6,
+                            child: Row(
+                              children: <Widget>[
+                                Expanded(
+                                  child: Padding(
+                                    padding: EdgeInsets.only(
+                                        left: (RouterConf.blockV) * 1),
+                                    child: TextField(
+                                      decoration: InputDecoration(
+                                          hintText: ffsubmitted != "Disturbance"
+                                              ? "Specie Names"
+                                              : "Please describe the disturbance",
+                                          hintStyle: TextStyle(
+                                              fontSize:
+                                                  (RouterConf.blockV) * 1.9)),
+                                      controller: enteredSpecie,
+                                      onSubmitted: (_) {},
                                     ),
                                   ),
-                                  (ffsubmitted != null &&
-                                          subSpecieSubmitted != null &&
-                                          ffsubmitted != "Disturbance")
-                                      ? FutureBuilder(
-                                          future: initiator(),
-                                          builder: (context, snapshot) {
-                                            if (snapshot.hasData == null &&
-                                                snapshot.connectionState ==
-                                                    ConnectionState.none) {
-                                              return Container();
-                                            }
-                                            return PopupMenuButton<String>(
-                                              color: Colors.white70,
-                                              captureInheritedThemes: true,
-                                              icon: Icon(Icons.arrow_drop_down),
-                                              onSelected: (value) {
-                                                enteredSpecie.text = value;
-                                              },
-                                              itemBuilder:
-                                                  (BuildContext context) {
-                                                return specieList;
-                                              },
-                                            );
-                                          },
-                                        )
-                                      : Container(),
-                                ],
-                              ),
+                                ),
+                                (ffsubmitted != null &&
+                                        subSpecieSubmitted != null &&
+                                        ffsubmitted != "Disturbance")
+                                    ? FutureBuilder(
+                                        future: initiator(),
+                                        builder: (context, snapshot) {
+                                          if (snapshot.hasData == null &&
+                                              snapshot.connectionState ==
+                                                  ConnectionState.none) {
+                                            return Container();
+                                          }
+                                          return PopupMenuButton<String>(
+                                            color: Colors.white70,
+                                            captureInheritedThemes: true,
+                                            icon: Icon(Icons.arrow_drop_down),
+                                            onSelected: (value) {
+                                              enteredSpecie.text = value;
+                                            },
+                                            itemBuilder:
+                                                (BuildContext context) {
+                                              return specieList;
+                                            },
+                                          );
+                                        },
+                                      )
+                                    : Container(),
+                              ],
                             ),
                           ),
-                        ],
-                      ),
-                      submitHere(),
-                    ],
-                  ),
-                ],
-              ),
+                        ),
+                      ],
+                    ),
+                    submitHere(),
+                  ],
+                ),
+              ],
             ),
           ),
         ),
