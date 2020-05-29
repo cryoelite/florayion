@@ -148,7 +148,13 @@ class _LoginRouteState extends State<LoginRoute> {
     return loader
         ? Loading()
         : Container(
-            color: Colors.black,
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage(
+                  'lib/ImageAsset/ppo2.jpg',
+                ),
+              ),
+            ),
             child: Center(
               child: SizedBox(
                 height: (RouterConf.blockV) * 44,
@@ -241,24 +247,26 @@ class _LoginRouteState extends State<LoginRoute> {
       child: Container(
         width: (RouterConf.blockH) * 77,
         height: (RouterConf.blockV) * 36,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
+        child: Stack(
           children: <Widget>[
             i == 1 ? invalidLogin() : inputLogin(),
-            GradientButton(
-              increaseWidthBy: 150,
-              increaseHeightBy: 4,
-              callback: () {
-                checker("login");
-              },
-              gradient: Gradients.hotLinear,
-              child: GradientText(
-                "Login",
-                shaderRect: Rect.fromLTWH(0.0, 0.0, 50.0, 50.0),
-                gradient: Gradients.deepSpace,
-                style: TextStyle(
-                  fontSize: 20,
+            Positioned(
+              bottom: RouterConf.blockH * 2,
+              left: RouterConf.blockH * 15,
+              child: GradientButton(
+                increaseWidthBy: 150,
+                increaseHeightBy: 4,
+                callback: () {
+                  checker("login");
+                },
+                gradient: Gradients.hotLinear,
+                child: GradientText(
+                  "Login",
+                  shaderRect: Rect.fromLTWH(0.0, 0.0, 50.0, 50.0),
+                  gradient: Gradients.deepSpace,
+                  style: TextStyle(
+                    fontSize: 20,
+                  ),
                 ),
               ),
             ),
@@ -330,10 +338,8 @@ class _LoginRouteState extends State<LoginRoute> {
     );
   }
 
-  Column inputLogin() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      mainAxisAlignment: MainAxisAlignment.center,
+  Stack inputLogin() {
+    return Stack(
       children: <Widget>[loginMain()],
     );
   }
@@ -396,62 +402,66 @@ class _LoginRouteState extends State<LoginRoute> {
         Padding(
           padding: EdgeInsets.only(
               top: (RouterConf.blockV) * 1, bottom: (RouterConf.blockV) * 3),
-          child: TextField(
-            cursorColor: Color(
-              0xFFF56395,
-            ),
-            textAlign: TextAlign.center,
-            decoration: new InputDecoration(
-              prefixIconConstraints: BoxConstraints(maxHeight: 0),
-              prefixIcon: Icon(
-                IC1.user,
-                color: Color(
-                  0xFFF56395,
-                ),
+          child: Container(
+            child: TextField(
+              cursorColor: Color(
+                0xFFF56395,
               ),
-              labelText: "Phone Number",
-              labelStyle: TextStyle(
-                  height: 0,
-                  fontSize: (RouterConf.blockV) * 3,
-                  color: Colors.grey),
-              floatingLabelBehavior: FloatingLabelBehavior.always,
+              textAlign: TextAlign.center,
+              decoration: new InputDecoration(
+                prefixIconConstraints: BoxConstraints(maxHeight: 0),
+                prefixIcon: Icon(
+                  IC1.user,
+                  color: Color(
+                    0xFFF56395,
+                  ),
+                ),
+                labelText: "Phone Number",
+                labelStyle: TextStyle(
+                    height: 0,
+                    fontSize: (RouterConf.blockV) * 3,
+                    color: Colors.grey),
+                floatingLabelBehavior: FloatingLabelBehavior.always,
+              ),
+              style: TextStyle(color: Colors.white),
+              controller: enteredName,
+              keyboardType: TextInputType.phone,
+              onSubmitted: (_) {
+                checker("login");
+              },
             ),
-            style: TextStyle(color: Colors.white),
-            controller: enteredName,
-            keyboardType: TextInputType.phone,
-            onSubmitted: (_) {
-              checker("login");
-            },
           ),
         ),
         Padding(
           padding: EdgeInsets.only(
               top: (RouterConf.blockV) * 1, bottom: (RouterConf.blockV) * 3),
-          child: TextField(
-            cursorColor: Color(
-              0xFFF56395,
-            ),
-            textAlign: TextAlign.center,
-            decoration: new InputDecoration(
-              prefixIconConstraints: BoxConstraints(maxHeight: 0),
-              prefixIcon: Icon(
-                IC1.key,
-                color: Color(
-                  0xFFF56395,
-                ),
+          child: Container(
+            child: TextField(
+              cursorColor: Color(
+                0xFFF56395,
               ),
-              labelText: "Password",
-              labelStyle: TextStyle(
-                  height: 0,
-                  fontSize: (RouterConf.blockV) * 3,
-                  color: Colors.grey),
-              floatingLabelBehavior: FloatingLabelBehavior.always,
+              textAlign: TextAlign.center,
+              decoration: new InputDecoration(
+                prefixIconConstraints: BoxConstraints(maxHeight: 0),
+                prefixIcon: Icon(
+                  IC1.key,
+                  color: Color(
+                    0xFFF56395,
+                  ),
+                ),
+                labelText: "Password",
+                labelStyle: TextStyle(
+                    height: 0,
+                    fontSize: (RouterConf.blockV) * 3,
+                    color: Colors.grey),
+                floatingLabelBehavior: FloatingLabelBehavior.always,
+              ),
+              style: TextStyle(color: Colors.white),
+              controller: enteredPas,
+              onSubmitted: (_) {
+                checker("login");
+              },
             ),
-            style: TextStyle(color: Colors.white),
-            controller: enteredPas,
-            onSubmitted: (_) {
-              checker("login");
-            },
           ),
         ),
       ],

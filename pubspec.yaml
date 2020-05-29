@@ -61,6 +61,7 @@ flutter:
   assets:
     - lib/ImageAsset/xx.png
     - lib/ImageAsset/ppo.jpg
+    - lib/ImageAsset/ppo2.jpg
   #  - images/a_dot_ham.jpeg
   fonts:
     - family:  IC1
