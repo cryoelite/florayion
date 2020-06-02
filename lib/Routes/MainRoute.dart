@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:gradient_app_bar/gradient_app_bar.dart';
 import 'package:gradient_widgets/gradient_widgets.dart';
 
 import '../CollectorData/CollectorData.dart';
