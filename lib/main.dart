@@ -8,6 +8,7 @@ import './Routes/LogChecker.dart';
 
 void main() => runApp(MainRouteFunc());
 
+
 class MainRouteFunc extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
