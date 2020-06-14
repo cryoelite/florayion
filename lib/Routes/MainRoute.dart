@@ -1,8 +1,10 @@
+
 import 'package:flutter/material.dart';
 import 'package:gradient_widgets/gradient_widgets.dart';
 
 import '../CollectorData/CollectorData.dart';
-import 'package:florayion/CollectorData/SubmitterData.dart';
+import 'package:florayion/CollectorData/localSubmitData.dart';
+//import 'package:florayion/CollectorData/SubmitterData.dart';
 import '../routeConfig.dart';
 
 class MainRoute extends StatefulWidget {
@@ -23,11 +25,11 @@ class _MainRouteState extends State<MainRoute> {
   final fetchData = CollectorData();
 
   void collector() {
-    final submitData = SubmitterData(
+    final submitData = LocalSubmission(
         tempff: ffsubmitted,
         tempSubSpecie: subSpecieSubmitted,
-        tempsubmitVal: enteredSpecie.text);
-    submitData.setter();
+        tempSubmitVal: enteredSpecie.text);
+    submitData.submission();
     enteredSpecie.clear();
     subSpecieSubmitted = null;
     ffsubmitted = null;
@@ -320,6 +322,18 @@ class _MainRouteState extends State<MainRoute> {
                 )
               : Column(
                   children: <Widget>[
+                    Container(
+                      margin: EdgeInsets.only(top: 100),
+                      child: GradientButton(
+                        child: Text(
+                          "SubmitNa",
+                        ),
+                        callback: () {
+                          LocalSubmission().sendSubmission();
+                      
+                        },
+                      ),
+                    ),
                     Container(
                       margin: EdgeInsets.only(top: 100),
                       child: GradientButton(

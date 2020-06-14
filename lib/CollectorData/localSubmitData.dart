@@ -1,5 +1,8 @@
 import 'dart:io';
+import 'dart:async';
+import 'dart:convert';
 import 'package:geolocator/geolocator.dart';
+//import 'package:data_connection_checker/data_connection_checker.dart';
 
 import '../LoginData/localData.dart';
 
@@ -8,7 +11,9 @@ class LocalSubmission {
   final String tempff;
   final String tempSubSpecie;
   final String tempSubmitVal;
-  LocalSubmission(this.tempSubSpecie, this.tempff, this.tempSubmitVal);
+  LocalSubmission({this.tempff, this.tempSubSpecie, this.tempSubmitVal});
+
+
   Future<void> submission() async {
     Position pos = await Geolocator()
         .getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
@@ -19,19 +24,43 @@ class LocalSubmission {
       final currentId = int.tryParse(
         info.substring(
           info.lastIndexOf("id=") + 3,
-          info.indexOf(
-            "\n",
+          info.lastIndexOf(
+            "-.-",
           ),
         ),
       );
       print("Current ID: $currentId");
       localDat.writeAsStringSync(
-        "id=${(currentId + 1).toString()}\n FF=$tempff\n SubSpecie=$tempSubSpecie\n SubmitVal=$tempSubmitVal\n Position=${(pos.toJson()).toString()}\n ",
+        "id=${(currentId + 1).toString()}-.-FF=$tempff--SubSpecie=$tempSubSpecie--SubmitVal=$tempSubmitVal--Position=${(pos.toJson()).toString()}\n",
+        mode: FileMode.append,
       );
+
     } else {
+      print("doing");
       localDat.writeAsStringSync(
-        "id=0\n FF=$tempff\n SubSpecie=$tempSubSpecie\n SubmitVal=$tempSubmitVal\n Position=${(pos.toJson()).toString()}\n ",
+        "id=0-.-FF=$tempff--SubSpecie=$tempSubSpecie--SubmitVal=$tempSubmitVal--Position=${(pos.toJson()).toString()}\n",
+        mode: FileMode.write,
       );
     }
+  }
+
+  Future<int> sendSubmission() async {
+    id = 0;
+    final path = await UserName.localPath;
+    File localDat = File('$path/submission.txt');
+    print("hai");
+    if (localDat.existsSync()) {
+      print("here");
+      localDat
+          .openRead()
+          .map(utf8.decode)
+          .transform(LineSplitter())
+          .forEach((element) {
+        print(element);
+      });
+    } else {
+      return 1;
+    }
+    return 0;
   }
 }
