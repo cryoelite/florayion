@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:geolocator/geolocator.dart';
 
 import '../LoginData/localData.dart';
 
@@ -8,8 +7,11 @@ class SubmitterData {
   final tempff;
   final tempSubSpecie;
   final tempsubmitVal;
-  SubmitterData({this.tempff, this.tempSubSpecie, this.tempsubmitVal});
+  final pos;
+  SubmitterData(
+      {this.tempff, this.tempSubSpecie, this.tempsubmitVal, this.pos});
   final userData = Firestore.instance.collection('userData');
+
   Future setter() async {
     final QuerySnapshot idFind = await userData
         .document(UserName.name)
@@ -17,8 +19,6 @@ class SubmitterData {
         .getDocuments();
     id = idFind.documents.length;
     print(id);
-    Position pos = await Geolocator()
-        .getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
     this.tempff != "Disturbance"
         ? {
             userData
@@ -30,8 +30,7 @@ class SubmitterData {
                 "FFType": this.tempff,
                 "Sub-Specie": (this.tempSubSpecie),
                 "SpecieName": (this.tempsubmitVal),
-                "Location":
-                    ("${pos.toJson()}"),
+                "Location": ("$pos"),
               },
               merge: true,
             )
@@ -44,14 +43,9 @@ class SubmitterData {
             {
               "FFType": this.tempff,
               "Disturbance": this.tempsubmitVal,
-              "Location":
-                  ("${pos.latitude.toString()} + ${pos.longitude.toString()}"),
+              "Location": ("$pos"),
             },
             merge: false,
           );
   }
 }
-/* 
-        tempff: ffsubmitted,
-        tempSubSpecie: subSpecieSubmitted,
-        tempsubmitVal: enteredSpecie.text*/
