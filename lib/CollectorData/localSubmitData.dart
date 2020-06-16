@@ -1,9 +1,16 @@
-import 'dart:io';
-import 'dart:async';
+/* import 'dart:io';
+
 import 'dart:convert';
 import 'package:florayion/CollectorData/SubmitterData.dart';
-import 'package:geolocator/geolocator.dart';
+
 import 'package:data_connection_checker/data_connection_checker.dart';
+import 'package:sqflite/sqflite.dart'; */
+import 'dart:io';
+
+import 'package:geolocator/geolocator.dart';
+import 'package:sqflite/sqflite.dart';
+import 'dart:async';
+import 'package:path/path.dart';
 
 import '../LoginData/localData.dart';
 
@@ -11,14 +18,42 @@ class LocalSubmission {
   int id = 0;
   List<int> submitted;
   String tempff;
+  static Database db4x;
   String tempSubSpecie;
   String tempSubmitVal;
-  LocalSubmission({this.tempff, this.tempSubSpecie, this.tempSubmitVal});
+  var db4xPath;
+  var path;
+  LocalSubmission({this.tempff, this.tempSubSpecie, this.tempSubmitVal}) {
+    setDb();
+  }
+
+  Future<void> setDb() async {
+    final dbName = "StorageHolder";
+    db4xPath = await getDatabasesPath();
+    path = join(db4xPath, dbName);
+  }
 
   Future<void> submission() async {
     Position pos = await Geolocator()
         .getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
-    final path = await UserName.localPath;
+    final tSql = '''CREATE TABLE StorageF
+    (
+
+      $id INTEGER PRIMARY KEY
+      $tempff TEXT,
+      $tempSubSpecie TEXT,
+      $tempSubmitVal TEXT,
+      ${(pos.toJson()).toString()} TEXT
+    ) ''';
+    await db4x.execute(tSql);
+    if (await Directory(dirname(path)).exists()) {
+      print("ya");
+    } else {
+      await Directory(dirname(path)).create(recursive: true);
+    }
+  }
+}
+/* final path = await UserName.localPath;
     File localDat = File('$path/submission.txt');
     if (localDat.existsSync()) {
       final info = localDat.readAsStringSync();
@@ -86,8 +121,8 @@ class LocalSubmission {
     return 0;
   }
 
-  Future<void> yeetUsDeleteUs(File localDat) async{
-    RandomAccessFile raf= await localDat.open(mode: FileMode.writeOnlyAppend);
-    raf.
+  Future<void> yeetUsDeleteUs(File localDat) async {
+    RandomAccessFile raf = await localDat.open(mode: FileMode.writeOnlyAppend);
+
   }
-}
+} */
