@@ -3,7 +3,7 @@ import 'package:gradient_widgets/gradient_widgets.dart';
 
 import '../CollectorData/CollectorData.dart';
 import 'package:florayion/CollectorData/localSubmitData.dart';
-//import 'package:florayion/CollectorData/SubmitterData.dart';
+import '../CollectorData/moordb.dart';
 import '../routeConfig.dart';
 
 class MainRoute extends StatefulWidget {
@@ -13,7 +13,7 @@ class MainRoute extends StatefulWidget {
 
 class _MainRouteState extends State<MainRoute> {
   var i = 0;
-
+  FDB filedb = FDB();
   var specieList;
   var tempSS;
   var ffsubmitted;
@@ -27,8 +27,9 @@ class _MainRouteState extends State<MainRoute> {
     final submitData = LocalSubmission(
         tempff: ffsubmitted,
         tempSubSpecie: subSpecieSubmitted,
-        tempSubmitVal: enteredSpecie.text);
-    //submitData.submission();
+        tempSubmitVal: enteredSpecie.text,
+        filedb: filedb);
+    submitData.submission();
     enteredSpecie.clear();
     subSpecieSubmitted = null;
     ffsubmitted = null;
@@ -337,7 +338,7 @@ class _MainRouteState extends State<MainRoute> {
                           "SubmitNa",
                         ),
                         callback: () {
-                         // LocalSubmission().checkSubmission();
+                           LocalSubmission().getId();
                         },
                       ),
                     ),
