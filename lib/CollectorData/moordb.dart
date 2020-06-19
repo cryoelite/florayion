@@ -19,12 +19,17 @@ class FDB extends _$FDB {
   @override
   int get schemaVersion => 3;
   Future<List<Task>> getAllTask() => select(tasks).get();
-  getId() {
+  Future<int> getId() async {
     final qry = tasks.id.max();
-    final selection = selectOnly(tasks)..addColumns([qry]);
-    return (selection.getSingle());
+    final selection = await select(tasks).addColumns([qry]).get();
+    final selectedInt = selection.first.read(qry);
+    return (selectedInt);
   }
 
   Future<int> insertTask(TasksCompanion task) => into(tasks).insert(task);
   Future deleteTask(Task task) => delete(tasks).delete(task);
+  Future<Task> getSinglyTask(int inputId) =>
+      (select(tasks)..where((tb) => tb.id.equals(inputId))).getSingle();
+  Future<int> deleteSinglyTask(int inputId) =>
+      (delete(tasks)..where((tbl) => tbl.id.equals(inputId))).go();
 }

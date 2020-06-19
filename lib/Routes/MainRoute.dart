@@ -335,17 +335,6 @@ class _MainRouteState extends State<MainRoute> {
                       margin: EdgeInsets.only(top: 100),
                       child: GradientButton(
                         child: Text(
-                          "SubmitNa",
-                        ),
-                        callback: () {
-                           LocalSubmission().getId();
-                        },
-                      ),
-                    ),
-                    Container(
-                      margin: EdgeInsets.only(top: 100),
-                      child: GradientButton(
-                        child: Text(
                           "Submit",
                         ),
                         callback: () {

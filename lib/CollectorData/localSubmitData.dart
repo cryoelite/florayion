@@ -1,5 +1,5 @@
 import 'package:geolocator/geolocator.dart';
-
+import 'package:data_connection_checker/data_connection_checker.dart';
 import 'dart:async';
 import 'package:moor_flutter/moor_flutter.dart';
 import 'moordb.dart';
@@ -12,18 +12,12 @@ class LocalSubmission {
   String tempSubmitVal;
   FDB filedb;
   LocalSubmission(
-      {this.tempff, this.tempSubSpecie, this.tempSubmitVal, this.filedb}) {
-    /* getId(); */
-  }
-  Future<void> getId() async {
-    final temp = await filedb.getId();
-    print(temp.toString());
-  }
+      {this.tempff, this.tempSubSpecie, this.tempSubmitVal, this.filedb});
 
   Future<void> submission() async {
     Position pos = await Geolocator()
         .getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
-    int id=await filedb.insertTask(
+    int id = await filedb.insertTask(
       TasksCompanion(
         ff: Value(this.tempff),
         pos: Value((pos.toJson()).toString()),
@@ -32,5 +26,19 @@ class LocalSubmission {
       ),
     );
     print("Succes: $id");
+    syncX();
+  }
+
+  Future<int> syncX() async {
+    final int getDat = await filedb.getId();
+    final tempDat = await filedb.getSinglyTask(getDat);
+    print(await filedb.getId());
+    /* await filedb.deleteSinglyTask(getDat);
+    print(await filedb.getId()); */
+    /* for (int i = 0; i < getDat; ++i) {
+      if (await DataConnectionChecker().hasConnection == true) {
+        
+      }
+    } */
   }
 }
