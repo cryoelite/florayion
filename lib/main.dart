@@ -16,7 +16,7 @@ class MainRouteFunc extends StatelessWidget {
       routes: {
         '/': (context) => StartupLogo(),
         '/first': (context) => LoginRoute(),
-        '/second': (context) => MainRoute(),
+        '/second': (context) => MBX(),
         '/third': (context) => InvalidVer(),
         '/fourth': (context) => LogChecker(),
       },

@@ -15,15 +15,11 @@ class FDB extends _$FDB {
   FDB()
       : super(FlutterQueryExecutor.inDatabaseFolder(
             path: 'StorageFlorayion', logStatements: true));
-  int mx = 0;
   @override
   int get schemaVersion => 3;
   Future<List<Task>> getAllTask() => select(tasks).get();
-  Future<int> getId() async {
-    final qry = tasks.id.max();
-    final selection = await select(tasks).addColumns([qry]).get();
-    final selectedInt = selection.first.read(qry);
-    return (selectedInt);
+  Future<List> getId() async {
+    return select(tasks).map((temp) => temp.id).get();
   }
 
   Future<int> insertTask(TasksCompanion task) => into(tasks).insert(task);

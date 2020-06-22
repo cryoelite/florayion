@@ -9,7 +9,9 @@ class SubmitterData {
   final tempsubmitVal;
   final pos;
   SubmitterData(
-      {this.tempff, this.tempSubSpecie, this.tempsubmitVal, this.pos});
+      {this.tempff, this.tempSubSpecie, this.tempsubmitVal, this.pos}) {
+    setter();
+  }
   final userData = Firestore.instance.collection('userData');
 
   Future setter() async {
