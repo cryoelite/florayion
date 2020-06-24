@@ -1,8 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 import '../LoginData/localData.dart';
+import '../CreateText.dart';
 
 class SubmitterData {
+  int dataCountVal = 0;
   var id = 0;
   final tempff;
   final tempSubSpecie;
@@ -14,11 +16,27 @@ class SubmitterData {
   }
   final userData = Firestore.instance.collection('userData');
 
+  Future<void> dataCountUpdater() async {
+    final DocumentSnapshot dataCountDoc =
+        await userData.document("DataCount").get();
+    final dataCount = dataCountDoc.data;
+
+    if (dataCountDoc.exists) {
+      dataCountVal = int.parse(dataCount['docVal'].toString());
+    }
+    userData.document("DataCount").setData(
+      {
+        "docVal": dataCountVal + 1,
+      },
+    );
+  }
+
   Future setter() async {
     final QuerySnapshot idFind = await userData
         .document(UserName.name)
         .collection("Data")
         .getDocuments();
+
     id = idFind.documents.length;
     print(id);
     this.tempff != "Disturbance"
@@ -49,5 +67,6 @@ class SubmitterData {
             },
             merge: false,
           );
+    dataCountUpdater();
   }
 }
