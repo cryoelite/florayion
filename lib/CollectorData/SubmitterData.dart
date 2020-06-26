@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 import '../LoginData/localData.dart';
-import '../CreateText.dart';
 
 class SubmitterData {
   int dataCountVal = 0;
@@ -39,34 +38,19 @@ class SubmitterData {
 
     id = idFind.documents.length;
     print(id);
-    this.tempff != "Disturbance"
-        ? {
-            userData
-                .document(UserName.name)
-                .collection("Data")
-                .document(id.toString())
-                .setData(
-              {
-                "FFType": this.tempff,
-                "Sub-Specie": (this.tempSubSpecie),
-                "SpecieName": (this.tempsubmitVal),
-                "Location": ("$pos"),
-              },
-              merge: true,
-            )
-          }
-        : userData
-            .document(UserName.name)
-            .collection("Data")
-            .document(id.toString())
-            .setData(
-            {
-              "FFType": this.tempff,
-              "Disturbance": this.tempsubmitVal,
-              "Location": ("$pos"),
-            },
-            merge: false,
-          );
+    userData
+        .document(UserName.name)
+        .collection("Data")
+        .document(id.toString())
+        .setData(
+      {
+        "FFType": this.tempff,
+        "Sub-Specie": (this.tempSubSpecie),
+        "SpecieName": (this.tempsubmitVal),
+        "Location": ("$pos"),
+      },
+      merge: true,
+    );
     dataCountUpdater();
   }
 }
