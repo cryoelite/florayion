@@ -48,6 +48,7 @@ class SubmitterData {
         "Sub-Specie": (this.tempSubSpecie),
         "SpecieName": (this.tempsubmitVal),
         "Location": ("$pos"),
+        "Time": DateTime.now(),
       },
       merge: true,
     );

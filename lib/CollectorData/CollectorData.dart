@@ -1,39 +1,54 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
+
 import 'dart:io';
 
 import '../CollectorData/localFFData.dart';
 
 class CollectorData {
-  final specieData = Firestore.instance.collection('MainData');
-  static final ff = ["Flora", "Fauna", "Disturbance"];
-  static final subTypeFlora = ["Tree", "Shurb", "Grass"];
-  static final subTypeFauna = ["Mammals", "Birds"];
-  static final subTypeDisturbance = ["Activity site", "Human", "NTFP collection", "Sand Mining", "livestock"];
+  final ff = ["Flora", "Fauna", "Disturbance"];
+  final subTypeFlora = ["Tree", "Shurb", "Grass"];
+  final subTypeFauna = ["Mammals", "Birds"];
+  final subTypeDisturbance = [
+    "Activity site",
+    "Human",
+    "NTFP collection",
+    "Sand Mining",
+    "livestock"
+  ];
+  List<String> fileyaDis;
+  List<String> fileyaFlora;
+  List<String> fileyaFauna;
+
+  CollectorData() {
+    init();
+  }
+
+  Future init() async {
+    final path = await LocalFF.localPath;
+    final faunaFile = File('$path/faunaDat.txt');
+    fileyaFauna = await faunaFile.readAsLines();
+
+    final floraFile = File('$path/floraDat.txt');
+    fileyaFlora = await floraFile.readAsLines();
+
+    final disFile = File('$path/disturbanceDat.txt');
+    fileyaDis = await disFile.readAsLines();
+  }
 
   Future getFFSpecie(String subSpecie, String option) async {
-    if (option == "flora") {
-      List<String> fileya;
-      final path = await LocalFF.localPath;
-      final floraFile = File('$path/floraDat.txt');
-      fileya = floraFile.readAsLinesSync();
-      final temp=fileya[(fileya.indexWhere((elem) => elem==subSpecie))+1];
-      final xSpecie=(temp.substring(1,temp.length-1)).split(", ");
+    if (option == "Flora") {
+      final temp = fileyaFlora[
+          (fileyaFlora.indexWhere((elem) => elem == subSpecie)) + 1];
+      final xSpecie = (temp.substring(1, temp.length - 1)).split(", ");
       return xSpecie;
-    } else if(option=="fauna") {
-      List<String> fileya;
-      final path = await LocalFF.localPath;
-      final faunaFile = File('$path/faunaDat.txt');
-      fileya = faunaFile.readAsLinesSync();
-      final temp=fileya[(fileya.indexWhere((elem) => elem==subSpecie))+1];
-      final xSpecie=(temp.substring(1,temp.length-1)).split(", ");
+    } else if (option == "Fauna") {
+      final temp = fileyaFauna[
+          (fileyaFauna.indexWhere((elem) => elem == subSpecie)) + 1];
+      final xSpecie = (temp.substring(1, temp.length - 1)).split(", ");
       return xSpecie;
     } else {
-      List<String> fileya;
-      final path = await LocalFF.localPath;
-      final disFile = File('$path/disturbanceDat.txt');
-      fileya = disFile.readAsLinesSync();
-      final temp=fileya[(fileya.indexWhere((elem) => elem==subSpecie))+1];
-      final xSpecie=(temp.substring(1,temp.length-1)).split(", ");
+      final temp =
+          fileyaDis[(fileyaDis.indexWhere((elem) => elem == subSpecie)) + 1];
+      final xSpecie = (temp.substring(1, temp.length - 1)).split(", ");
       return xSpecie;
     }
   }
