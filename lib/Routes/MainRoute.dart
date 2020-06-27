@@ -13,7 +13,6 @@ class MBX extends StatefulWidget {
 }
 
 class _MBXState extends State<MBX> {
-  var i = 0;
   final Stream<DataConnectionStatus> slr;
   final StreamController<int> str = StreamController();
   Timer timer;
@@ -108,7 +107,9 @@ class _MBXState extends State<MBX> {
   }
 
   void setter() {
-    setState(() {});
+    setState(() {
+      
+    });
   }
 
   @override
@@ -340,7 +341,6 @@ class _MBXState extends State<MBX> {
       builder: (BuildContext context) {
         void setter2() {
           setState(() {
-            i += 1;
             print("SetState2");
           });
         }
@@ -349,11 +349,7 @@ class _MBXState extends State<MBX> {
           content: Stack(
             overflow: Overflow.visible,
             children: <Widget>[
-              FlatButton(
-                child: Text(i.toString()),
-                onPressed: setter2,
-              )
-              /* Padding(
+              Padding(
                 padding: _defPad2,
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
@@ -389,7 +385,7 @@ class _MBXState extends State<MBX> {
                         ),
                       ),
                     ),
-                    Padding(
+                    /* Padding(
                       padding: _defPad2,
                       child: Theme(
                         data: Theme.of(context)
@@ -414,10 +410,10 @@ class _MBXState extends State<MBX> {
                           ),
                         ),
                       ),
-                    ),
+                    ), */
                   ],
                 ),
-              ), */
+              ),
             ],
           ),
         );
