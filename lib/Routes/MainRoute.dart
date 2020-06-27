@@ -3,9 +3,12 @@ import 'dart:async';
 import 'package:florayion/CollectorData/CollectorData.dart';
 import 'package:flutter/material.dart';
 import 'package:data_connection_checker/data_connection_checker.dart';
+import 'package:gradient_widgets/gradient_widgets.dart';
 
 import '../routeConfig.dart';
 import '../CreateText.dart';
+import '../CollectorData/localSubmitData.dart';
+import '../CollectorData/moordb.dart';
 
 class MBX extends StatefulWidget {
   @override
@@ -13,6 +16,7 @@ class MBX extends StatefulWidget {
 }
 
 class _MBXState extends State<MBX> {
+  //Variables for streams
   final Stream<DataConnectionStatus> slr;
   final StreamController<int> str = StreamController();
   Timer timer;
@@ -23,7 +27,7 @@ class _MBXState extends State<MBX> {
     getVal();
     mapper();
   }
-
+  // Variables that manage layout
   final _formKey = GlobalKey<FormState>();
   final double _elevate = 5;
   final double _defHeight = (RouterConf.blockV) * 10;
@@ -35,6 +39,8 @@ class _MBXState extends State<MBX> {
   final _defColor = Colors.grey[200];
   final double _boxWidth = (RouterConf.blockH) * 20;
   final double _boxHeight = (RouterConf.blockV) * 8;
+
+  final _borRad = BorderRadius.circular(10);
 
   void canceller() {
     str.close();
@@ -64,6 +70,10 @@ class _MBXState extends State<MBX> {
   var subType;
   var subDisturbance;
   var subTypeInfo;
+  final TextEditingController submitControl = TextEditingController();
+  var specieList;
+  final CollectorData colDat = CollectorData();
+  final filedb = FDB();
 
   subMapper(var val) {
     var temp = DropdownMenuItem<String>(
@@ -76,18 +86,33 @@ class _MBXState extends State<MBX> {
     return temp;
   }
 
+  popMenuMapper() async {
+    if (selectedFF != null && selectedSubType != null) {
+      specieList = await colDat.getFFSpecie(selectedSubType, selectedFF);
+      specieList = specieList.map<PopupMenuItem<String>>((var val) {
+        return PopupMenuItem<String>(
+            child: Text(val.toString(),
+                style: TextStyle(fontSize: (RouterConf.blockV) * 1.9)),
+            value: val);
+      }).toList();
+    } else {
+      print("specie null");
+      specieList = null;
+    }
+  }
+
   void mapper() {
-    ff = CollectorData.ff.map<DropdownMenuItem<String>>((val) {
+    ff = colDat.ff.map<DropdownMenuItem<String>>((val) {
       return subMapper(val);
     }).toList();
-    subFlora = CollectorData.subTypeFlora.map<DropdownMenuItem<String>>((val) {
+    subFlora = colDat.subTypeFlora.map<DropdownMenuItem<String>>((val) {
       return subMapper(val);
     }).toList();
-    subFauna = CollectorData.subTypeFauna.map<DropdownMenuItem<String>>((val) {
+    subFauna = colDat.subTypeFauna.map<DropdownMenuItem<String>>((val) {
       return subMapper(val);
     }).toList();
     subDisturbance =
-        CollectorData.subTypeDisturbance.map<DropdownMenuItem<String>>((val) {
+        colDat.subTypeDisturbance.map<DropdownMenuItem<String>>((val) {
       return subMapper(val);
     }).toList();
   }
@@ -101,15 +126,31 @@ class _MBXState extends State<MBX> {
       print("fauna");
     } else {
       subTypeInfo = subDisturbance;
-      print("floraS");
+      print("disturbance");
     }
-    print("idostuff");
   }
 
-  void setter() {
-    setState(() {
-      
-    });
+  void submit() {
+    if (selectedFF != null &&
+        selectedSubType != null &&
+        submitControl.text != "") {
+      final submitData = LocalSubmission(
+          tempff: selectedFF,
+          tempSubSpecie: selectedSubType,
+          tempSubmitVal: submitControl.text,
+          filedb: filedb);
+      submitData.submission();
+      print("Sent submit from mainRoute");
+    }
+    resetter();
+  }
+
+  void resetter() {
+    selectedSubType = null;
+    selectedFF = null;
+    specieList = null;
+    submitControl.clear();
+    setState(() {});
   }
 
   @override
@@ -276,7 +317,9 @@ class _MBXState extends State<MBX> {
                                   height: _boxHeight,
                                   child: IconButton(
                                     icon: Icon(Icons.autorenew),
-                                    onPressed: () {},
+                                    onPressed: () {
+                                      LocalSubmission().syncX(filedb);
+                                    },
                                     tooltip: "Sync progress now",
                                   ),
                                 ),
@@ -339,83 +382,139 @@ class _MBXState extends State<MBX> {
     return showDialog(
       context: context,
       builder: (BuildContext context) {
-        void setter2() {
-          setState(() {
-            print("SetState2");
-          });
-        }
-
         return AlertDialog(
-          content: Stack(
-            overflow: Overflow.visible,
-            children: <Widget>[
-              Padding(
-                padding: _defPad2,
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: <Widget>[
-                    Padding(
-                      padding: _defPad2,
-                      child: Theme(
-                        data: Theme.of(context)
-                            .copyWith(canvasColor: _defColor),
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(10),
-                          child: Container(
-                            color: _defColor,
-                            child: DropdownButton(
-                              value: selectedFF,
-                              hint: Text(
-                                "Type of Occurence",
-                                style: TextStyle(
-                                    fontSize: (RouterConf.blockV) * 1.9),
+          title: Text("Input Details"),
+          content: StatefulBuilder(builder: (
+            context,
+            StateSetter setState,
+          ) {
+            return Stack(
+              overflow: Overflow.visible,
+              children: <Widget>[
+                Padding(
+                  padding: _defPad2,
+                  child: Form(
+                    key: _formKey,
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: <Widget>[
+                        Padding(
+                          padding: _defPad2,
+                          child: Theme(
+                            data: Theme.of(context)
+                                .copyWith(canvasColor: _defColor),
+                            child: ClipRRect(
+                              borderRadius: _borRad,
+                              child: Container(
+                                color: _defColor,
+                                child: DropdownButton(
+                                  value: selectedFF,
+                                  hint: Text(
+                                    "Type of Occurence",
+                                    style: TextStyle(
+                                        fontSize: (RouterConf.blockV) * 1.9),
+                                  ),
+                                  items: ff,
+                                  onChanged: (val) {
+                                    selectedFF = val;
+                                    selectedSubType = null;
+                                    subTypeInfo = null;
+                                    subTypeSelector();
+                                    popMenuMapper();
+                                    setState(() {});
+                                  },
+                                ),
                               ),
-                              items: ff,
-                              onChanged: (val) {
-                                selectedFF = val;
-                                selectedSubType = null;
-                                subTypeInfo = null;
-                                subTypeSelector();
-                                setState(() {
-                                  
-                                });
-                              },
                             ),
                           ),
                         ),
-                      ),
+                        Padding(
+                          padding: _defPad2,
+                          child: Theme(
+                            data: Theme.of(context)
+                                .copyWith(canvasColor: _defColor),
+                            child: ClipRRect(
+                              borderRadius: _borRad,
+                              child: Container(
+                                color: _defColor,
+                                child: DropdownButton(
+                                  value: selectedSubType,
+                                  hint: Text(
+                                    "Sub-Type",
+                                    style: TextStyle(
+                                        fontSize: (RouterConf.blockV) * 1.9),
+                                  ),
+                                  items: subTypeInfo,
+                                  onChanged: (val) {
+                                    selectedSubType = val;
+                                    popMenuMapper();
+                                    setState(() {});
+                                  },
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                        Padding(
+                          padding: _defPad2,
+                          child: Theme(
+                            data: Theme.of(context)
+                                .copyWith(canvasColor: _defColor),
+                            child: ClipRRect(
+                              borderRadius: _borRad,
+                              child: Container(
+                                color: _defColor,
+                                width: RouterConf.blockH * 60,
+                                child: Row(
+                                  children: <Widget>[
+                                    Container(
+                                      width: RouterConf.blockH * 50,
+                                      
+                                      child: TextField(
+                                        controller: submitControl,
+                                      ),
+                                    ),
+                                    specieList !=null ?Container(
+                                      width: RouterConf.blockH * 4,
+                                      child: PopupMenuButton<String>(
+                                        padding: EdgeInsets.all(2),
+                                        enabled: true,
+                                        onSelected: (val) {
+                                          print("Selected Pop button");
+                                          submitControl.text = val;
+                                        },
+                                        captureInheritedThemes: true,
+                                        icon: Icon(Icons.arrow_drop_down),
+                                        itemBuilder: (BuildContext context) {
+                                          return specieList;
+                                        },
+                                      ),
+                                    ): Container(),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                        Container(
+                          height: _defHeight,
+                          child: GradientButton(
+                            child: Text(
+                              "Submit",
+                            ),
+                            callback: () {
+                              submit();
+                              Navigator.of(context).pop();
+                            },
+                          ),
+                        ),
+                      ],
                     ),
-                    /* Padding(
-                      padding: _defPad2,
-                      child: Theme(
-                        data: Theme.of(context)
-                            .copyWith(canvasColor: _defColor),
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(10),
-                          child: Container(
-                            color: _defColor,
-                            child: DropdownButton(
-                              value: selectedSubType,
-                              hint: Text(
-                                "Sub-Type",
-                                style: TextStyle(
-                                    fontSize: (RouterConf.blockV) * 1.9),
-                              ),
-                              items: subTypeInfo,
-                              onChanged: (val) {
-                                selectedSubType = val;
-                                setter2();
-                              },
-                            ),
-                          ),
-                        ),
-                      ),
-                    ), */
-                  ],
+                  ),
                 ),
-              ),
-            ],
-          ),
+              ],
+            );
+          }),
         );
       },
     );

@@ -46,7 +46,7 @@ class LocalSubmission {
     return 0;
   }
 
-  Future<void> syncX() async {
+  Future<void> syncX(FDB filedb) async {
     final List getDat = await filedb.getId();
     for (int i = 1; i < getDat.length; ++i) {
       if (await DataConnectionChecker().hasConnection == true &&
