@@ -312,39 +312,53 @@ class _MBXState extends State<MBX> {
                             children: <Widget>[
                               Padding(
                                 padding: _defPad,
-                                child: Container(
-                                  width: _boxWidth,
-                                  height: _boxHeight,
-                                  child: IconButton(
-                                    icon: Icon(Icons.autorenew),
-                                    onPressed: () {
-                                      LocalSubmission().syncX(filedb);
-                                    },
-                                    tooltip: "Sync progress now",
+                                child: Material(
+                                  color: Colors.transparent,
+                                  child: Container(
+                                    width: _boxWidth,
+                                    height: _boxHeight,
+                                    child: InkWell(
+                                      enableFeedback: true,
+                                      excludeFromSemantics: true,
+                                      child: IconButton(
+                                        color: Colors.black,
+                                        icon: Icon(Icons.autorenew),
+                                        onPressed: () {
+                                          /* LocalSubmission().syncX(filedb); */
+                                        },
+                                        tooltip: "Sync progress now",
+                                      ),
+                                    ),
                                   ),
                                 ),
                               ),
                               Padding(
                                 padding: _defPad,
-                                child: Container(
-                                  width: _boxWidth,
-                                  height: _boxHeight,
-                                  child: IconButton(
-                                    icon: Icon(Icons.file_download),
-                                    onPressed: () {},
-                                    tooltip: "Null",
+                                child: Material(
+                                  color: Colors.transparent,
+                                  child: Container(
+                                    width: _boxWidth,
+                                    height: _boxHeight,
+                                    child: IconButton(
+                                      icon: Icon(Icons.file_download),
+                                      onPressed: () {},
+                                      tooltip: "Null",
+                                    ),
                                   ),
                                 ),
                               ),
                               Padding(
                                 padding: _defPad,
-                                child: Container(
-                                  width: _boxWidth,
-                                  height: _boxHeight,
-                                  child: IconButton(
-                                    icon: Icon(Icons.folder),
-                                    onPressed: () {},
-                                    tooltip: "My Submissions",
+                                child: Material(
+                                  color: Colors.transparent,
+                                  child: Container(
+                                    width: _boxWidth,
+                                    height: _boxHeight,
+                                    child: IconButton(
+                                      icon: Icon(Icons.folder),
+                                      onPressed: () {},
+                                      tooltip: "My Submissions",
+                                    ),
                                   ),
                                 ),
                               ),
@@ -383,7 +397,11 @@ class _MBXState extends State<MBX> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text("Input Details"),
+          title: Center(
+            child: Text(
+              "Input Details",
+            ),
+          ),
           content: StatefulBuilder(builder: (
             context,
             StateSetter setState,
@@ -407,22 +425,29 @@ class _MBXState extends State<MBX> {
                               borderRadius: _borRad,
                               child: Container(
                                 color: _defColor,
-                                child: DropdownButton(
-                                  value: selectedFF,
-                                  hint: Text(
-                                    "Type of Occurence",
-                                    style: TextStyle(
-                                        fontSize: (RouterConf.blockV) * 1.9),
+                                child: Padding(
+                                  padding: _defPad,
+                                  child: DropdownButton(
+                                    value: selectedFF,
+                                    hint: Padding(
+                                      padding: _defPad,
+                                      child: Text(
+                                        "Type of Occurence",
+                                        style: TextStyle(
+                                            fontSize:
+                                                (RouterConf.blockV) * 1.9),
+                                      ),
+                                    ),
+                                    items: ff,
+                                    onChanged: (val) {
+                                      selectedFF = val;
+                                      selectedSubType = null;
+                                      subTypeInfo = null;
+                                      subTypeSelector();
+                                      popMenuMapper();
+                                      setState(() {});
+                                    },
                                   ),
-                                  items: ff,
-                                  onChanged: (val) {
-                                    selectedFF = val;
-                                    selectedSubType = null;
-                                    subTypeInfo = null;
-                                    subTypeSelector();
-                                    popMenuMapper();
-                                    setState(() {});
-                                  },
                                 ),
                               ),
                             ),
@@ -437,19 +462,26 @@ class _MBXState extends State<MBX> {
                               borderRadius: _borRad,
                               child: Container(
                                 color: _defColor,
-                                child: DropdownButton(
-                                  value: selectedSubType,
-                                  hint: Text(
-                                    "Sub-Type",
-                                    style: TextStyle(
-                                        fontSize: (RouterConf.blockV) * 1.9),
+                                child: Padding(
+                                  padding: _defPad,
+                                  child: DropdownButton(
+                                    value: selectedSubType,
+                                    hint: Padding(
+                                      padding: _defPad,
+                                      child: Text(
+                                        "Sub-Type",
+                                        style: TextStyle(
+                                            fontSize:
+                                                (RouterConf.blockV) * 1.9),
+                                      ),
+                                    ),
+                                    items: subTypeInfo,
+                                    onChanged: (val) {
+                                      selectedSubType = val;
+                                      popMenuMapper();
+                                      setState(() {});
+                                    },
                                   ),
-                                  items: subTypeInfo,
-                                  onChanged: (val) {
-                                    selectedSubType = val;
-                                    popMenuMapper();
-                                    setState(() {});
-                                  },
                                 ),
                               ),
                             ),
@@ -467,29 +499,34 @@ class _MBXState extends State<MBX> {
                                 width: RouterConf.blockH * 60,
                                 child: Row(
                                   children: <Widget>[
-                                    Container(
-                                      width: RouterConf.blockH * 50,
-                                      
-                                      child: TextField(
-                                        controller: submitControl,
+                                    Padding(
+                                      padding: _defPad,
+                                      child: Container(
+                                        width: RouterConf.blockH * 45,
+                                        child: TextField(
+                                          controller: submitControl,
+                                        ),
                                       ),
                                     ),
-                                    specieList !=null ?Container(
-                                      width: RouterConf.blockH * 4,
-                                      child: PopupMenuButton<String>(
-                                        padding: EdgeInsets.all(2),
-                                        enabled: true,
-                                        onSelected: (val) {
-                                          print("Selected Pop button");
-                                          submitControl.text = val;
-                                        },
-                                        captureInheritedThemes: true,
-                                        icon: Icon(Icons.arrow_drop_down),
-                                        itemBuilder: (BuildContext context) {
-                                          return specieList;
-                                        },
-                                      ),
-                                    ): Container(),
+                                    specieList != null
+                                        ? Container(
+                                            width: RouterConf.blockH * 4,
+                                            child: PopupMenuButton<String>(
+                                              padding: EdgeInsets.all(2),
+                                              enabled: true,
+                                              onSelected: (val) {
+                                                print("Selected Pop button");
+                                                submitControl.text = val;
+                                              },
+                                              captureInheritedThemes: true,
+                                              icon: Icon(Icons.arrow_drop_down),
+                                              itemBuilder:
+                                                  (BuildContext context) {
+                                                return specieList;
+                                              },
+                                            ),
+                                          )
+                                        : Container(),
                                   ],
                                 ),
                               ),
@@ -497,7 +534,8 @@ class _MBXState extends State<MBX> {
                           ),
                         ),
                         Container(
-                          height: _defHeight,
+                          height: RouterConf.blockV * 5,
+                          width: RouterConf.blockH * 20,
                           child: GradientButton(
                             child: Text(
                               "Submit",
