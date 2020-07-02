@@ -425,29 +425,33 @@ class _MBXState extends State<MBX> {
                               borderRadius: _borRad,
                               child: Container(
                                 color: _defColor,
-                                child: Padding(
-                                  padding: _defPad,
-                                  child: DropdownButton(
-                                    value: selectedFF,
-                                    hint: Padding(
+                                child: Column(
+                                  children: <Widget>[
+                                    Padding(
                                       padding: _defPad,
-                                      child: Text(
-                                        "Type of Occurence",
-                                        style: TextStyle(
-                                            fontSize:
-                                                (RouterConf.blockV) * 1.9),
+                                      child: DropdownButton(
+                                        value: selectedFF,
+                                        hint: Padding(
+                                          padding: _defPad,
+                                          child: Text(
+                                            "Type of Occurence",
+                                            style: TextStyle(
+                                                fontSize:
+                                                    (RouterConf.blockV) * 1.9),
+                                          ),
+                                        ),
+                                        items: ff,
+                                        onChanged: (val) {
+                                          selectedFF = val;
+                                          selectedSubType = null;
+                                          subTypeInfo = null;
+                                          subTypeSelector();
+                                          popMenuMapper();
+                                          setState(() {});
+                                        },
                                       ),
                                     ),
-                                    items: ff,
-                                    onChanged: (val) {
-                                      selectedFF = val;
-                                      selectedSubType = null;
-                                      subTypeInfo = null;
-                                      subTypeSelector();
-                                      popMenuMapper();
-                                      setState(() {});
-                                    },
-                                  ),
+                                  ],
                                 ),
                               ),
                             ),
@@ -461,29 +465,33 @@ class _MBXState extends State<MBX> {
                             child: ClipRRect(
                               borderRadius: _borRad,
                               child: Container(
-                                color: _defColor,
-                                child: Padding(
-                                  padding: _defPad,
-                                  child: DropdownButton(
-                                    value: selectedSubType,
-                                    hint: Padding(
-                                      padding: _defPad,
-                                      child: Text(
-                                        "Sub-Type",
-                                        style: TextStyle(
-                                            fontSize:
-                                                (RouterConf.blockV) * 1.9),
+                                  color: _defColor,
+                                  child: Column(
+                                    children: <Widget>[
+                                      Padding(
+                                        padding: _defPad,
+                                        child: DropdownButton(
+                                          value: selectedSubType,
+                                          hint: Padding(
+                                            padding: _defPad,
+                                            child: Text(
+                                              "Sub-Type",
+                                              style: TextStyle(
+                                                  fontSize:
+                                                      (RouterConf.blockV) *
+                                                          1.9),
+                                            ),
+                                          ),
+                                          items: subTypeInfo,
+                                          onChanged: (val) {
+                                            selectedSubType = val;
+                                            popMenuMapper();
+                                            setState(() {});
+                                          },
+                                        ),
                                       ),
-                                    ),
-                                    items: subTypeInfo,
-                                    onChanged: (val) {
-                                      selectedSubType = val;
-                                      popMenuMapper();
-                                      setState(() {});
-                                    },
-                                  ),
-                                ),
-                              ),
+                                    ],
+                                  )),
                             ),
                           ),
                         ),
