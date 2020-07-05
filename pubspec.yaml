@@ -45,6 +45,9 @@ flutter:
     - lib/ImageAsset/ppo2.jpg
 
   fonts:
+    - family: CustIcons
+      fonts:
+        - asset: lib/IconAsset/CustIcons.ttf
     - family:  IC1
       fonts:
         - asset: lib/IconAsset/IC1.ttf

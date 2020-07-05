@@ -9,6 +9,7 @@ import '../routeConfig.dart';
 import '../CreateDocCount.dart';
 import '../CollectorData/SubmitToDBandFB.dart';
 import '../CollectorData/moordb.dart';
+import './MySubmissions.dart';
 
 class MBX extends StatefulWidget {
   @override
@@ -360,7 +361,14 @@ class _MBXState extends State<MBX> {
                                     height: _boxHeight,
                                     child: IconButton(
                                       icon: Icon(Icons.folder),
-                                      onPressed: () {},
+                                      onPressed: () {
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) => MySubs(),
+                                          ),
+                                        );
+                                      },
                                       tooltip: "My Submissions",
                                     ),
                                   ),
