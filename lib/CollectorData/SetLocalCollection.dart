@@ -2,10 +2,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'dart:io';
 import 'package:path_provider/path_provider.dart';
 
-import '../CollectorData/CollectorData.dart';
+import 'GetLocalCollection.dart';
 
-class LocalFF {
-  
+class SetLocalCollection {
   static var checker = 0;
   static Future<String> get localPath async {
     final dir = await getTemporaryDirectory();
@@ -13,7 +12,7 @@ class LocalFF {
   }
 
   static Future<void> init() async {
-    final CollectorData colDat= CollectorData();
+    final GetLocalCollection colDat = GetLocalCollection();
     final specieData = Firestore.instance.collection('MainData');
     final floraDat = await specieData.document('FloraSpecies').get();
     final faunaDat = await specieData.document('FaunaSpecies').get();

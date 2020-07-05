@@ -1,13 +1,13 @@
 import 'dart:async';
 
-import 'package:florayion/CollectorData/CollectorData.dart';
+import 'package:florayion/CollectorData/GetLocalCollection.dart';
 import 'package:flutter/material.dart';
 import 'package:data_connection_checker/data_connection_checker.dart';
 import 'package:gradient_widgets/gradient_widgets.dart';
 
 import '../routeConfig.dart';
-import '../CreateText.dart';
-import '../CollectorData/localSubmitData.dart';
+import '../CreateDocCount.dart';
+import '../CollectorData/SubmitToDBandFB.dart';
 import '../CollectorData/moordb.dart';
 
 class MBX extends StatefulWidget {
@@ -50,7 +50,7 @@ class _MBXState extends State<MBX> {
   void getVal() {
     timer = Timer.periodic(Duration(seconds: 5), (_) async {
       str.sink.add(
-        await CreateText().getValue(),
+        await CreateDocCount().getValue(),
       );
     });
   }
@@ -72,7 +72,7 @@ class _MBXState extends State<MBX> {
   var subTypeInfo;
   final TextEditingController submitControl = TextEditingController();
   var specieList;
-  final CollectorData colDat = CollectorData();
+  final GetLocalCollection colDat = GetLocalCollection();
   final filedb = FDB();
 
   subMapper(var val) {
@@ -88,7 +88,7 @@ class _MBXState extends State<MBX> {
 
   popMenuMapper() async {
     if (selectedFF != null && selectedSubType != null) {
-      specieList = await colDat.getFFSpecie(selectedSubType, selectedFF);
+      specieList = await colDat.getLocalCollection(selectedSubType, selectedFF);
       specieList = specieList.map<PopupMenuItem<String>>((var val) {
         return PopupMenuItem<String>(
             child: Text(val.toString(),
@@ -130,16 +130,16 @@ class _MBXState extends State<MBX> {
     }
   }
 
-  void submit() {
+  void submit() async {
     if (selectedFF != null &&
         selectedSubType != null &&
         submitControl.text != "") {
-      final submitData = LocalSubmission(
+      final submitData = SubmitToDBandFB(
           tempff: selectedFF,
           tempSubSpecie: selectedSubType,
           tempSubmitVal: submitControl.text,
           filedb: filedb);
-      submitData.submission();
+      await submitData.submitToDb();
       print("Sent submit from mainRoute");
     }
     resetter();
@@ -151,6 +151,10 @@ class _MBXState extends State<MBX> {
     specieList = null;
     submitControl.clear();
     setState(() {});
+  }
+
+  void sendIntoDb() async {
+    await SubmitToDBandFB().syncDBtoFireBase(filedb);
   }
 
   @override
@@ -324,7 +328,7 @@ class _MBXState extends State<MBX> {
                                         color: Colors.black,
                                         icon: Icon(Icons.autorenew),
                                         onPressed: () {
-                                          /* LocalSubmission().syncX(filedb); */
+                                          sendIntoDb();
                                         },
                                         tooltip: "Sync progress now",
                                       ),
@@ -423,23 +427,33 @@ class _MBXState extends State<MBX> {
                                 .copyWith(canvasColor: _defColor),
                             child: ClipRRect(
                               borderRadius: _borRad,
-                              child: Container(
-                                color: _defColor,
-                                child: Column(
-                                  children: <Widget>[
-                                    Padding(
+                              child: Column(
+                                children: <Widget>[
+                                  Padding(
+                                    padding: _defPad,
+                                    child: Text(
+                                      "Type Of Occurence",
+                                      style: TextStyle(
+                                        fontSize: (RouterConf.blockV) * 1.9,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ),
+                                  Container(
+                                    color: _defColor,
+                                    child: Padding(
                                       padding: _defPad,
                                       child: DropdownButton(
-                                        value: selectedFF,
                                         hint: Padding(
                                           padding: _defPad,
                                           child: Text(
-                                            "Type of Occurence",
+                                            "Select Here: ",
                                             style: TextStyle(
                                                 fontSize:
                                                     (RouterConf.blockV) * 1.9),
                                           ),
                                         ),
+                                        value: selectedFF,
                                         items: ff,
                                         onChanged: (val) {
                                           selectedFF = val;
@@ -451,8 +465,8 @@ class _MBXState extends State<MBX> {
                                         },
                                       ),
                                     ),
-                                  ],
-                                ),
+                                  ),
+                                ],
                               ),
                             ),
                           ),
@@ -464,34 +478,44 @@ class _MBXState extends State<MBX> {
                                 .copyWith(canvasColor: _defColor),
                             child: ClipRRect(
                               borderRadius: _borRad,
-                              child: Container(
-                                  color: _defColor,
-                                  child: Column(
-                                    children: <Widget>[
-                                      Padding(
-                                        padding: _defPad,
-                                        child: DropdownButton(
-                                          value: selectedSubType,
-                                          hint: Padding(
-                                            padding: _defPad,
-                                            child: Text(
-                                              "Sub-Type",
-                                              style: TextStyle(
-                                                  fontSize:
-                                                      (RouterConf.blockV) *
-                                                          1.9),
-                                            ),
-                                          ),
-                                          items: subTypeInfo,
-                                          onChanged: (val) {
-                                            selectedSubType = val;
-                                            popMenuMapper();
-                                            setState(() {});
-                                          },
-                                        ),
+                              child: Column(
+                                children: <Widget>[
+                                  Padding(
+                                    padding: _defPad,
+                                    child: Text(
+                                      "Sub-Type",
+                                      style: TextStyle(
+                                        fontSize: (RouterConf.blockV) * 1.9,
+                                        fontWeight: FontWeight.bold,
                                       ),
-                                    ],
-                                  )),
+                                    ),
+                                  ),
+                                  Container(
+                                    color: _defColor,
+                                    child: Padding(
+                                      padding: _defPad,
+                                      child: DropdownButton(
+                                        hint: Padding(
+                                          padding: _defPad,
+                                          child: Text(
+                                            "Select Here: ",
+                                            style: TextStyle(
+                                                fontSize:
+                                                    (RouterConf.blockV) * 1.9),
+                                          ),
+                                        ),
+                                        value: selectedSubType,
+                                        items: subTypeInfo,
+                                        onChanged: (val) {
+                                          selectedSubType = val;
+                                          popMenuMapper();
+                                          setState(() {});
+                                        },
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
                             ),
                           ),
                         ),
@@ -502,41 +526,57 @@ class _MBXState extends State<MBX> {
                                 .copyWith(canvasColor: _defColor),
                             child: ClipRRect(
                               borderRadius: _borRad,
-                              child: Container(
-                                color: _defColor,
-                                width: RouterConf.blockH * 60,
-                                child: Row(
-                                  children: <Widget>[
-                                    Padding(
-                                      padding: _defPad,
-                                      child: Container(
-                                        width: RouterConf.blockH * 45,
-                                        child: TextField(
-                                          controller: submitControl,
-                                        ),
+                              child: Column(
+                                children: <Widget>[
+                                  Padding(
+                                    padding: _defPad,
+                                    child: Text(
+                                      "Select one of the options or type your own",
+                                      style: TextStyle(
+                                        fontSize: (RouterConf.blockV) * 1.9,
+                                        fontWeight: FontWeight.bold,
                                       ),
                                     ),
-                                    specieList != null
-                                        ? Container(
-                                            width: RouterConf.blockH * 4,
-                                            child: PopupMenuButton<String>(
-                                              padding: EdgeInsets.all(2),
-                                              enabled: true,
-                                              onSelected: (val) {
-                                                print("Selected Pop button");
-                                                submitControl.text = val;
-                                              },
-                                              captureInheritedThemes: true,
-                                              icon: Icon(Icons.arrow_drop_down),
-                                              itemBuilder:
-                                                  (BuildContext context) {
-                                                return specieList;
-                                              },
+                                  ),
+                                  Container(
+                                    color: _defColor,
+                                    width: RouterConf.blockH * 60,
+                                    child: Row(
+                                      children: <Widget>[
+                                        Padding(
+                                          padding: _defPad,
+                                          child: Container(
+                                            width: RouterConf.blockH * 45,
+                                            child: TextField(
+                                              controller: submitControl,
                                             ),
-                                          )
-                                        : Container(),
-                                  ],
-                                ),
+                                          ),
+                                        ),
+                                        specieList != null
+                                            ? Container(
+                                                width: RouterConf.blockH * 4,
+                                                child: PopupMenuButton<String>(
+                                                  padding: EdgeInsets.all(2),
+                                                  enabled: true,
+                                                  onSelected: (val) {
+                                                    print(
+                                                        "Selected Pop button");
+                                                    submitControl.text = val;
+                                                  },
+                                                  captureInheritedThemes: true,
+                                                  icon: Icon(
+                                                      Icons.arrow_drop_down),
+                                                  itemBuilder:
+                                                      (BuildContext context) {
+                                                    return specieList;
+                                                  },
+                                                ),
+                                              )
+                                            : Container(),
+                                      ],
+                                    ),
+                                  ),
+                                ],
                               ),
                             ),
                           ),

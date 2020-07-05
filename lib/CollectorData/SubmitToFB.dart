@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-import '../LoginData/localData.dart';
+import '../LoginData/LocalUserData.dart';
 
 class SubmitterData {
   int dataCountVal = 0;
@@ -27,6 +27,7 @@ class SubmitterData {
       {
         "docVal": dataCountVal + 1,
       },
+      merge: true,
     );
   }
 
@@ -49,6 +50,12 @@ class SubmitterData {
         "SpecieName": (this.tempsubmitVal),
         "Location": ("$pos"),
         "Time": DateTime.now(),
+      },
+      merge: true,
+    );
+    userData.document(UserName.name).setData(
+      {
+        "TotalEntries": (id.toString()),
       },
       merge: true,
     );

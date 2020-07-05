@@ -1,8 +1,8 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 
-import '../liveChecker.dart';
-import 'package:florayion/CollectorData/localFFData.dart';
+import '../Connectivity.dart';
+import 'package:florayion/CollectorData/SetLocalCollection.dart';
 
 class LogChecker extends StatefulWidget {
   @override
@@ -11,14 +11,14 @@ class LogChecker extends StatefulWidget {
 
 class _LogCheckerState extends State<LogChecker> {
   void streamer(BuildContext context) {
-    var lvcObject = LVC();
+    var lvcObject = Connectivity();
     StreamSubscription<bool> stream;
     lvcObject.startTimer();
     Stream lvcStream = lvcObject.strClr;
     stream = lvcStream.listen((event) {
       print("$event");
       if (event == true) {
-        LocalFF.init();
+        SetLocalCollection.init();
         stream.cancel();
         lvcObject.disabler();
         Navigator.pushNamedAndRemoveUntil(

@@ -5,11 +5,11 @@ import 'package:flutter/services.dart';
 import 'package:get_version/get_version.dart';
 import 'package:data_connection_checker/data_connection_checker.dart';
 
-import 'package:florayion/versioner.dart';
-import '../LoginData/localData.dart';
-import 'package:florayion/CollectorData/localFFData.dart';
+import 'package:florayion/VersionChecker.dart';
+import '../LoginData/LocalUserData.dart';
+import 'package:florayion/CollectorData/SetLocalCollection.dart';
 import '../routeConfig.dart';
-import '../liveChecker.dart';
+import '../Connectivity.dart';
 
 class StartupLogo extends StatefulWidget {
   @override
@@ -18,11 +18,11 @@ class StartupLogo extends StatefulWidget {
 
 class _StartupLogoState extends State<StartupLogo> {
   var localDataChecker;
-  var lvcObject = LVC();
+  var lvcObject = Connectivity();
   void streamFunc(BuildContext context) async {
     localDataChecker = await UserName.checker();
     if (await DataConnectionChecker().hasConnection == true) {
-      LocalFF.init();
+      SetLocalCollection.init();
       proceeder(context);
       streamer();
     } else {
@@ -62,7 +62,7 @@ class _StartupLogoState extends State<StartupLogo> {
 
   checkVersion() async {
     final currentVersion = await GetVersion.projectCode;
-    final checker = VersionAllowed(currentVersion);
+    final checker = VersionChecker(currentVersion);
 
     if (await checker.vChecker() == 1) {
       return 1;

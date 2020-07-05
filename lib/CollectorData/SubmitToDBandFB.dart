@@ -1,22 +1,22 @@
-import 'package:florayion/CollectorData/SubmitterData.dart';
+import 'package:florayion/CollectorData/SubmitToFB.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:data_connection_checker/data_connection_checker.dart';
 import 'dart:async';
 import 'package:moor_flutter/moor_flutter.dart';
 import 'moordb.dart';
-import '../LoginData/localData.dart';
+import '../LoginData/LocalUserData.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-class LocalSubmission {
+class SubmitToDBandFB {
   List<int> submitted;
   String tempff;
   String tempSubSpecie;
   String tempSubmitVal;
   FDB filedb;
-  LocalSubmission(
+  SubmitToDBandFB(
       {this.tempff, this.tempSubSpecie, this.tempSubmitVal, this.filedb});
 
-  Future<void> submission() async {
+  Future<void> submitToDb() async {
     Position pos = await Geolocator()
         .getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
     int id = await filedb.insertTask(
@@ -30,7 +30,7 @@ class LocalSubmission {
     print("Succes: $id");
   }
 
-  Future<int> validator() async {
+  Future<int> randValChecker() async {
     final userData = Firestore.instance.collection('userAU');
     final name = UserName.name;
     final randVal = "(${UserName.randVal})";
@@ -40,17 +40,19 @@ class LocalSubmission {
       final temp = getter.documents.elementAt(i);
       final tempString = temp.data.values.toString();
       if (randVal == tempString) {
+        print("RandVal Match.");
         return 1;
       }
     }
+    print("RandVal Mismatch, Re-login .");
     return 0;
   }
 
-  Future<void> syncX(FDB filedb) async {
+  Future<void> syncDBtoFireBase(FDB filedb) async {
     final List getDat = await filedb.getId();
     for (int i = 1; i < getDat.length; ++i) {
       if (await DataConnectionChecker().hasConnection == true &&
-          await validator() == 1) {
+          await randValChecker() == 1) {
         final tempDat = await filedb.getSinglyTask(getDat[i]);
         SubmitterData(
             pos: tempDat.pos,

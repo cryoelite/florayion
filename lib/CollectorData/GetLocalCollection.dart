@@ -1,9 +1,8 @@
-
 import 'dart:io';
 
-import '../CollectorData/localFFData.dart';
+import 'SetLocalCollection.dart';
 
-class CollectorData {
+class GetLocalCollection {
   final ff = ["Flora", "Fauna", "Disturbance"];
   final subTypeFlora = ["Tree", "Shurb", "Grass"];
   final subTypeFauna = ["Mammals", "Birds"];
@@ -18,12 +17,12 @@ class CollectorData {
   List<String> fileyaFlora;
   List<String> fileyaFauna;
 
-  CollectorData() {
+  GetLocalCollection() {
     init();
   }
 
   Future init() async {
-    final path = await LocalFF.localPath;
+    final path = await SetLocalCollection.localPath;
     final faunaFile = File('$path/faunaDat.txt');
     fileyaFauna = await faunaFile.readAsLines();
 
@@ -34,7 +33,7 @@ class CollectorData {
     fileyaDis = await disFile.readAsLines();
   }
 
-  Future getFFSpecie(String subSpecie, String option) async {
+  Future getLocalCollection(String subSpecie, String option) async {
     if (option == "Flora") {
       final temp = fileyaFlora[
           (fileyaFlora.indexWhere((elem) => elem == subSpecie)) + 1];

@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-class CreateText {
+class CreateDocCount {
   int dataCountVal = 0;
   final userData = Firestore.instance.collection('userData');
   Future<int> getValue() async {

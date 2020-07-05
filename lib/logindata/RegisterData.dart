@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 import 'package:florayion/LoginData/keySign.dart';
-import '../LoginData/localData.dart';
+import 'LocalUserData.dart';
 
 class RegisterData {
   final String userName;

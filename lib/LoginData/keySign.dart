@@ -6,7 +6,7 @@ class ENCRV {
   ENCRV(this.userName);
   String encrvDo() {
     final userData = Firestore.instance.collection('userAU');
-    final randEnc = encrDoer.SecureRandom(8).base64;
+    final randEnc = encrDoer.SecureRandom(16).base64;
     userData
         .document(userName)
         .collection('keys')

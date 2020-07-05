@@ -1,7 +1,7 @@
 import 'package:data_connection_checker/data_connection_checker.dart';
 import 'dart:async';
 
-class LVC {
+class Connectivity {
   var clr = StreamController<bool>.broadcast();
   bool status;
   bool get thatStatus => status;

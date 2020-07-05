@@ -1,15 +1,15 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 import 'package:florayion/LoginData/keySign.dart';
-import '../LoginData/localData.dart';
+import 'LocalUserData.dart';
 
 class LoginData {
   int i = 0;
   final String userName;
-  final String userPp;
+  final String userPass;
   var checker;
-  var pper;
-  LoginData(this.userName, this.userPp);
+  var docs;
+  LoginData(this.userName, this.userPass);
   final userData = Firestore.instance.collection('userAU');
   Future<int> checkData() async {
     checker = await userData.document(userName).get();
@@ -19,7 +19,7 @@ class LoginData {
     } else {
       for (var i = 0; i < pper.documents.length; i++) {
         if (pper.documents[i][userName] != null) {
-          if (pper.documents[i][userName] == userPp) {
+          if (pper.documents[i][userName] == userPass) {
             final encr = ENCRV(userName);
             UserName.setter(userName);
             UserName.writeIn(encr.encrvDo());
