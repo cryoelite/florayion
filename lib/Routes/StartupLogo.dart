@@ -104,7 +104,7 @@ class _StartupLogoState extends State<StartupLogo> {
 
   void proceeder(BuildContext context) {
     Future<void>.delayed(
-      Duration(seconds: 5),
+      Duration(seconds: 3),
       () async {
         lvcObject.disabler();
         if (await checkVersion() == 1) {

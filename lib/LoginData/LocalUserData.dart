@@ -16,6 +16,10 @@ class UserName {
     file.setBool("status", isLoggedin);
     file.setString("randVal", encr);
   }
+  static Future setLog(bool val)async { 
+    final file= await SharedPreferences.getInstance();
+    file.setBool("status", val);
+  }
 
   static Future<int> checker() async {
     final file = await SharedPreferences.getInstance();

@@ -21,7 +21,6 @@ class SetLocalCollection {
     final floraFile = File('$path/floraDat.txt');
     final faunaFile = File('$path/faunaDat.txt');
     final disFile = File('$path/disturbanceDat.txt');
-
     for (var i = 0; i < colDat.subTypeFlora.length; i++) {
       floraFile.writeAsStringSync("${colDat.subTypeFlora[i]}\n",
           mode: FileMode.append);

@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:florayion/CollectorData/GetLocalCollection.dart';
 import 'package:flutter/material.dart';
 import 'package:data_connection_checker/data_connection_checker.dart';
+import 'package:flutter/services.dart';
 import 'package:gradient_widgets/gradient_widgets.dart';
 
 import '../routeConfig.dart';
@@ -10,6 +11,7 @@ import '../CreateDocCount.dart';
 import '../CollectorData/SubmitToDBandFB.dart';
 import '../CollectorData/moordb.dart';
 import './MySubmissions.dart';
+import '../Reset.dart';
 
 class MBX extends StatefulWidget {
   @override
@@ -40,8 +42,18 @@ class _MBXState extends State<MBX> {
   final _defColor = Colors.grey[200];
   final double _boxWidth = (RouterConf.blockH) * 20;
   final double _boxHeight = (RouterConf.blockV) * 8;
+  static List<String> menuInfo = ["My Info", "LogOut", "Exit"];
+  String menuValues;
+  double _tempHeight = 0;
+  double _tempWidth = 0;
 
   final _borRad = BorderRadius.circular(10);
+
+  List<DropdownMenuItem> menuItems() {
+    return menuInfo.map<DropdownMenuItem>((String val) {
+      return subMapper(val);
+    }).toList();
+  }
 
   void canceller() {
     str.close();
@@ -58,6 +70,7 @@ class _MBXState extends State<MBX> {
 
   void dispose() {
     canceller();
+    filedb.close();
     super.dispose();
     print("MainRoute disposed successfully.");
   }
@@ -158,6 +171,31 @@ class _MBXState extends State<MBX> {
     await SubmitToDBandFB().syncDBtoFireBase(filedb);
   }
 
+  Future resetState(BuildContext context) async {
+    await filedb.close();
+    Reset(context);
+  }
+
+  double animateHeight() {
+    if (_tempHeight != 0) {
+      _tempHeight = 0;
+      return 0;
+    } else {
+      _tempHeight = _defHeight;
+      return _tempHeight;
+    }
+  }
+
+  double animateWidth() {
+    if (_tempWidth != 0) {
+      _tempWidth = 0;
+      return _tempWidth;
+    } else {
+      _tempWidth = _defWidth;
+      return _tempWidth;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Material(
@@ -165,22 +203,47 @@ class _MBXState extends State<MBX> {
       child: Scaffold(
         appBar: AppBar(
           backgroundColor: Color(0xFF19191a),
-          title: Center(
-            child: ShaderMask(
-              shaderCallback: (bounds) => RadialGradient(
-                center: Alignment.topLeft,
-                radius: 1.0,
-                colors: [
-                  Colors.yellow,
-                  Colors.deepOrange,
-                ],
-                tileMode: TileMode.mirror,
-              ).createShader(bounds),
-              child: Text(
-                "Dashboard",
-                style: TextStyle(fontSize: (RouterConf.blockV) * 4),
+          title: Row(
+            mainAxisSize: MainAxisSize.max,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              Container(
+                child: ShaderMask(
+                  shaderCallback: (bounds) => RadialGradient(
+                    center: Alignment.topLeft,
+                    radius: 1.0,
+                    colors: [
+                      Colors.yellow,
+                      Colors.deepOrange,
+                    ],
+                    tileMode: TileMode.mirror,
+                  ).createShader(bounds),
+                  child: Text(
+                    "Dashboard",
+                    style: TextStyle(fontSize: (RouterConf.blockV) * 4),
+                  ),
+                ),
               ),
-            ),
+              Container(
+                child: Material(
+                  color: Colors.transparent,
+                  child: DropdownButton(
+                    underline: Container(),
+                    iconEnabledColor: Colors.white,
+                    icon: Icon(Icons.menu),
+                    items: menuItems(),
+                    value: menuValues,
+                    onChanged: (val) {
+                      if (val == menuInfo[1]) {
+                        resetState(context);
+                      } else if (val == menuInfo[2]) {
+                        SystemNavigator.pop();
+                      }
+                    },
+                  ),
+                ),
+              ),
+            ],
           ),
         ),
         body: Container(
@@ -345,9 +408,12 @@ class _MBXState extends State<MBX> {
                                     width: _boxWidth,
                                     height: _boxHeight,
                                     child: IconButton(
-                                      icon: Icon(Icons.file_download),
-                                      onPressed: () {},
-                                      tooltip: "Null",
+                                      icon: Icon(Icons.info_outline),
+                                      onPressed: () {
+                                        
+                                        setState(() {});
+                                      },
+                                      tooltip: "Info",
                                     ),
                                   ),
                                 ),
@@ -379,6 +445,24 @@ class _MBXState extends State<MBX> {
                         ),
                       ),
                     ),
+                    AnimatedContainer(
+                      curve: Curves.easeInOut,
+                      duration: Duration(milliseconds: 2000),
+                      height: animateHeight(),
+                      width: animateWidth(),
+                      child: Padding(
+                        padding: _defPad2,
+                        child: Card(
+                          elevation: _elevate,
+                          child: Container(
+                            color: _defColor,
+                            child: Row(
+                              children: <Widget>[],
+                            ),
+                          ),
+                        ),
+                      ),
+                    )
                   ],
                 ),
                 Positioned(
