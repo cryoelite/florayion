@@ -317,6 +317,7 @@ class _LoginRouteState extends State<LoginRoute> {
       ),
     );
   }
+
   Column invalidLogin() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
@@ -429,7 +430,22 @@ class _LoginRouteState extends State<LoginRoute> {
             ),
             textAlign: TextAlign.center,
             decoration: new InputDecoration(
-              prefixIconConstraints: BoxConstraints(maxHeight: 0),
+              enabledBorder: UnderlineInputBorder(
+                borderSide: BorderSide(
+                  color: Color(
+                    0xFFF56395,
+                  ),
+                ),
+              ),
+              focusedBorder: UnderlineInputBorder(
+                borderSide: BorderSide(
+                  color: Color(
+                    0xFFF56395,
+                  ),
+                ),
+              ),
+              prefixIconConstraints: BoxConstraints(
+                  maxHeight: 0, maxWidth: (RouterConf.blockH) * 0.3),
               prefixIcon: Icon(
                 IC1.user,
                 color: Color(
@@ -460,7 +476,22 @@ class _LoginRouteState extends State<LoginRoute> {
             ),
             textAlign: TextAlign.center,
             decoration: new InputDecoration(
-              prefixIconConstraints: BoxConstraints(maxHeight: 0),
+              enabledBorder: UnderlineInputBorder(
+                borderSide: BorderSide(
+                  color: Color(
+                    0xFFF56395,
+                  ),
+                ),
+              ),
+              focusedBorder: UnderlineInputBorder(
+                borderSide: BorderSide(
+                  color: Color(
+                    0xFFF56395,
+                  ),
+                ),
+              ),
+              prefixIconConstraints: BoxConstraints(
+                  maxHeight: 0, maxWidth: (RouterConf.blockH) * 0.3),
               prefixIcon: Icon(
                 IC1.key,
                 color: Color(
@@ -498,7 +529,22 @@ class _LoginRouteState extends State<LoginRoute> {
             ),
             textAlign: TextAlign.center,
             decoration: new InputDecoration(
-              prefixIconConstraints: BoxConstraints(maxHeight: 0),
+              enabledBorder: UnderlineInputBorder(
+                borderSide: BorderSide(
+                  color: Color(
+                    0xFFF9AE70,
+                  ),
+                ),
+              ),
+              focusedBorder: UnderlineInputBorder(
+                borderSide: BorderSide(
+                  color: Color(
+                    0xFFF9AE70,
+                  ),
+                ),
+              ),
+              prefixIconConstraints: BoxConstraints(
+                  maxHeight: 0, maxWidth: (RouterConf.blockH) * 0.3),
               prefixIcon: Icon(
                 IC1.user,
                 color: Color(
@@ -529,7 +575,22 @@ class _LoginRouteState extends State<LoginRoute> {
             ),
             textAlign: TextAlign.center,
             decoration: new InputDecoration(
-              prefixIconConstraints: BoxConstraints(maxHeight: 0),
+              enabledBorder: UnderlineInputBorder(
+                borderSide: BorderSide(
+                  color: Color(
+                    0xFFF9AE70,
+                  ),
+                ),
+              ),
+              focusedBorder: UnderlineInputBorder(
+                borderSide: BorderSide(
+                  color: Color(
+                    0xFFF9AE70,
+                  ),
+                ),
+              ),
+              prefixIconConstraints: BoxConstraints(
+                  maxHeight: 0, maxWidth: (RouterConf.blockH) * 0.3),
               prefixIcon: Icon(
                 IC1.key,
                 color: Color(

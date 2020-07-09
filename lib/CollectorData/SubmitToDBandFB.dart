@@ -33,17 +33,22 @@ class SubmitToDBandFB {
   Future<int> randValChecker() async {
     final userData = Firestore.instance.collection('userAU');
     final name = UserName.name;
+
     final randVal = "(${UserName.randVal})";
-    final getter =
+    final QuerySnapshot getter =
         await userData.document(name).collection('keys').getDocuments();
-    for (int i = 0; i < getter.documents.length; ++i) {
-      final temp = getter.documents.elementAt(i);
+    
+    print("Herein randchecker");
+    for (int i = 0; i < getter.documents.length ; ++i) {
+      final temp = getter.documents[i];
       final tempString = temp.data.values.toString();
+      print("tempstring : $tempString");
       if (randVal == tempString) {
         print("RandVal Match.");
         return 1;
       }
     }
+    print(randVal);
     print("RandVal Mismatch, Re-login .");
     return 0;
   }

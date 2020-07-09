@@ -23,7 +23,7 @@ class _StartupLogoState extends State<StartupLogo> {
     localDataChecker = await UserName.checker();
     if (await DataConnectionChecker().hasConnection == true) {
       SetLocalCollection.init();
-      proceeder(context);
+      proceeder(context);   
       streamer();
     } else {
       loginChecker();
@@ -54,7 +54,7 @@ class _StartupLogoState extends State<StartupLogo> {
     } else {
       Navigator.pushNamedAndRemoveUntil(
         context,
-        '/fourth',
+        '/first',
         (_) => false,
       );
     }
@@ -104,7 +104,7 @@ class _StartupLogoState extends State<StartupLogo> {
 
   void proceeder(BuildContext context) {
     Future<void>.delayed(
-      Duration(seconds: 5),
+      Duration(seconds: 3),
       () async {
         lvcObject.disabler();
         if (await checkVersion() == 1) {
