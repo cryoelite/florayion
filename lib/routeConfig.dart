@@ -6,6 +6,8 @@ class RouterConf {
   static double blockV;
   static double blockH;
 
+
+
   void init(BuildContext context) {
     final _mediaQ = MediaQuery.of(context);
     vArea = _mediaQ.size.height;
