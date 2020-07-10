@@ -400,6 +400,7 @@ class _MBXState extends State<MBX> {
                                   ),
                                 ),
                               ),
+                              Text("|"),
                               Padding(
                                 padding: _defPad,
                                 child: Material(
@@ -410,7 +411,6 @@ class _MBXState extends State<MBX> {
                                     child: IconButton(
                                       icon: Icon(Icons.info_outline),
                                       onPressed: () {
-                                        
                                         setState(() {});
                                       },
                                       tooltip: "Info",
@@ -418,6 +418,7 @@ class _MBXState extends State<MBX> {
                                   ),
                                 ),
                               ),
+                              Text("|"),
                               Padding(
                                 padding: _defPad,
                                 child: Material(
@@ -445,24 +446,6 @@ class _MBXState extends State<MBX> {
                         ),
                       ),
                     ),
-                    AnimatedContainer(
-                      curve: Curves.easeInOut,
-                      duration: Duration(milliseconds: 2000),
-                      height: animateHeight(),
-                      width: animateWidth(),
-                      child: Padding(
-                        padding: _defPad2,
-                        child: Card(
-                          elevation: _elevate,
-                          child: Container(
-                            color: _defColor,
-                            child: Row(
-                              children: <Widget>[],
-                            ),
-                          ),
-                        ),
-                      ),
-                    )
                   ],
                 ),
                 Positioned(

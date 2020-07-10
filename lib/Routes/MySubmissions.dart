@@ -12,8 +12,8 @@ class _MySubsState extends State<MySubs> {
   List listData = [];
   final double _defHeight = (RouterConf.blockV) * 10;
   final double _defWidth = (RouterConf.blockH) * 80;
-  final EdgeInsets _defPad = EdgeInsets.only(
-      left: RouterConf.blockH * 4, right: RouterConf.blockH * 4);
+  final EdgeInsets _defPad = EdgeInsets.only(right: RouterConf.blockH * 8);
+
   final EdgeInsets _defPad2 = EdgeInsets.only(
       top: RouterConf.blockV * 0.5, bottom: RouterConf.blockV * 2);
   final _defColor = Colors.grey[200];
@@ -30,132 +30,146 @@ class _MySubsState extends State<MySubs> {
       type: MaterialType.canvas,
       child: Scaffold(
         appBar: AppBar(
+          automaticallyImplyLeading: false,
           centerTitle: true,
-          leading: IconButton(
-            icon: Icon(Icons.arrow_back_ios),
-            onPressed: () => Navigator.pop(
-              context,
-            ),
-          ),
           backgroundColor: Color(0xFF19191a),
-          title: Center(
-            child: ShaderMask(
-              shaderCallback: (bounds) => RadialGradient(
-                center: Alignment.topLeft,
-                radius: 1.0,
-                colors: [
-                  Colors.yellow,
-                  Colors.deepOrange,
-                ],
-                tileMode: TileMode.mirror,
-              ).createShader(bounds),
-              child: Text(
-                "My Submissions",
-                style: TextStyle(fontSize: (RouterConf.blockV) * 4),
+          title: Row(
+            children: <Widget>[
+              Padding(
+                padding: _defPad,
+                child: IconButton(
+                  icon: Icon(Icons.arrow_back_ios),
+                  onPressed: () => Navigator.pop(
+                    context,
+                  ),
+                ),
               ),
-            ),
+              ShaderMask(
+                shaderCallback: (bounds) => RadialGradient(
+                  center: Alignment.topLeft,
+                  radius: 1.0,
+                  colors: [
+                    Colors.yellow,
+                    Colors.deepOrange,
+                  ],
+                  tileMode: TileMode.mirror,
+                ).createShader(bounds),
+                child: Text(
+                  "My Submissions",
+                  style: TextStyle(fontSize: (RouterConf.blockV) * 4),
+                ),
+              ),
+            ],
           ),
         ),
         body: FutureBuilder(
           future: initList(),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.done) {
-              return Container(
-                child: ListView.builder(
-                  itemCount: listData.length,
-                  itemBuilder: (context, index) {
-                    return Padding(
-                      padding: _defPad2,
-                      child: Card(
-                        elevation: 5,
-                        child: new Container(
-                            color: _defColor,
-                            width: _defWidth,
-                            height: _defHeight,
-                            child: Row(
-                              children: <Widget>[
-                                Container(
-                                  width: _boxWidth,
-                                  height: _boxHeight,
-                                  child: iconBuilder(listData[index]["FFType"]),
-                                ),
-                                Container(
-                                  width: RouterConf.blockH * 45,
-                                  child: Column(
-                                    children: <Widget>[
-                                      Padding(
-                                        padding: _defPad2,
-                                        child: Row(
+              if (listData.length != 0) {
+                return Container(
+                  child: ListView.builder(
+                    itemCount: listData.length,
+                    itemBuilder: (context, index) {
+                      return Padding(
+                        padding: _defPad2,
+                        child: Card(
+                          elevation: 5,
+                          child: new Container(
+                              color: _defColor,
+                              width: _defWidth,
+                              height: _defHeight,
+                              child: Row(
+                                children: <Widget>[
+                                  Container(
+                                    width: _boxWidth,
+                                    height: _boxHeight,
+                                    child:
+                                        iconBuilder(listData[index]["FFType"]),
+                                  ),
+                                  Container(
+                                    width: RouterConf.blockH * 45,
+                                    child: Column(
+                                      children: <Widget>[
+                                        Padding(
+                                          padding: _defPad2,
+                                          child: Row(
+                                            children: <Widget>[
+                                              Text(
+                                                "Type ",
+                                              ),
+                                              Text(
+                                                listData[index]["FFType"],
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                        Padding(
+                                          padding: _defPad2,
+                                          child: Row(
+                                            children: <Widget>[
+                                              Text(
+                                                "Details :",
+                                              ),
+                                              Text(
+                                                listData[index]["SpecieName"],
+                                              ),
+                                            ],
+                                          ),
+                                        )
+                                      ],
+                                    ),
+                                  ),
+                                  Container(
+                                    width: RouterConf.blockH * 30,
+                                    child: Column(
+                                      children: <Widget>[
+                                        Row(
                                           children: <Widget>[
                                             Text(
-                                              "Type ",
+                                              "Sub: ",
                                             ),
                                             Text(
-                                              listData[index]["FFType"],
+                                              listData[index]["Sub-Specie"],
                                             ),
                                           ],
                                         ),
-                                      ),
-                                      Padding(
-                                        padding: _defPad2,
-                                        child: Row(
-                                          children: <Widget>[
-                                            Text(
-                                              "Details :",
-                                            ),
-                                            Text(
-                                              listData[index]["SpecieName"],
-                                            ),
-                                          ],
-                                        ),
-                                      )
-                                    ],
+                                      ],
+                                    ),
                                   ),
-                                ),
-                                Container(
-                                  width: RouterConf.blockH * 30,
-                                  child: Column(
-                                    children: <Widget>[
-                                      Row(
-                                        children: <Widget>[
-                                          Text(
-                                            "Sub: ",
-                                          ),
-                                          Text(
-                                            listData[index]["Sub-Specie"],
-                                          ),
-                                        ],
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ],
-                            )),
-                      ),
-                    );
-                  },
-                ),
-              );
-            } else {
-              return Container(
-                color: Colors.white,
-                width: RouterConf.hArea,
-                height: RouterConf.vArea,
-                child: Center(
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: <Widget>[
-                      Text(
-                          "Your Submissions will show up in a sec, if any exist."),
-                      Icon(
-                        CustIcons.crow,
-                      ),
-                    ],
+                                ],
+                              )),
+                        ),
+                      );
+                    },
                   ),
-                ),
-              );
+                );
+              } else {
+                return buildContainer();
+              }
+            } else {
+              return buildContainer();
             }
           },
+        ),
+      ),
+    );
+  }
+
+  Widget buildContainer() {
+    return Container(
+      color: Colors.white,
+      width: RouterConf.hArea,
+      height: RouterConf.vArea,
+      child: Center(
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            Text("Your Submissions will show up in a sec, if any exist."),
+            Icon(
+              CustIcons.crow,
+            ),
+          ],
         ),
       ),
     );
