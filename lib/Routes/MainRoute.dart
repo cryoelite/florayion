@@ -22,11 +22,15 @@ class _MBXState extends State<MBX> {
   //Variables for streams
   final Stream<DataConnectionStatus> slr;
   final StreamController<int> str = StreamController();
+  final StreamController<String> statusClr = StreamController();
+  Stream statusStream;
   Timer timer;
+  Timer statusTimer;
   Stream streamAlpha;
 
   _MBXState() : slr = DataConnectionChecker().onStatusChange {
     streamAlpha = str.stream;
+    statusStream = statusClr.stream;
     getVal();
     mapper();
   }
@@ -58,9 +62,11 @@ class _MBXState extends State<MBX> {
   void canceller() {
     str.close();
     timer.cancel();
+    statusClr.close();
   }
 
   void getVal() {
+    statusTimer = Timer.periodic(Duration(minutes: 1), (_) => sendIntoDb());
     timer = Timer.periodic(Duration(seconds: 5), (_) async {
       str.sink.add(
         await CreateDocCount().getValue(),
@@ -148,6 +154,7 @@ class _MBXState extends State<MBX> {
     if (selectedFF != null &&
         selectedSubType != null &&
         submitControl.text != "") {
+      statusClr.sink.add("Saving Submission");
       final submitData = SubmitToDBandFB(
           tempff: selectedFF,
           tempSubSpecie: selectedSubType,
@@ -155,6 +162,7 @@ class _MBXState extends State<MBX> {
           filedb: filedb);
       await submitData.submitToDb();
       print("Sent submit from mainRoute");
+      statusClr.sink.add("Idle");
     }
     resetter();
   }
@@ -168,7 +176,9 @@ class _MBXState extends State<MBX> {
   }
 
   void sendIntoDb() async {
+    statusClr.sink.add("Syncing Database");
     await SubmitToDBandFB().syncDBtoFireBase(filedb);
+    statusClr.sink.add("Idle");
   }
 
   Future resetState(BuildContext context) async {
@@ -411,7 +421,7 @@ class _MBXState extends State<MBX> {
                                     child: IconButton(
                                       icon: Icon(Icons.info_outline),
                                       onPressed: () {
-                                        setState(() {});
+                                        /* setState(() {}); */
                                       },
                                       tooltip: "Info",
                                     ),
@@ -446,6 +456,55 @@ class _MBXState extends State<MBX> {
                         ),
                       ),
                     ),
+                    Padding(
+                        padding: _defPad2,
+                        child: Card(
+                          elevation: _elevate,
+                          child: Container(
+                            height: _defHeight,
+                            width: _defWidth,
+                            color: _defColor,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: <Widget>[
+                                Padding(
+                                  padding: _defPad,
+                                  child: Text(
+                                    "Status :  ",
+                                    style: TextStyle(
+                                        fontSize: RouterConf.blockV * 3),
+                                  ),
+                                ),
+                                Padding(
+                                  padding: _defPad,
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(16),
+                                      border: Border.all(
+                                        color: Colors.black,
+                                        width: RouterConf.blockH * 0.6,
+                                      ),
+                                    ),
+                                    child: StreamBuilder(
+                                      stream: statusStream,
+                                      builder: (_, snapshot) {
+                                        if (snapshot.connectionState ==
+                                                ConnectionState.waiting ||
+                                            snapshot.connectionState ==
+                                                ConnectionState.none) {
+                                          return defaultStatus();
+                                        } else {
+                                          return defaultStatus(
+                                              val: snapshot.data);
+                                        }
+                                      },
+                                    ),
+                                  ),
+                                )
+                              ],
+                            ),
+                          ),
+                        ))
                   ],
                 ),
                 Positioned(
@@ -466,6 +525,20 @@ class _MBXState extends State<MBX> {
               ],
             ),
           ),
+        ),
+      ),
+    );
+  }
+
+  Widget defaultStatus({String val = "Idle"}) {
+    return Container(
+      width: _boxWidth,
+      height: _boxHeight,
+      child: Center(
+        child: Text(
+          val,
+          style: TextStyle(
+              fontWeight: FontWeight.bold, fontSize: RouterConf.blockV * 2),
         ),
       ),
     );

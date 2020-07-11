@@ -39,7 +39,7 @@ class SubmitterData {
 
     id = idFind.documents.length;
     print(id);
-    userData
+    await userData
         .document(UserName.name)
         .collection("Data")
         .document(id.toString())
@@ -53,12 +53,16 @@ class SubmitterData {
       },
       merge: true,
     );
-    userData.document(UserName.name).setData(
+    await totalEntries();
+  }
+
+  Future totalEntries() async {
+    await userData.document(UserName.name).setData(
       {
         "TotalEntries": (id.toString()),
       },
       merge: true,
     );
-    dataCountUpdater();
+    await dataCountUpdater();
   }
 }
