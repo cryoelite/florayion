@@ -1,7 +1,7 @@
 name: florayion
 description: A data collection app for Project GTF.
 
-version: 1.9.0+8
+version: 1.9.4+9
 
 environment:
   sdk: ">=2.6.0 <3.0.0"

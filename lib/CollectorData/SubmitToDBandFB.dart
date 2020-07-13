@@ -32,7 +32,7 @@ class SubmitToDBandFB {
 
   Future<int> randValChecker() async {
     final userData = Firestore.instance.collection('userAU');
-    final name = UserName.name;
+    final name = await UserName().getName();
 
     final String randVal = await UserName().getRandVal();
     final QuerySnapshot getter =

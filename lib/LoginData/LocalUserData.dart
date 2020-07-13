@@ -29,15 +29,16 @@ class UserName {
 
   Future getName() async {
     final file = await SharedPreferences.getInstance();
+
     final String name = file.getString("uid");
-    print("Name: $name");
+
     return name;
   }
 
   Future getRandVal() async {
     final file = await SharedPreferences.getInstance();
     final String rand = file.getString("randVal");
-    print("rand: $rand");
+
     return rand;
   }
 

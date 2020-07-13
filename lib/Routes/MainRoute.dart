@@ -60,10 +60,11 @@ class _MBXState extends State<MBX> {
   }
 
   void canceller() {
-    str.close();
-    timer.cancel();
-    statusClr.close();
     statusTimer.cancel();
+    timer.cancel();
+    str.close();
+
+    statusClr.close();
   }
 
   void getVal() {

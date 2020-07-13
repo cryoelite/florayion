@@ -19,8 +19,8 @@ class Connectivity {
 
   Stream<bool> get strClr => clr.stream;
   void disabler() async {
-    print("thy is done!");
-    await clr.close();
+    print("Loading Complete");
     timeIt.cancel();
+    await clr.close();
   }
 }

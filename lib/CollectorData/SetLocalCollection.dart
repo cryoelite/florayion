@@ -42,6 +42,6 @@ class SetLocalCollection {
           "${(disturbanceDat[colDat.subTypeDisturbance[i]]).toString()}\n",
           mode: FileMode.append);
     }
-    print("yayayayaya");
+    print("Set Local Collection Done.");
   }
 }

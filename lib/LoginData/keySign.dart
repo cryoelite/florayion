@@ -25,8 +25,7 @@ class ENCRV {
     this.id = idData.documents.length;
   }
 
-  Future deleteKey(String key) async {
-    print("deleteKey : $key , userName: $userName");
+  Future deleteKey(String randVal) async {
     final userData = Firestore.instance
         .collection('userAU')
         .document(userName)
@@ -35,14 +34,21 @@ class ENCRV {
 
     for (int i = 0; i < keyIds.documents.length; ++i) {
       final temp = keyIds.documents[i];
-      final tempString = temp.data.values.toString();
-      print("tempString: $tempString");
-      if (key == tempString) {
-        await userData.document('$i+1').delete();
-        print("Key popped from FB");
+      var flag = 0;
+      temp.data.forEach(
+        (key, value) {
+          if (value == randVal) {
+            print("RandVal Match.");
+            flag = 1;
+          }
+        },
+      );
+      if (flag == 1) {
+        await userData.document('${i + 1}').delete();
+        print("KeyDelete complete.");
         return;
       }
     }
-    print("KeyDelete complete.");
+    print("KeyDelete Incomplete.");
   }
 }
