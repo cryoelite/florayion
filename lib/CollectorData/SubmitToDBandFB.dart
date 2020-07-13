@@ -34,28 +34,35 @@ class SubmitToDBandFB {
     final userData = Firestore.instance.collection('userAU');
     final name = UserName.name;
 
-    final randVal = "(${UserName.randVal})";
+    final String randVal = await UserName().getRandVal();
     final QuerySnapshot getter =
         await userData.document(name).collection('keys').getDocuments();
-    
-    print("Herein randchecker");
-    for (int i = 0; i < getter.documents.length ; ++i) {
+
+    print("Herein randchecker and key length: ${getter.documents.length}");
+    for (int i = 0; i < getter.documents.length; ++i) {
+      int flag = 0;
       final temp = getter.documents[i];
-      final tempString = temp.data.values.toString();
-      print("tempstring : $tempString");
-      if (randVal == tempString) {
-        print("RandVal Match.");
+      temp.data.forEach(
+        (key, value) {
+          if (value == randVal) {
+            print("RandVal Match.");
+            flag = 1;
+          }
+        },
+      );
+      if (flag == 1) {
         return 1;
       }
     }
-    print(randVal);
+
+    print("randVal : $randVal");
     print("RandVal Mismatch, Re-login .");
     return 0;
   }
 
   Future<void> syncDBtoFireBase(FDB filedb) async {
     final List getDat = await filedb.getId();
-    for (int i = 1; i < getDat.length; ++i) {
+    for (int i = 0; i < getDat.length; ++i) {
       if (await DataConnectionChecker().hasConnection == true &&
           await randValChecker() == 1) {
         final tempDat = await filedb.getSinglyTask(getDat[i]);

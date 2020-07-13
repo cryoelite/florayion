@@ -63,6 +63,7 @@ class _MBXState extends State<MBX> {
     str.close();
     timer.cancel();
     statusClr.close();
+    statusTimer.cancel();
   }
 
   void getVal() {
@@ -183,7 +184,7 @@ class _MBXState extends State<MBX> {
 
   Future resetState(BuildContext context) async {
     await filedb.close();
-    Reset(context);
+    Reset().resetApp(context);
   }
 
   double animateHeight() {

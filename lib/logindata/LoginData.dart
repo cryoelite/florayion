@@ -22,7 +22,7 @@ class LoginData {
           if (pper.documents[i][userName] == userPass) {
             final encr = ENCRV(userName);
             UserName.setter(userName);
-            UserName.writeIn(encr.encrvDo());
+            await UserName.writeIn(await encr.encrvDo());
             return 1;
           } else {
             return 0;
