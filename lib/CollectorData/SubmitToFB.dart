@@ -33,14 +33,15 @@ class SubmitterData {
 
   Future setter() async {
     final QuerySnapshot idFind = await userData
-        .document(UserName.name)
+        .document(await UserName().getName())
         .collection("Data")
         .getDocuments();
 
     id = idFind.documents.length;
     print(id);
+    print(UserName.name);
     await userData
-        .document(UserName.name)
+        .document(await UserName().getName())
         .collection("Data")
         .document(id.toString())
         .setData(
@@ -57,7 +58,7 @@ class SubmitterData {
   }
 
   Future totalEntries() async {
-    await userData.document(UserName.name).setData(
+    await userData.document(await UserName().getName()).setData(
       {
         "TotalEntries": (id.toString()),
       },

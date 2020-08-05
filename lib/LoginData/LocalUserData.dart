@@ -31,7 +31,6 @@ class UserName {
     final file = await SharedPreferences.getInstance();
 
     final String name = file.getString("uid");
-
     return name;
   }
 
