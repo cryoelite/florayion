@@ -46,7 +46,7 @@ class _MBXState extends State<MBX> {
   final _defColor = Colors.grey[200];
   final double _boxWidth = (RouterConf.blockH) * 20;
   final double _boxHeight = (RouterConf.blockV) * 8;
-  static List<String> menuInfo = ["My Info", "LogOut", "Exit"];
+  static List<String> menuInfo = ["Language", "LogOut", "Exit"];
   String menuValues;
   double _tempHeight = 0;
   double _tempWidth = 0;
@@ -92,6 +92,7 @@ class _MBXState extends State<MBX> {
   var subType;
   var subDisturbance;
   var subTypeInfo;
+  var subReptile;
   final TextEditingController submitControl = TextEditingController();
   var specieList;
   final GetLocalCollection colDat = GetLocalCollection();
@@ -137,6 +138,9 @@ class _MBXState extends State<MBX> {
         colDat.subTypeDisturbance.map<DropdownMenuItem<String>>((val) {
       return subMapper(val);
     }).toList();
+    subReptile = colDat.subTypeReptile.map<DropdownMenuItem<String>>((val) {
+      return subMapper(val);
+    }).toList();
   }
 
   void subTypeSelector() {
@@ -146,6 +150,9 @@ class _MBXState extends State<MBX> {
     } else if (selectedFF == "Fauna") {
       subTypeInfo = subFauna;
       print("fauna");
+    } else if (selectedFF == "Reptiles") {
+      subTypeInfo = subReptile;
+      print("Reptiles");
     } else {
       subTypeInfo = subDisturbance;
       print("disturbance");
@@ -250,6 +257,14 @@ class _MBXState extends State<MBX> {
                         resetState(context);
                       } else if (val == menuInfo[2]) {
                         SystemNavigator.pop();
+                      } else {
+                        resetter();
+                        filedb.close();
+                        Navigator.pushNamedAndRemoveUntil(
+                          context,
+                          '/second',
+                          (_) => false,
+                        );
                       }
                     },
                   ),

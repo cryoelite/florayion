@@ -6,7 +6,7 @@ class ListData {
   Future<List> getList() async {
     final QuerySnapshot submissions = await Firestore.instance
         .collection('userData')
-        .document(UserName.name)
+        .document(await UserName().getName())
         .collection('Data')
         .getDocuments();
     final List<DocumentSnapshot> documents = submissions.documents;

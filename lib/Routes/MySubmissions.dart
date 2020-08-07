@@ -106,15 +106,17 @@ class _MySubsState extends State<MySubs> {
                                         ),
                                         Padding(
                                           padding: _defPad2,
-                                          child: Row(
-                                            children: <Widget>[
-                                              Text(
-                                                "Details :",
-                                              ),
-                                              Text(
-                                                listData[index]["SpecieName"],
-                                              ),
-                                            ],
+                                          child: FittedBox(
+                                            child: Row(
+                                              children: <Widget>[
+                                                Text(
+                                                  "Details :",
+                                                ),
+                                                Text(
+                                                  listData[index]["SpecieName"],
+                                                ),
+                                              ],
+                                            ),
                                           ),
                                         )
                                       ],
@@ -122,19 +124,25 @@ class _MySubsState extends State<MySubs> {
                                   ),
                                   Container(
                                     width: RouterConf.blockH * 30,
-                                    child: Column(
-                                      children: <Widget>[
-                                        Row(
-                                          children: <Widget>[
-                                            Text(
-                                              "Sub: ",
-                                            ),
-                                            Text(
-                                              listData[index]["Sub-Specie"],
-                                            ),
-                                          ],
-                                        ),
-                                      ],
+                                    child: FittedBox(
+                                      child: Column(
+                                        children: <Widget>[
+                                          Row(
+                                            children: <Widget>[
+                                              Text(
+                                                "Sub: ",
+                                              ),
+                                              Text(
+                                                listData[index]["Sub-Specie"],
+                                              ),
+                                            ],
+                                          ),
+                                          Container(
+                                            width: _boxWidth,
+                                            height: _boxHeight,
+                                          ),
+                                        ],
+                                      ),
                                     ),
                                   ),
                                 ],
