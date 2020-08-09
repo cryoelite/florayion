@@ -8,6 +8,8 @@ class Tasks extends Table {
   TextColumn get subSpecie => text().withLength(min: 1, max: 512)();
   TextColumn get submitVal => text().withLength(min: 1, max: 512)();
   TextColumn get pos => text().withLength(min: 1, max: 512)();
+  IntColumn get transect =>
+      integer().withDefault(const Constant(0)).autoIncrement()();
 }
 
 @UseMoor(tables: [Tasks])
@@ -16,7 +18,7 @@ class FDB extends _$FDB {
       : super(FlutterQueryExecutor.inDatabaseFolder(
             path: 'StorageFlorayion', logStatements: true));
   @override
-  int get schemaVersion => 3;
+  int get schemaVersion => 5;
   Future<List<Task>> getAllTask() => select(tasks).get();
   Future<List> getId() async {
     return select(tasks).map((temp) => temp.id).get();

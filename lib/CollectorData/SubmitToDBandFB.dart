@@ -67,10 +67,11 @@ class SubmitToDBandFB {
           await randValChecker() == 1) {
         final tempDat = await filedb.getSinglyTask(getDat[i]);
         SubmitterData(
-            pos: tempDat.pos,
-            tempSubSpecie: tempDat.subSpecie,
-            tempff: tempDat.ff,
-            tempsubmitVal: tempDat.submitVal);
+          pos: tempDat.pos,
+          tempSubSpecie: tempDat.subSpecie,
+          tempff: tempDat.ff,
+          tempsubmitVal: tempDat.submitVal,
+        );
         filedb.deleteSinglyTask(getDat[i]);
         print("Submission Success");
       }

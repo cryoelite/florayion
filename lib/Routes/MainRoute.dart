@@ -1,7 +1,9 @@
 import 'dart:async';
 
 import 'package:florayion/CollectorData/GetLocalCollection.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:data_connection_checker/data_connection_checker.dart';
 import 'package:flutter/services.dart';
 import 'package:gradient_widgets/gradient_widgets.dart';
@@ -42,7 +44,7 @@ class _MBXState extends State<MBX> {
   final EdgeInsets _defPad = EdgeInsets.only(
       left: RouterConf.blockH * 4, right: RouterConf.blockH * 4);
   final EdgeInsets _defPad2 = EdgeInsets.only(
-      top: RouterConf.blockV * 0.5, bottom: RouterConf.blockV * 2);
+      top: RouterConf.blockV * 0.2, bottom: RouterConf.blockV * 1.4);
   final _defColor = Colors.grey[200];
   final double _boxWidth = (RouterConf.blockH) * 20;
   final double _boxHeight = (RouterConf.blockV) * 8;
@@ -213,6 +215,71 @@ class _MBXState extends State<MBX> {
       _tempWidth = _defWidth;
       return _tempWidth;
     }
+  }
+
+  //MapImplementation
+  GoogleMapController mapclr;
+  LatLng position;
+  List<LatLng> markerPoints = [
+    LatLng(26.8011, 82.2369),
+    LatLng(26.7593, 82.2385)
+  ];
+  Future positioner() async {
+    Position pos = await Geolocator()
+        .getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+    print(
+        "Positioner | Current Position : [${pos.latitude}],[${pos.longitude}]");
+    position = LatLng(pos.latitude, pos.longitude);
+  }
+
+  Set<Marker> markers = {};
+  Set<Polyline> polylines = {};
+
+  void markerUpdate() {
+    markers.add(
+      Marker(
+        markerId: MarkerId("one"),
+        position: position,
+        icon: BitmapDescriptor.defaultMarkerWithHue(23),
+      ),
+    );
+
+    polylines.add(
+      Polyline(
+        polylineId: PolylineId("value"),
+        geodesic: true,
+        points: markerPoints,
+        color: Colors.indigo[400],
+        width: (RouterConf.blockV * 0.6).toInt(),
+      ),
+    );
+    setState(() {});
+  }
+
+  Widget mapImplementation(BuildContext context) {
+    return Container(
+      child: FutureBuilder(
+        future: positioner(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.done) {
+            return GoogleMap(
+              onMapCreated: (GoogleMapController tempclr) {
+                mapclr = tempclr;
+              },
+              myLocationEnabled: true,
+              markers: markers,
+              polylines: polylines,
+              initialCameraPosition: CameraPosition(
+                target: position,
+                zoom: 13.0,
+              ),
+            );
+          } else {
+            return Container();
+          }
+        },
+      ),
+    );
   }
 
   @override
@@ -413,17 +480,15 @@ class _MBXState extends State<MBX> {
                                     width: _boxWidth,
                                     height: _boxHeight,
                                     child: InkWell(
-                                      enableFeedback: true,
-                                      excludeFromSemantics: true,
-                                      child: IconButton(
-                                        color: Colors.black,
-                                        icon: Icon(Icons.autorenew),
-                                        onPressed: () {
-                                          sendIntoDb();
-                                        },
-                                        tooltip: "Sync progress now",
-                                      ),
-                                    ),
+                                        enableFeedback: true,
+                                        excludeFromSemantics: true,
+                                        child: RaisedButton(
+                                          color: Colors.yellow,
+                                          onPressed: () => sendIntoDb(),
+                                          child: Text(
+                                            "Start Sync",
+                                          ),
+                                        )),
                                   ),
                                 ),
                               ),
@@ -438,7 +503,7 @@ class _MBXState extends State<MBX> {
                                     child: IconButton(
                                       icon: Icon(Icons.info_outline),
                                       onPressed: () {
-                                        /* setState(() {}); */
+                                        markerUpdate();
                                       },
                                       tooltip: "Info",
                                     ),
@@ -521,11 +586,19 @@ class _MBXState extends State<MBX> {
                               ],
                             ),
                           ),
-                        ))
+                        )),
+                    Padding(
+                      padding: _defPad2,
+                      child: Container(
+                        width: RouterConf.blockH * 80,
+                        height: RouterConf.blockV * 40,
+                        child: mapImplementation(context),
+                      ),
+                    )
                   ],
                 ),
                 Positioned(
-                  bottom: RouterConf.blockV * 2,
+                  bottom: 0,
                   right: RouterConf.blockH * 4,
                   child: Padding(
                     padding: _defPad2,

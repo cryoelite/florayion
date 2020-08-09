@@ -13,12 +13,14 @@ class Task extends DataClass implements Insertable<Task> {
   final String subSpecie;
   final String submitVal;
   final String pos;
+  final int transect;
   Task(
       {@required this.id,
       @required this.ff,
       @required this.subSpecie,
       @required this.submitVal,
-      @required this.pos});
+      @required this.pos,
+      @required this.transect});
   factory Task.fromData(Map<String, dynamic> data, GeneratedDatabase db,
       {String prefix}) {
     final effectivePrefix = prefix ?? '';
@@ -32,6 +34,8 @@ class Task extends DataClass implements Insertable<Task> {
       submitVal: stringType
           .mapFromDatabaseResponse(data['${effectivePrefix}submit_val']),
       pos: stringType.mapFromDatabaseResponse(data['${effectivePrefix}pos']),
+      transect:
+          intType.mapFromDatabaseResponse(data['${effectivePrefix}transect']),
     );
   }
   @override
@@ -52,6 +56,9 @@ class Task extends DataClass implements Insertable<Task> {
     if (!nullToAbsent || pos != null) {
       map['pos'] = Variable<String>(pos);
     }
+    if (!nullToAbsent || transect != null) {
+      map['transect'] = Variable<int>(transect);
+    }
     return map;
   }
 
@@ -66,6 +73,9 @@ class Task extends DataClass implements Insertable<Task> {
           ? const Value.absent()
           : Value(submitVal),
       pos: pos == null && nullToAbsent ? const Value.absent() : Value(pos),
+      transect: transect == null && nullToAbsent
+          ? const Value.absent()
+          : Value(transect),
     );
   }
 
@@ -78,6 +88,7 @@ class Task extends DataClass implements Insertable<Task> {
       subSpecie: serializer.fromJson<String>(json['subSpecie']),
       submitVal: serializer.fromJson<String>(json['submitVal']),
       pos: serializer.fromJson<String>(json['pos']),
+      transect: serializer.fromJson<int>(json['transect']),
     );
   }
   @override
@@ -89,6 +100,7 @@ class Task extends DataClass implements Insertable<Task> {
       'subSpecie': serializer.toJson<String>(subSpecie),
       'submitVal': serializer.toJson<String>(submitVal),
       'pos': serializer.toJson<String>(pos),
+      'transect': serializer.toJson<int>(transect),
     };
   }
 
@@ -97,13 +109,15 @@ class Task extends DataClass implements Insertable<Task> {
           String ff,
           String subSpecie,
           String submitVal,
-          String pos}) =>
+          String pos,
+          int transect}) =>
       Task(
         id: id ?? this.id,
         ff: ff ?? this.ff,
         subSpecie: subSpecie ?? this.subSpecie,
         submitVal: submitVal ?? this.submitVal,
         pos: pos ?? this.pos,
+        transect: transect ?? this.transect,
       );
   @override
   String toString() {
@@ -112,7 +126,8 @@ class Task extends DataClass implements Insertable<Task> {
           ..write('ff: $ff, ')
           ..write('subSpecie: $subSpecie, ')
           ..write('submitVal: $submitVal, ')
-          ..write('pos: $pos')
+          ..write('pos: $pos, ')
+          ..write('transect: $transect')
           ..write(')'))
         .toString();
   }
@@ -120,8 +135,12 @@ class Task extends DataClass implements Insertable<Task> {
   @override
   int get hashCode => $mrjf($mrjc(
       id.hashCode,
-      $mrjc(ff.hashCode,
-          $mrjc(subSpecie.hashCode, $mrjc(submitVal.hashCode, pos.hashCode)))));
+      $mrjc(
+          ff.hashCode,
+          $mrjc(
+              subSpecie.hashCode,
+              $mrjc(submitVal.hashCode,
+                  $mrjc(pos.hashCode, transect.hashCode))))));
   @override
   bool operator ==(dynamic other) =>
       identical(this, other) ||
@@ -130,7 +149,8 @@ class Task extends DataClass implements Insertable<Task> {
           other.ff == this.ff &&
           other.subSpecie == this.subSpecie &&
           other.submitVal == this.submitVal &&
-          other.pos == this.pos);
+          other.pos == this.pos &&
+          other.transect == this.transect);
 }
 
 class TasksCompanion extends UpdateCompanion<Task> {
@@ -139,12 +159,14 @@ class TasksCompanion extends UpdateCompanion<Task> {
   final Value<String> subSpecie;
   final Value<String> submitVal;
   final Value<String> pos;
+  final Value<int> transect;
   const TasksCompanion({
     this.id = const Value.absent(),
     this.ff = const Value.absent(),
     this.subSpecie = const Value.absent(),
     this.submitVal = const Value.absent(),
     this.pos = const Value.absent(),
+    this.transect = const Value.absent(),
   });
   TasksCompanion.insert({
     this.id = const Value.absent(),
@@ -152,6 +174,7 @@ class TasksCompanion extends UpdateCompanion<Task> {
     @required String subSpecie,
     @required String submitVal,
     @required String pos,
+    this.transect = const Value.absent(),
   })  : ff = Value(ff),
         subSpecie = Value(subSpecie),
         submitVal = Value(submitVal),
@@ -162,6 +185,7 @@ class TasksCompanion extends UpdateCompanion<Task> {
     Expression<String> subSpecie,
     Expression<String> submitVal,
     Expression<String> pos,
+    Expression<int> transect,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
@@ -169,6 +193,7 @@ class TasksCompanion extends UpdateCompanion<Task> {
       if (subSpecie != null) 'sub_specie': subSpecie,
       if (submitVal != null) 'submit_val': submitVal,
       if (pos != null) 'pos': pos,
+      if (transect != null) 'transect': transect,
     });
   }
 
@@ -177,13 +202,15 @@ class TasksCompanion extends UpdateCompanion<Task> {
       Value<String> ff,
       Value<String> subSpecie,
       Value<String> submitVal,
-      Value<String> pos}) {
+      Value<String> pos,
+      Value<int> transect}) {
     return TasksCompanion(
       id: id ?? this.id,
       ff: ff ?? this.ff,
       subSpecie: subSpecie ?? this.subSpecie,
       submitVal: submitVal ?? this.submitVal,
       pos: pos ?? this.pos,
+      transect: transect ?? this.transect,
     );
   }
 
@@ -205,7 +232,23 @@ class TasksCompanion extends UpdateCompanion<Task> {
     if (pos.present) {
       map['pos'] = Variable<String>(pos.value);
     }
+    if (transect.present) {
+      map['transect'] = Variable<int>(transect.value);
+    }
     return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('TasksCompanion(')
+          ..write('id: $id, ')
+          ..write('ff: $ff, ')
+          ..write('subSpecie: $subSpecie, ')
+          ..write('submitVal: $submitVal, ')
+          ..write('pos: $pos, ')
+          ..write('transect: $transect')
+          ..write(')'))
+        .toString();
   }
 }
 
@@ -258,8 +301,18 @@ class $TasksTable extends Tasks with TableInfo<$TasksTable, Task> {
         minTextLength: 1, maxTextLength: 512);
   }
 
+  final VerificationMeta _transectMeta = const VerificationMeta('transect');
+  GeneratedIntColumn _transect;
   @override
-  List<GeneratedColumn> get $columns => [id, ff, subSpecie, submitVal, pos];
+  GeneratedIntColumn get transect => _transect ??= _constructTransect();
+  GeneratedIntColumn _constructTransect() {
+    return GeneratedIntColumn('transect', $tableName, false,
+        defaultValue: const Constant(0));
+  }
+
+  @override
+  List<GeneratedColumn> get $columns =>
+      [id, ff, subSpecie, submitVal, pos, transect];
   @override
   $TasksTable get asDslTable => this;
   @override
@@ -296,6 +349,10 @@ class $TasksTable extends Tasks with TableInfo<$TasksTable, Task> {
           _posMeta, pos.isAcceptableOrUnknown(data['pos'], _posMeta));
     } else if (isInserting) {
       context.missing(_posMeta);
+    }
+    if (data.containsKey('transect')) {
+      context.handle(_transectMeta,
+          transect.isAcceptableOrUnknown(data['transect'], _transectMeta));
     }
     return context;
   }

@@ -9,6 +9,7 @@ class SubmitterData {
   final tempSubSpecie;
   final tempsubmitVal;
   final pos;
+
   SubmitterData(
       {this.tempff, this.tempSubSpecie, this.tempsubmitVal, this.pos}) {
     setter();
