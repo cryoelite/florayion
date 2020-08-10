@@ -140,6 +140,15 @@ class _MySubsState extends State<MySubs> {
                                           Container(
                                             width: _boxWidth,
                                             height: _boxHeight,
+                                            child: Row(
+                                              children: [
+                                                Text(" TT: "),
+                                                Text(
+                                                  listData[index]["Transect"]
+                                                      .toString(),
+                                                )
+                                              ],
+                                            ),
                                           ),
                                         ],
                                       ),
@@ -188,6 +197,8 @@ class _MySubsState extends State<MySubs> {
       return Icon(CustIcons.leaf);
     } else if (option == "Fauna") {
       return Icon(CustIcons.crow);
+    } else if (option == "Reptiles") {
+      return Icon(Icons.hdr_strong);
     } else {
       return Icon(CustIcons.shoe_prints);
     }

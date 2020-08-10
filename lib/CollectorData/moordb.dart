@@ -8,8 +8,7 @@ class Tasks extends Table {
   TextColumn get subSpecie => text().withLength(min: 1, max: 512)();
   TextColumn get submitVal => text().withLength(min: 1, max: 512)();
   TextColumn get pos => text().withLength(min: 1, max: 512)();
-  IntColumn get transect =>
-      integer().withDefault(const Constant(0)).autoIncrement()();
+  IntColumn get transect => integer()();
 }
 
 @UseMoor(tables: [Tasks])

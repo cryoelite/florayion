@@ -13,8 +13,13 @@ class SubmitToDBandFB {
   String tempSubSpecie;
   String tempSubmitVal;
   FDB filedb;
+  int transect;
   SubmitToDBandFB(
-      {this.tempff, this.tempSubSpecie, this.tempSubmitVal, this.filedb});
+      {this.tempff,
+      this.tempSubSpecie,
+      this.tempSubmitVal,
+      this.filedb,
+      this.transect});
 
   Future<void> submitToDb() async {
     Position pos = await Geolocator()
@@ -25,6 +30,7 @@ class SubmitToDBandFB {
         pos: Value((pos.toJson()).toString()),
         subSpecie: Value(this.tempSubSpecie),
         submitVal: Value(this.tempSubmitVal),
+        transect: Value(this.transect),
       ),
     );
     print("Succes: $id");
@@ -66,13 +72,15 @@ class SubmitToDBandFB {
       if (await DataConnectionChecker().hasConnection == true &&
           await randValChecker() == 1) {
         final tempDat = await filedb.getSinglyTask(getDat[i]);
-        SubmitterData(
+        final SubmitterData submit = SubmitterData(
           pos: tempDat.pos,
           tempSubSpecie: tempDat.subSpecie,
           tempff: tempDat.ff,
           tempsubmitVal: tempDat.submitVal,
+          transect: tempDat.transect,
         );
-        filedb.deleteSinglyTask(getDat[i]);
+        await submit.setter();
+        await filedb.deleteSinglyTask(getDat[i]);
         print("Submission Success");
       }
     }

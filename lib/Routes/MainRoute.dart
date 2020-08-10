@@ -7,6 +7,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:data_connection_checker/data_connection_checker.dart';
 import 'package:flutter/services.dart';
 import 'package:gradient_widgets/gradient_widgets.dart';
+import 'package:provider/provider.dart';
 
 import '../routeConfig.dart';
 import '../CreateDocCount.dart';
@@ -14,6 +15,17 @@ import '../CollectorData/SubmitToDBandFB.dart';
 import '../CollectorData/moordb.dart';
 import './MySubmissions.dart';
 import '../Reset.dart';
+import '../CollectorData/transectState.dart';
+
+enum SyncState {
+  START,
+  END,
+}
+
+enum UpdateState {
+  ON,
+  OFF,
+}
 
 class MBX extends StatefulWidget {
   @override
@@ -70,11 +82,14 @@ class _MBXState extends State<MBX> {
   }
 
   void getVal() {
-    statusTimer = Timer.periodic(Duration(minutes: 1), (_) => sendIntoDb());
+    statusTimer =
+        Timer.periodic(Duration(minutes: 1), (_) {}); // => sendIntoDb());
     timer = Timer.periodic(Duration(seconds: 5), (_) async {
-      str.sink.add(
-        await CreateDocCount().getValue(),
-      );
+      if (await DataConnectionChecker().hasConnection == true) {
+        str.sink.add(
+          await CreateDocCount().getValue(),
+        );
+      }
     });
   }
 
@@ -98,7 +113,19 @@ class _MBXState extends State<MBX> {
   final TextEditingController submitControl = TextEditingController();
   var specieList;
   final GetLocalCollection colDat = GetLocalCollection();
+  int transectCount = 1;
   final filedb = FDB();
+  SyncState syncState = SyncState.START;
+  UpdateState updateState = UpdateState.OFF;
+
+  Future<void> transectState() async {
+    final Map<bool, int> value = await TransectState().getTransectState;
+    transectCount = value.values.first;
+    if (value.keys.first) {
+      syncState = SyncState.END;
+      updateState = UpdateState.ON;
+    }
+  }
 
   subMapper(var val) {
     var temp = DropdownMenuItem<String>(
@@ -161,16 +188,18 @@ class _MBXState extends State<MBX> {
     }
   }
 
-  void submit() async {
+  Future submit() async {
     if (selectedFF != null &&
         selectedSubType != null &&
         submitControl.text != "") {
       statusClr.sink.add("Saving Submission");
       final submitData = SubmitToDBandFB(
-          tempff: selectedFF,
-          tempSubSpecie: selectedSubType,
-          tempSubmitVal: submitControl.text,
-          filedb: filedb);
+        tempff: selectedFF,
+        tempSubSpecie: selectedSubType,
+        tempSubmitVal: submitControl.text,
+        filedb: filedb,
+        transect: transectCount,
+      );
       await submitData.submitToDb();
       print("Sent submit from mainRoute");
       statusClr.sink.add("Idle");
@@ -186,7 +215,7 @@ class _MBXState extends State<MBX> {
     setState(() {});
   }
 
-  void sendIntoDb() async {
+  Future sendIntoDb() async {
     statusClr.sink.add("Syncing Database");
     await SubmitToDBandFB().syncDBtoFireBase(filedb);
     statusClr.sink.add("Idle");
@@ -220,30 +249,30 @@ class _MBXState extends State<MBX> {
   //MapImplementation
   GoogleMapController mapclr;
   LatLng position;
-  List<LatLng> markerPoints = [
-    LatLng(26.8011, 82.2369),
-    LatLng(26.7593, 82.2385)
-  ];
-  Future positioner() async {
+  List<LatLng> markerPoints = [];
+  Future<LatLng> positioner() async {
     Position pos = await Geolocator()
         .getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
     print(
         "Positioner | Current Position : [${pos.latitude}],[${pos.longitude}]");
     position = LatLng(pos.latitude, pos.longitude);
+    return position;
   }
 
   Set<Marker> markers = {};
   Set<Polyline> polylines = {};
 
-  void markerUpdate() {
-    markers.add(
-      Marker(
-        markerId: MarkerId("one"),
-        position: position,
-        icon: BitmapDescriptor.defaultMarkerWithHue(23),
-      ),
+  Future markerUpdate() async {
+    final LatLng pos = await positioner();
+    final Marker marker = Marker(
+      markerId: MarkerId("one"),
+      position: pos,
+      icon: BitmapDescriptor.defaultMarkerWithHue(23),
     );
+    markers.add(marker);
+    markerPoints.add(pos);
 
+    print("Polylines");
     polylines.add(
       Polyline(
         polylineId: PolylineId("value"),
@@ -253,6 +282,7 @@ class _MBXState extends State<MBX> {
         width: (RouterConf.blockV * 0.6).toInt(),
       ),
     );
+
     setState(() {});
   }
 
@@ -280,6 +310,13 @@ class _MBXState extends State<MBX> {
         },
       ),
     );
+  }
+
+  void resetMarker() {
+    markerPoints = [];
+    markers = {};
+    polylines = {};
+    setState(() {});
   }
 
   @override
@@ -345,278 +382,343 @@ class _MBXState extends State<MBX> {
           child: SizedBox(
             height: RouterConf.vArea,
             width: RouterConf.hArea,
-            child: Stack(
-              children: <Widget>[
-                ListView(
-                  physics: const NeverScrollableScrollPhysics(),
-                  children: <Widget>[
-                    AnimatedContainer(
-                      duration: Duration(milliseconds: 200),
-                      child: StreamBuilder(
-                        stream: slr,
-                        initialData: true,
-                        builder: (context, snapshot) {
-                          if (snapshot.hasData) {
-                            if (snapshot.data ==
-                                DataConnectionStatus.disconnected) {
-                              return Padding(
-                                padding: _defPad2,
-                                child: Card(
-                                  elevation: _elevate,
-                                  child: Container(
-                                    height: RouterConf.blockV * 5,
-                                    width: _defWidth,
-                                    color: _defColor,
-                                    child: Row(
-                                      children: <Widget>[
-                                        Padding(
-                                          padding: _defPad,
-                                          child: Icon(
-                                            Icons.error_outline,
-                                            color: Colors.red,
-                                          ),
-                                        ),
-                                        Padding(
-                                          padding: _defPad,
-                                          child: Text(
-                                            " Please Check Connectivity !",
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                              );
-                            } else {
-                              return Card(
-                                elevation: _elevate,
-                                child: Container(
-                                  height: 0,
-                                  width: 0,
-                                ),
-                              );
-                            }
-                          } else {
-                            return Card(
-                              elevation: _elevate,
-                              child: Container(
-                                height: 0,
-                                width: 0,
-                              ),
-                            );
-                          }
-                        },
-                      ),
-                    ),
-                    Padding(
-                      padding: _defPad2,
-                      child: Card(
-                        elevation: _elevate,
-                        child: Container(
-                          color: _defColor,
-                          height: _defHeight,
-                          width: _defWidth,
-                          child: Row(
-                            children: <Widget>[
-                              Padding(
-                                padding: _defPad,
-                                child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(10),
-                                  child: SizedBox(
-                                    height: RouterConf.blockH * 10,
-                                    width: RouterConf.blockV * 8,
-                                    child: Container(
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(16),
-                                        border: Border.all(
-                                          color: Colors.black,
-                                          width: RouterConf.blockH * 0.6,
-                                        ),
-                                      ),
-                                      child: Center(
-                                        child: StreamBuilder<int>(
-                                          stream: streamAlpha,
-                                          builder: (context, snapshot) {
-                                            return FittedBox(
-                                              child: Text(
-                                                snapshot.data.toString(),
-                                                style: TextStyle(
-                                                    fontSize:
-                                                        RouterConf.blockH * 6),
-                                              ),
-                                            );
-                                          },
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              Padding(
-                                padding: _defPad,
-                                child: Text(": Total number of submissions."),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
-                    Padding(
-                      padding: _defPad2,
-                      child: Card(
-                        elevation: _elevate,
-                        child: Container(
-                          width: _defWidth,
-                          height: _defHeight,
-                          color: _defColor,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: <Widget>[
-                              Padding(
-                                padding: _defPad,
-                                child: Material(
-                                  color: Colors.transparent,
-                                  child: Container(
-                                    width: _boxWidth,
-                                    height: _boxHeight,
-                                    child: InkWell(
-                                        enableFeedback: true,
-                                        excludeFromSemantics: true,
-                                        child: RaisedButton(
-                                          color: Colors.yellow,
-                                          onPressed: () => sendIntoDb(),
-                                          child: Text(
-                                            "Start Sync",
-                                          ),
-                                        )),
-                                  ),
-                                ),
-                              ),
-                              Text("|"),
-                              Padding(
-                                padding: _defPad,
-                                child: Material(
-                                  color: Colors.transparent,
-                                  child: Container(
-                                    width: _boxWidth,
-                                    height: _boxHeight,
-                                    child: IconButton(
-                                      icon: Icon(Icons.info_outline),
-                                      onPressed: () {
-                                        markerUpdate();
-                                      },
-                                      tooltip: "Info",
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              Text("|"),
-                              Padding(
-                                padding: _defPad,
-                                child: Material(
-                                  color: Colors.transparent,
-                                  child: Container(
-                                    width: _boxWidth,
-                                    height: _boxHeight,
-                                    child: IconButton(
-                                      icon: Icon(Icons.folder),
-                                      onPressed: () {
-                                        Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                            builder: (context) => MySubs(),
-                                          ),
-                                        );
-                                      },
-                                      tooltip: "My Submissions",
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
-                    Padding(
+            child: buildStack(context),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Stack buildStack(BuildContext context) {
+    return Stack(
+      children: <Widget>[
+        ListView(
+          physics: const NeverScrollableScrollPhysics(),
+          children: <Widget>[
+            AnimatedContainer(
+              duration: Duration(milliseconds: 200),
+              child: StreamBuilder(
+                stream: slr,
+                initialData: true,
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    if (snapshot.data == DataConnectionStatus.disconnected) {
+                      return Padding(
                         padding: _defPad2,
                         child: Card(
                           elevation: _elevate,
                           child: Container(
-                            height: _defHeight,
+                            height: RouterConf.blockV * 5,
                             width: _defWidth,
                             color: _defColor,
                             child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                               children: <Widget>[
                                 Padding(
                                   padding: _defPad,
-                                  child: Text(
-                                    "Status :  ",
-                                    style: TextStyle(
-                                        fontSize: RouterConf.blockV * 3),
+                                  child: Icon(
+                                    Icons.error_outline,
+                                    color: Colors.red,
                                   ),
                                 ),
                                 Padding(
                                   padding: _defPad,
-                                  child: Container(
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(16),
-                                      border: Border.all(
-                                        color: Colors.black,
-                                        width: RouterConf.blockH * 0.6,
-                                      ),
-                                    ),
-                                    child: StreamBuilder(
-                                      stream: statusStream,
-                                      builder: (_, snapshot) {
-                                        if (snapshot.connectionState ==
-                                                ConnectionState.waiting ||
-                                            snapshot.connectionState ==
-                                                ConnectionState.none) {
-                                          return defaultStatus();
-                                        } else {
-                                          return defaultStatus(
-                                              val: snapshot.data);
-                                        }
-                                      },
-                                    ),
+                                  child: Text(
+                                    " Please Check Connectivity !",
                                   ),
-                                )
+                                ),
                               ],
                             ),
                           ),
-                        )),
-                    Padding(
-                      padding: _defPad2,
+                        ),
+                      );
+                    } else {
+                      return Card(
+                        elevation: _elevate,
+                        child: Container(
+                          height: 0,
+                          width: 0,
+                        ),
+                      );
+                    }
+                  } else {
+                    return Card(
+                      elevation: _elevate,
                       child: Container(
-                        width: RouterConf.blockH * 80,
-                        height: RouterConf.blockV * 40,
-                        child: mapImplementation(context),
+                        height: 0,
+                        width: 0,
                       ),
-                    )
-                  ],
+                    );
+                  }
+                },
+              ),
+            ),
+            Padding(
+              padding: _defPad2,
+              child: Card(
+                elevation: _elevate,
+                child: Container(
+                  color: _defColor,
+                  height: _defHeight,
+                  width: _defWidth,
+                  child: Row(
+                    children: <Widget>[
+                      Padding(
+                        padding: _defPad,
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(10),
+                          child: SizedBox(
+                            height: RouterConf.blockH * 10,
+                            width: RouterConf.blockV * 8,
+                            child: Container(
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(16),
+                                border: Border.all(
+                                  color: Colors.black,
+                                  width: RouterConf.blockH * 0.6,
+                                ),
+                              ),
+                              child: Center(
+                                child: StreamBuilder<int>(
+                                  stream: streamAlpha,
+                                  builder: (context, snapshot) {
+                                    return FittedBox(
+                                      child: Text(
+                                        snapshot.data.toString(),
+                                        style: TextStyle(
+                                            fontSize: RouterConf.blockH * 6),
+                                      ),
+                                    );
+                                  },
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: _defPad,
+                        child: Text(": Total number of submissions."),
+                      ),
+                    ],
+                  ),
                 ),
-                Positioned(
-                  bottom: 0,
-                  right: RouterConf.blockH * 4,
-                  child: Padding(
-                    padding: _defPad2,
-                    child: FloatingActionButton(
-                      onPressed: () {
-                        buttonbuilder(context);
-                      },
-                      backgroundColor: Colors.amber,
-                      foregroundColor: Colors.white,
-                      child: Icon(Icons.spa),
+              ),
+            ),
+            Padding(
+              padding: _defPad2,
+              child: Card(
+                elevation: _elevate,
+                child: Container(
+                  width: _defWidth,
+                  height: _defHeight,
+                  color: _defColor,
+                  child: MultiProvider(
+                    providers: [
+                      ChangeNotifierProvider<ValueNotifier<SyncState>>(
+                        create: (_) => ValueNotifier<SyncState>(syncState),
+                      ),
+                      ChangeNotifierProvider<ValueNotifier<UpdateState>>(
+                        create: (_) => ValueNotifier<UpdateState>(updateState),
+                      ),
+                    ],
+                    child: Builder(
+                      builder: (context) => Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: <Widget>[
+                          buildSyncButton(context),
+                          Text("|"),
+                          buildUpdateButton(context),
+                          Text("|"),
+                          Padding(
+                            padding: _defPad,
+                            child: Material(
+                              color: Colors.transparent,
+                              child: Container(
+                                width: _boxWidth,
+                                height: _boxHeight,
+                                child: IconButton(
+                                  icon: Icon(Icons.folder),
+                                  onPressed: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => MySubs(),
+                                      ),
+                                    );
+                                  },
+                                  tooltip: "My Submissions",
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ),
-              ],
+              ),
             ),
+            Padding(
+                padding: _defPad2,
+                child: Card(
+                  elevation: _elevate,
+                  child: Container(
+                    height: _defHeight,
+                    width: _defWidth,
+                    color: _defColor,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: <Widget>[
+                        Padding(
+                          padding: _defPad,
+                          child: Text(
+                            "Status :  ",
+                            style: TextStyle(fontSize: RouterConf.blockV * 3),
+                          ),
+                        ),
+                        Padding(
+                          padding: _defPad,
+                          child: Container(
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(16),
+                              border: Border.all(
+                                color: Colors.black,
+                                width: RouterConf.blockH * 0.6,
+                              ),
+                            ),
+                            child: StreamBuilder(
+                              stream: statusStream,
+                              builder: (_, snapshot) {
+                                if (snapshot.connectionState ==
+                                        ConnectionState.waiting ||
+                                    snapshot.connectionState ==
+                                        ConnectionState.none) {
+                                  return defaultStatus();
+                                } else {
+                                  return defaultStatus(val: snapshot.data);
+                                }
+                              },
+                            ),
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
+                )),
+            Padding(
+              padding: _defPad2,
+              child: Container(
+                width: RouterConf.blockH * 80,
+                height: RouterConf.blockV * 40,
+                child: mapImplementation(context),
+              ),
+            )
+          ],
+        ),
+      ],
+    );
+  }
+
+  Widget buildUpdateButton(BuildContext context) {
+    return Consumer<ValueNotifier<UpdateState>>(builder: (_, value, __) {
+      return Padding(
+        padding: _defPad,
+        child: Material(
+          color: Colors.transparent,
+          child: Container(
+            width: _boxWidth,
+            height: _boxHeight - 20,
+            child: value.value == UpdateState.OFF
+                ? RaisedButton(
+                    color: Colors.deepOrange[200].withOpacity(0),
+                    onPressed: () {},
+                    child: Text(
+                      "Update",
+                    ),
+                  )
+                : RaisedButton(
+                    color: Colors.deepOrange[200],
+                    onPressed: () async {
+                      buttonbuilder(context);
+                      await markerUpdate();
+                    },
+                    child: Text(
+                      "Update",
+                    ),
+                  ),
           ),
         ),
-      ),
+      );
+    });
+  }
+
+  Widget buildSyncButton(BuildContext context) {
+    return FutureBuilder(
+      future: transectState(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.done) {
+          return Consumer<ValueNotifier<SyncState>>(
+            builder: (__, value, _) {
+              return Padding(
+                padding: _defPad,
+                child: Material(
+                  color: Colors.transparent,
+                  child: Container(
+                    width: _boxWidth,
+                    height: _boxHeight - 20,
+                    child: InkWell(
+                      enableFeedback: true,
+                      excludeFromSemantics: true,
+                      child: value.value == SyncState.START
+                          ? RaisedButton(
+                              color: Colors.green,
+                              onPressed: () async {
+                                value.value = SyncState.END;
+
+                                Map<bool, int> map = {true: transectCount};
+                                await TransectState().setTransectState(map);
+                                final updateProvider =
+                                    Provider.of<ValueNotifier<UpdateState>>(
+                                        context,
+                                        listen: false);
+                                updateProvider.value = UpdateState.ON;
+                                await markerUpdate();
+                              },
+                              child: Text(
+                                "Start Sync",
+                              ),
+                            )
+                          : RaisedButton(
+                              color: Colors.red,
+                              onPressed: () async {
+                                value.value = SyncState.START;
+                                await sendIntoDb();
+                                resetMarker();
+                                transectCount += 1;
+                                Map<bool, int> map = {false: transectCount};
+                                await TransectState().setTransectState(map);
+                                final updateProvider =
+                                    Provider.of<ValueNotifier<UpdateState>>(
+                                        context,
+                                        listen: false);
+                                updateProvider.value = UpdateState.OFF;
+                              },
+                              child: Text(
+                                "Stop Sync",
+                              ),
+                            ),
+                    ),
+                  ),
+                ),
+              );
+            },
+          );
+        } else {
+          return Container(
+            color: Colors.white,
+          );
+        }
+      },
     );
   }
 
@@ -819,6 +921,14 @@ class _MBXState extends State<MBX> {
                             ),
                           ),
                         ),
+                        Padding(
+                          padding: _defPad2,
+                          child: Container(
+                            child: Text(
+                              "Current Transect: $transectCount",
+                            ),
+                          ),
+                        ),
                         Container(
                           height: RouterConf.blockV * 5,
                           width: RouterConf.blockH * 20,
@@ -826,8 +936,8 @@ class _MBXState extends State<MBX> {
                             child: Text(
                               "Submit",
                             ),
-                            callback: () {
-                              submit();
+                            callback: () async {
+                              await submit();
                               Navigator.of(context).pop();
                             },
                           ),
