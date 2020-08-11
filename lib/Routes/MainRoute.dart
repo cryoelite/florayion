@@ -16,6 +16,7 @@ import '../CollectorData/moordb.dart';
 import './MySubmissions.dart';
 import '../Reset.dart';
 import '../CollectorData/transectState.dart';
+import '../LoginData/LocalUserData.dart';
 
 enum SyncState {
   START,
@@ -185,6 +186,16 @@ class _MBXState extends State<MBX> {
     } else {
       subTypeInfo = subDisturbance;
       print("disturbance");
+    }
+  }
+
+  Future checkLogin() async {
+    if (await UserName.checker() != 1) {
+      Navigator.pushNamedAndRemoveUntil(
+        context,
+        '/first',
+        (_) => false,
+      );
     }
   }
 
@@ -673,6 +684,7 @@ class _MBXState extends State<MBX> {
                           ? RaisedButton(
                               color: Colors.green,
                               onPressed: () async {
+                                await Future.sync(() => checkLogin());
                                 value.value = SyncState.END;
 
                                 Map<bool, int> map = {true: transectCount};
