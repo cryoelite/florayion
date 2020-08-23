@@ -650,7 +650,7 @@ class _MBXState extends State<MBX> {
                 : RaisedButton(
                     color: Colors.deepOrange[200],
                     onPressed: () async {
-                      buttonbuilder(context);
+                      await buttonbuilder(context);
                       await markerUpdate();
                     },
                     child: Text(
