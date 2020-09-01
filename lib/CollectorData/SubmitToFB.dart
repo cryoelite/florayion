@@ -36,6 +36,7 @@ class SubmitterData {
   }
 
   Future setter() async {
+    final List<String> posVal=pos.split("+");
     final QuerySnapshot idFind = await userData
         .document(await UserName().getName())
         .collection("Data")
@@ -66,7 +67,10 @@ class SubmitterData {
         "FFType": this.tempff,
         "Sub-Specie": (this.tempSubSpecie),
         "SpecieName": (this.tempsubmitVal),
-        "Location": ("$pos"),
+        "Latitude": posVal[0],
+        "Longitude": posVal[1],
+        "Altitude": posVal[2],
+        "Accuracy": posVal[3],
         "Time": DateTime.now(),
         "Transect": maxTransect + transect,
       },

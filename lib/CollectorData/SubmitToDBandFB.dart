@@ -24,10 +24,11 @@ class SubmitToDBandFB {
   Future<void> submitToDb() async {
     Position pos = await Geolocator()
         .getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+      final String posVal="${pos.latitude}+${pos.longitude}+${pos.altitude}+${pos.accuracy}";
     int id = await filedb.insertTask(
       TasksCompanion(
         ff: Value(this.tempff),
-        pos: Value((pos.toJson()).toString()),
+        pos: Value(posVal),
         subSpecie: Value(this.tempSubSpecie),
         submitVal: Value(this.tempSubmitVal),
         transect: Value(this.transect),
