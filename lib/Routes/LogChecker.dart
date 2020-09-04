@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 
-import '../Connectivity.dart';
+import '../Utilities/Connectivity.dart';
 import 'package:florayion/CollectorData/SetLocalCollection.dart';
 
 class LogChecker extends StatefulWidget {

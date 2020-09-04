@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../routeConfig.dart';
+import '../Utilities/routeConfig.dart';
 import '../CollectorData/listData.dart';
 import '../cust_icons_icons.dart';
 

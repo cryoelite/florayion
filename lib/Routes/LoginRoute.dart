@@ -7,7 +7,7 @@ import '../logindata/LoginData.dart';
 import '../logindata/RegisterData.dart';
 import 'package:florayion/i_c1_icons.dart';
 
-import '../routeConfig.dart';
+import '../Utilities/routeConfig.dart';
 
 class LoginRoute extends StatefulWidget {
   @override
@@ -153,7 +153,7 @@ class _LoginRouteState extends State<LoginRoute> {
             decoration: BoxDecoration(
               image: DecorationImage(
                 image: AssetImage(
-                  'lib/ImageAsset/ppo2.jpg',
+                  'lib/ImageAsset/background_2.jpg',
                 ),
               ),
             ),

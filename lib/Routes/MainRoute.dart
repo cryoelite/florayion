@@ -1,20 +1,19 @@
 import 'dart:async';
 
 import 'package:florayion/CollectorData/GetLocalCollection.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:flutter/material.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:data_connection_checker/data_connection_checker.dart';
 import 'package:flutter/services.dart';
 import 'package:gradient_widgets/gradient_widgets.dart';
 import 'package:provider/provider.dart';
 
-import '../routeConfig.dart';
-import '../CreateDocCount.dart';
+import '../Utilities/routeConfig.dart';
+import '../Utilities/CreateDocCount.dart';
 import '../CollectorData/SubmitToDBandFB.dart';
 import '../CollectorData/moordb.dart';
 import './MySubmissions.dart';
-import '../Reset.dart';
+import './MapInfo.dart';
+import '../Utilities/Reset.dart';
 import '../CollectorData/transectState.dart';
 import '../LoginData/LocalUserData.dart';
 
@@ -34,6 +33,10 @@ class MBX extends StatefulWidget {
 }
 
 class _MBXState extends State<MBX> {
+  //MapData
+  MapImplementation mapData;
+
+
   //Variables for streams
   final Stream<DataConnectionStatus> slr;
   final StreamController<int> str = StreamController();
@@ -110,7 +113,6 @@ class _MBXState extends State<MBX> {
   var subType;
   var subDisturbance;
   var subTypeInfo;
-  var subReptile;
   final TextEditingController submitControl = TextEditingController();
   var specieList;
   final GetLocalCollection colDat = GetLocalCollection();
@@ -168,9 +170,6 @@ class _MBXState extends State<MBX> {
         colDat.subTypeDisturbance.map<DropdownMenuItem<String>>((val) {
       return subMapper(val);
     }).toList();
-    subReptile = colDat.subTypeReptile.map<DropdownMenuItem<String>>((val) {
-      return subMapper(val);
-    }).toList();
   }
 
   void subTypeSelector() {
@@ -180,9 +179,6 @@ class _MBXState extends State<MBX> {
     } else if (selectedFF == "Fauna") {
       subTypeInfo = subFauna;
       print("fauna");
-    } else if (selectedFF == "Reptiles") {
-      subTypeInfo = subReptile;
-      print("Reptiles");
     } else {
       subTypeInfo = subDisturbance;
       print("disturbance");
@@ -257,77 +253,11 @@ class _MBXState extends State<MBX> {
     }
   }
 
-  //MapImplementation
-  GoogleMapController mapclr;
-  LatLng position;
-  List<LatLng> markerPoints = [];
-  Future<LatLng> positioner() async {
-    Position pos = await Geolocator()
-        .getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
-    print(
-        "Positioner | Current Position : [${pos.latitude}],[${pos.longitude}]");
-    position = LatLng(pos.latitude, pos.longitude);
-    return position;
-  }
 
-  Set<Marker> markers = {};
-  Set<Polyline> polylines = {};
-
-  Future markerUpdate() async {
-    final LatLng pos = await positioner();
-    final Marker marker = Marker(
-      markerId: MarkerId("one"),
-      position: pos,
-      icon: BitmapDescriptor.defaultMarkerWithHue(23),
-    );
-    markers.add(marker);
-    markerPoints.add(pos);
-
-    print("Polylines");
-    polylines.add(
-      Polyline(
-        polylineId: PolylineId("value"),
-        geodesic: true,
-        points: markerPoints,
-        color: Colors.indigo[400],
-        width: (RouterConf.blockV * 0.6).toInt(),
-      ),
-    );
-
-    setState(() {});
-  }
-
-  Widget mapImplementation(BuildContext context) {
-    return Container(
-      child: FutureBuilder(
-        future: positioner(),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.done) {
-            return GoogleMap(
-              onMapCreated: (GoogleMapController tempclr) {
-                mapclr = tempclr;
-              },
-              myLocationEnabled: true,
-              markers: markers,
-              polylines: polylines,
-              initialCameraPosition: CameraPosition(
-                target: position,
-                zoom: 13.0,
-              ),
-            );
-          } else {
-            return Container();
-          }
-        },
-      ),
-    );
-  }
-
-  void resetMarker() {
-    markerPoints = [];
-    markers = {};
-    polylines = {};
-    setState(() {});
+  Widget mapInfo()
+  {
+    mapData=MapImplementation();
+    return mapData;
   }
 
   @override
@@ -570,59 +500,56 @@ class _MBXState extends State<MBX> {
               ),
             ),
             Padding(
-                padding: _defPad2,
-                child: Card(
-                  elevation: _elevate,
-                  child: Container(
-                    height: _defHeight,
-                    width: _defWidth,
-                    color: _defColor,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: <Widget>[
-                        Padding(
-                          padding: _defPad,
-                          child: Text(
-                            "Status :  ",
-                            style: TextStyle(fontSize: RouterConf.blockV * 3),
+              padding: _defPad2,
+              child: Card(
+                elevation: _elevate,
+                child: Container(
+                  height: _defHeight,
+                  width: _defWidth,
+                  color: _defColor,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: <Widget>[
+                      Padding(
+                        padding: _defPad,
+                        child: Text(
+                          "Status :  ",
+                          style: TextStyle(fontSize: RouterConf.blockV * 3),
+                        ),
+                      ),
+                      Padding(
+                        padding: _defPad,
+                        child: Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(16),
+                            border: Border.all(
+                              color: Colors.black,
+                              width: RouterConf.blockH * 0.6,
+                            ),
+                          ),
+                          child: StreamBuilder(
+                            stream: statusStream,
+                            builder: (_, snapshot) {
+                              if (snapshot.connectionState ==
+                                      ConnectionState.waiting ||
+                                  snapshot.connectionState ==
+                                      ConnectionState.none) {
+                                return defaultStatus();
+                              } else {
+                                return defaultStatus(val: snapshot.data);
+                              }
+                            },
                           ),
                         ),
-                        Padding(
-                          padding: _defPad,
-                          child: Container(
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(16),
-                              border: Border.all(
-                                color: Colors.black,
-                                width: RouterConf.blockH * 0.6,
-                              ),
-                            ),
-                            child: StreamBuilder(
-                              stream: statusStream,
-                              builder: (_, snapshot) {
-                                if (snapshot.connectionState ==
-                                        ConnectionState.waiting ||
-                                    snapshot.connectionState ==
-                                        ConnectionState.none) {
-                                  return defaultStatus();
-                                } else {
-                                  return defaultStatus(val: snapshot.data);
-                                }
-                              },
-                            ),
-                          ),
-                        )
-                      ],
-                    ),
+                      )
+                    ],
                   ),
-                )),
+                ),
+              ),
+            ),
             Padding(
               padding: _defPad2,
-              child: Container(
-                width: RouterConf.blockH * 80,
-                height: RouterConf.blockV * 40,
-                child: mapImplementation(context),
-              ),
+              child: mapInfo(),
             )
           ],
         ),
@@ -651,7 +578,7 @@ class _MBXState extends State<MBX> {
                     color: Colors.deepOrange[200],
                     onPressed: () async {
                       await buttonbuilder(context);
-                      await markerUpdate();
+                      await mapData.mp.markerUpdate();
                     },
                     child: Text(
                       "Update",
@@ -694,7 +621,7 @@ class _MBXState extends State<MBX> {
                                         context,
                                         listen: false);
                                 updateProvider.value = UpdateState.ON;
-                                await markerUpdate();
+                                await mapData.mp.markerUpdate();
                               },
                               child: Text(
                                 "Start Sync",
@@ -705,7 +632,7 @@ class _MBXState extends State<MBX> {
                               onPressed: () async {
                                 value.value = SyncState.START;
                                 await sendIntoDb();
-                                resetMarker();
+                                mapData.mp.resetMarker();
                                 transectCount += 1;
                                 Map<bool, int> map = {false: transectCount};
                                 await TransectState().setTransectState(map);

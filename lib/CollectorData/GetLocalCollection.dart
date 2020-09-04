@@ -3,9 +3,9 @@ import 'dart:io';
 import 'SetLocalCollection.dart';
 
 class GetLocalCollection {
-  final ff = ["Flora", "Fauna", "Disturbance", "Reptiles"];
+  final ff = ["Flora", "Fauna", "Disturbance"];
   final subTypeFlora = ["Tree", "Shurb", "Grass"];
-  final subTypeFauna = ["Mammals", "Birds"];
+  final subTypeFauna = ["Mammals", "Birds","reptiles",];
   final subTypeDisturbance = [
     "Activity site",
     "Human",
@@ -13,9 +13,7 @@ class GetLocalCollection {
     "Sand Mining",
     "livestock"
   ];
-  final subTypeReptile = ["reptiles"];
   List<String> fileyaDis;
-  List<String> fileyaRep;
   List<String> fileyaFlora;
   List<String> fileyaFauna;
 
@@ -28,8 +26,6 @@ class GetLocalCollection {
     final faunaFile = File('$path/faunaDat.txt');
     fileyaFauna = await faunaFile.readAsLines();
 
-    final repFile = File('$path/reptileDat.txt');
-    fileyaRep = await repFile.readAsLines();
 
     final floraFile = File('$path/floraDat.txt');
     fileyaFlora = await floraFile.readAsLines();
@@ -47,11 +43,6 @@ class GetLocalCollection {
     } else if (option == "Fauna") {
       final temp = fileyaFauna[
           (fileyaFauna.indexWhere((elem) => elem == subSpecie)) + 1];
-      final xSpecie = (temp.substring(1, temp.length - 1)).split(", ");
-      return xSpecie;
-    } else if (option == "Reptiles") {
-      final temp =
-          fileyaRep[fileyaRep.indexWhere((elem) => elem == subSpecie) + 1];
       final xSpecie = (temp.substring(1, temp.length - 1)).split(", ");
       return xSpecie;
     } else {

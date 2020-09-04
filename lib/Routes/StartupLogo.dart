@@ -5,11 +5,11 @@ import 'package:flutter/services.dart';
 import 'package:get_version/get_version.dart';
 import 'package:data_connection_checker/data_connection_checker.dart';
 
-import 'package:florayion/VersionChecker.dart';
+import 'package:florayion/Utilities/VersionChecker.dart';
 import '../LoginData/LocalUserData.dart';
 import 'package:florayion/CollectorData/SetLocalCollection.dart';
-import '../routeConfig.dart';
-import '../Connectivity.dart';
+import '../Utilities/routeConfig.dart';
+import '../Utilities/Connectivity.dart';
 
 class StartupLogo extends StatefulWidget {
   @override
@@ -96,7 +96,7 @@ class _StartupLogoState extends State<StartupLogo> {
       width: double.infinity,
       child: Center(
         child: Image.asset(
-          'lib/ImageAsset/xx.png',
+          'lib/ImageAsset/splashScreen.png',
         ),
       ),
     );

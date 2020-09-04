@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 
-import './LoginData/LocalUserData.dart';
-import './LoginData/keySign.dart';
+import '../LoginData/LocalUserData.dart';
+import '../LoginData/keySign.dart';
 
 class Reset {
   Future resetApp(BuildContext context) async {

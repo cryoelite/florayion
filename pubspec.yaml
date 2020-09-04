@@ -1,7 +1,7 @@
 name: florayion
 description: A data collection app for Project GTF.
 
-version: 2.0.0+11
+version: 2.2.0+12
 
 environment:
   sdk: ">=2.6.0 <3.0.0"
@@ -34,16 +34,16 @@ dev_dependencies:
 flutter_icons:
     android: "launcher_icon"
     ios: true
-    image_path : lib/ImageAsset/lino.png
+    image_path : lib/ImageAsset/launcher_icon.png
 
 flutter:
 
   uses-material-design: true
 
   assets:
-    - lib/ImageAsset/xx.png
-    - lib/ImageAsset/ppo.jpg
-    - lib/ImageAsset/ppo2.jpg
+    - lib/ImageAsset/splashScreen.png
+    - lib/ImageAsset/background_1.jpg
+    - lib/ImageAsset/background_2.jpg
 
   fonts:
     - family: CustIcons
