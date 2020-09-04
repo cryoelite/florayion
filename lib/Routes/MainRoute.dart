@@ -6,13 +6,15 @@ import 'package:data_connection_checker/data_connection_checker.dart';
 import 'package:flutter/services.dart';
 import 'package:gradient_widgets/gradient_widgets.dart';
 import 'package:provider/provider.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 import '../Utilities/routeConfig.dart';
 import '../Utilities/CreateDocCount.dart';
 import '../CollectorData/SubmitToDBandFB.dart';
 import '../CollectorData/moordb.dart';
 import './MySubmissions.dart';
-import './MapInfo.dart';
+
 import '../Utilities/Reset.dart';
 import '../CollectorData/transectState.dart';
 import '../LoginData/LocalUserData.dart';
@@ -34,8 +36,88 @@ class MBX extends StatefulWidget {
 
 class _MBXState extends State<MBX> {
   //MapData
-  MapImplementation mapData;
+  GoogleMapController mapclr;
+  LatLng position;
+  List<LatLng> markerPoints = [];
+  Set<Marker> markers = {};
+  Set<Polyline> polylines = {};
+  StateSetter mapState;
 
+  Future markerUpdate() async {
+    final LatLng pos = await positioner();
+    final Marker marker = Marker(
+      markerId: MarkerId("one"),
+      position: pos,
+      icon: BitmapDescriptor.defaultMarkerWithHue(23),
+    );
+    markers.add(marker);
+    markerPoints.add(pos);
+
+    print("Polylines");
+    polylines.add(
+      Polyline(
+        polylineId: PolylineId("value"),
+        geodesic: true,
+        points: markerPoints,
+        color: Colors.indigo[400],
+        width: (RouterConf.blockV * 0.6).toInt(),
+      ),
+    );
+  }
+
+  Widget mapData(BuildContext context) {
+    print("mapData started");
+    return Container(
+      child: GoogleMap(
+        onMapCreated: (GoogleMapController tempclr) {
+          mapclr = tempclr;
+        },
+        myLocationEnabled: true,
+        markers: markers,
+        polylines: polylines,
+        initialCameraPosition: CameraPosition(
+          target: position,
+          zoom: 13.0,
+        ),
+      ),
+    );
+  }
+
+  void resetMarker() {
+    markerPoints = [];
+    markers = {};
+    polylines = {};
+    mapState(() {});
+  }
+
+  Future<LatLng> positioner() async {
+    Position pos = await Geolocator()
+        .getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+    print(
+        "Positioner | Current Position : [${pos.latitude}],[${pos.longitude}]");
+    position = LatLng(pos.latitude, pos.longitude);
+    return position;
+  }
+
+  Widget mapImplementation(BuildContext context) {
+    return StatefulBuilder(builder: (context, StateSetter stateSetter) {
+      mapState = stateSetter;
+      return Container(
+        width: RouterConf.blockH * 80,
+        height: RouterConf.blockV * 40,
+        child: FutureBuilder(
+          future: positioner(),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.done) {
+              return mapData(context);
+            } else {
+              return Container();
+            }
+          },
+        ),
+      );
+    });
+  }
 
   //Variables for streams
   final Stream<DataConnectionStatus> slr;
@@ -251,13 +333,6 @@ class _MBXState extends State<MBX> {
       _tempWidth = _defWidth;
       return _tempWidth;
     }
-  }
-
-
-  Widget mapInfo()
-  {
-    mapData=MapImplementation();
-    return mapData;
   }
 
   @override
@@ -549,7 +624,7 @@ class _MBXState extends State<MBX> {
             ),
             Padding(
               padding: _defPad2,
-              child: mapInfo(),
+              child: mapImplementation(context),
             )
           ],
         ),
@@ -578,7 +653,7 @@ class _MBXState extends State<MBX> {
                     color: Colors.deepOrange[200],
                     onPressed: () async {
                       await buttonbuilder(context);
-                      await mapData.mp.markerUpdate();
+                      await markerUpdate();
                     },
                     child: Text(
                       "Update",
@@ -621,7 +696,7 @@ class _MBXState extends State<MBX> {
                                         context,
                                         listen: false);
                                 updateProvider.value = UpdateState.ON;
-                                await mapData.mp.markerUpdate();
+                                await markerUpdate();
                               },
                               child: Text(
                                 "Start Sync",
@@ -632,7 +707,7 @@ class _MBXState extends State<MBX> {
                               onPressed: () async {
                                 value.value = SyncState.START;
                                 await sendIntoDb();
-                                mapData.mp.resetMarker();
+                                resetMarker();
                                 transectCount += 1;
                                 Map<bool, int> map = {false: transectCount};
                                 await TransectState().setTransectState(map);
