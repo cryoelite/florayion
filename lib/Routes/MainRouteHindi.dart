@@ -14,7 +14,7 @@ import '../Utilities/routeConfig.dart';
 import '../Utilities/CreateDocCount.dart';
 import '../CollectorData/SubmitToDBandFB.dart';
 import '../CollectorData/moordb.dart';
-import './MySubmissions.dart';
+import 'MySubmissions.dart';
 
 import '../Utilities/Reset.dart';
 import '../CollectorData/transectState.dart';
@@ -30,12 +30,12 @@ enum UpdateState {
   OFF,
 }
 
-class MBX extends StatefulWidget {
+class MBXHindi extends StatefulWidget {
   @override
-  _MBXState createState() => _MBXState();
+  _MBXHindiState createState() => _MBXHindiState();
 }
 
-class _MBXState extends State<MBX> {
+class _MBXHindiState extends State<MBXHindi> {
   //MapData
   GoogleMapController mapclr;
   LatLng position;
@@ -129,7 +129,7 @@ class _MBXState extends State<MBX> {
   Timer statusTimer;
   Stream streamAlpha;
 
-  _MBXState() : slr = DataConnectionChecker().onStatusChange {
+  _MBXHindiState() : slr = DataConnectionChecker().onStatusChange {
     streamAlpha = str.stream;
     statusStream = statusClr.stream;
     getVal();
@@ -147,7 +147,7 @@ class _MBXState extends State<MBX> {
   final _defColor = Color(0xEA78D5FF);
   final double _boxWidth = (RouterConf.blockH) * 20;
   final double _boxHeight = (RouterConf.blockV) * 8;
-  static List<String> menuInfo = ["Language", "LogOut", "Exit"];
+  static List<String> menuInfo = ["भाषा", "लॉग आउट", "बंद"];
   TextStyle _defStyle2 = TextStyle(
     fontSize: (RouterConf.blockV) * 1.9,
     fontWeight: FontWeight.w700,
@@ -306,7 +306,7 @@ class _MBXState extends State<MBX> {
     if (selectedFF != null &&
         selectedSubType != null &&
         submitControl.text != "") {
-      statusClr.sink.add("Saving Submission");
+      statusClr.sink.add("सबमिशन सहेजा जा रहा है");
       final submitData = SubmitToDBandFB(
         tempff: selectedFF,
         tempSubSpecie: selectedSubType,
@@ -316,7 +316,7 @@ class _MBXState extends State<MBX> {
       );
       await submitData.submitToDb();
       print("Sent submit from mainRoute");
-      statusClr.sink.add("Idle");
+      statusClr.sink.add("स्थिर");
     }
     resetter();
   }
@@ -330,9 +330,9 @@ class _MBXState extends State<MBX> {
   }
 
   Future sendIntoDb() async {
-    statusClr.sink.add("Syncing Database");
+    statusClr.sink.add("डेटाबेस को सिंक किया जा रहा है");
     await SubmitToDBandFB().syncDBtoFireBase(filedb);
-    statusClr.sink.add("Idle");
+    statusClr.sink.add("स्थिर");
   }
 
   Future resetState(BuildContext context) async {
@@ -477,7 +477,7 @@ class _MBXState extends State<MBX> {
                                   Padding(
                                     padding: _defPad,
                                     child: Text(
-                                      " Please Check Connectivity !",
+                                      "कृपया कनेक्टिविटी की जाँच करें !",
                                       style: _defStyle,
                                     ),
                                   ),
@@ -524,7 +524,7 @@ class _MBXState extends State<MBX> {
                         Padding(
                           padding: _defPad,
                           child: Text(
-                            "SUBMISSIONS: ",
+                            "प्रस्तुतियाँ: ",
                             style: _defStyle,
                           ),
                         ),
@@ -616,7 +616,7 @@ class _MBXState extends State<MBX> {
                                         ),
                                       );
                                     },
-                                    tooltip: "My Submissions",
+                                    tooltip: "मेरी प्रस्तुतियाँ",
                                   ),
                                 ),
                               ),
@@ -643,7 +643,7 @@ class _MBXState extends State<MBX> {
                       Padding(
                         padding: _defPad,
                         child: Text(
-                          "STATUS: ",
+                          "स्थिति: ",
                           style: _defStyle,
                         ),
                       ),
@@ -801,7 +801,7 @@ class _MBXState extends State<MBX> {
     );
   }
 
-  Widget defaultStatus({String val = "Idle"}) {
+  Widget defaultStatus({String val = "स्थिर"}) {
     return Container(
       width: _boxWidth,
       height: _boxHeight,
@@ -823,7 +823,7 @@ class _MBXState extends State<MBX> {
           backgroundColor: _defColor,
           title: Center(
             child: Text(
-              "Input Details",
+              "इनपुट विवरण",
               style: _defStyle,
             ),
           ),
@@ -853,7 +853,7 @@ class _MBXState extends State<MBX> {
                                   Padding(
                                     padding: _defPad,
                                     child: Text(
-                                      "Type Of Occurence",
+                                      "घट का प्रकार",
                                       style: _defStyle2,
                                     ),
                                   ),
@@ -865,7 +865,7 @@ class _MBXState extends State<MBX> {
                                         hint: Padding(
                                           padding: _defPad,
                                           child: Text(
-                                            "Select Here: ",
+                                            "यहां चुनें: ",
                                             style: _defStyle2,
                                           ),
                                         ),
@@ -911,7 +911,7 @@ class _MBXState extends State<MBX> {
                                         hint: Padding(
                                           padding: _defPad,
                                           child: Text(
-                                            "Select Here: ",
+                                            "यहां चुनें: ",
                                             style: _defStyle2,
                                           ),
                                         ),
@@ -942,7 +942,7 @@ class _MBXState extends State<MBX> {
                                   Padding(
                                     padding: _defPad,
                                     child: Text(
-                                      "Select one of the options or type your own",
+                                      "किसी एक विकल्प का चयन करें या अपना स्वयं का लिखें",
                                       style: _defStyle2,
                                     ),
                                   ),
@@ -995,7 +995,7 @@ class _MBXState extends State<MBX> {
                           padding: _defPad2,
                           child: Container(
                             child: Text(
-                              "Current Transect: $transectCount",
+                              "वर्तमान लाइन: $transectCount",
                               style: _defStyle2,
                             ),
                           ),
@@ -1011,7 +1011,7 @@ class _MBXState extends State<MBX> {
                               ],
                             ),
                             child: Text(
-                              "Submit",
+                              "दर्ज",
                             ),
                             callback: () async {
                               await submit();

@@ -41,6 +41,17 @@ class UserName {
     return rand;
   }
 
+  Future setLang(String lang) async {
+    final file = await SharedPreferences.getInstance();
+    await file.setString("Language", lang);
+  }
+
+  Future getLang() async {
+    final file = await SharedPreferences.getInstance();
+    final lang = file.getString("Language");
+    return lang;
+  }
+
   static Future<int> checker() async {
     final file = await SharedPreferences.getInstance();
     if (file.containsKey("uid") == true) {

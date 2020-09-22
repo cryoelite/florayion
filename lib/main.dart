@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'Routes/StartupLogo.dart';
 import 'Routes/LoginRoute.dart';
 import 'Routes/MainRoute.dart';
+import 'Routes/MainRouteHindi.dart';
 import 'Utilities/invalidVersion.dart';
 import './Routes/LogChecker.dart';
 
@@ -30,6 +31,7 @@ class MainRouteFunc extends StatelessWidget {
         '/second': (context) => MBX(),
         '/third': (context) => InvalidVer(),
         '/fourth': (context) => LogChecker(),
+        '/fifth': (context) => MBXHindi(),
       },
     );
   }

@@ -4,12 +4,12 @@ import '../CollectorData/listData.dart';
 import '../cust_icons_icons.dart';
 import 'package:flare_flutter/flare_actor.dart';
 
-class MySubs extends StatefulWidget {
+class MySubsHindi extends StatefulWidget {
   @override
-  _MySubsState createState() => _MySubsState();
+  _MySubsHindiState createState() => _MySubsHindiState();
 }
 
-class _MySubsState extends State<MySubs> {
+class _MySubsHindiState extends State<MySubsHindi> {
   List listData = [];
   final double _defHeight = (RouterConf.blockV) * 10;
   final double _defWidth = (RouterConf.blockH) * 80;
@@ -69,7 +69,7 @@ class _MySubsState extends State<MySubs> {
                 
               ), */
               Text(
-                "My Submissions",
+                "मेरी प्रस्तुतियाँ",
                 style: TextStyle(
                   fontSize: (RouterConf.blockV) * 4,
                   color: Color(
@@ -130,7 +130,7 @@ class _MySubsState extends State<MySubs> {
                                                   child: Row(
                                                     children: <Widget>[
                                                       Text(
-                                                        "Type: ",
+                                                        "प्रकार: ",
                                                         style: _defStyle,
                                                       ),
                                                       Text(
@@ -147,7 +147,7 @@ class _MySubsState extends State<MySubs> {
                                                     child: Row(
                                                       children: <Widget>[
                                                         Text(
-                                                          "Details: ",
+                                                          "विवरण: ",
                                                           style: _defStyle,
                                                         ),
                                                         Text(
@@ -170,7 +170,7 @@ class _MySubsState extends State<MySubs> {
                                                   Row(
                                                     children: <Widget>[
                                                       Text(
-                                                        "Sub: ",
+                                                        "विषय: ",
                                                         style: _defStyle,
                                                       ),
                                                       Text(
@@ -186,7 +186,7 @@ class _MySubsState extends State<MySubs> {
                                                     child: Row(
                                                       children: [
                                                         Text(
-                                                          " TT: ",
+                                                          "लाइन: ",
                                                           style: _defStyle,
                                                         ),
                                                         Text(
@@ -234,7 +234,7 @@ class _MySubsState extends State<MySubs> {
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
-            Text("Your Submissions will show up in a sec, if any exist."),
+            Text("यदि कोई मौजूद है तो आपका सबमिशन एक सेकंड में दिखाई देगा।"),
             Icon(
               CustIcons.crow,
             ),
