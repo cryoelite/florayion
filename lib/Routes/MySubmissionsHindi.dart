@@ -21,7 +21,7 @@ class _MySubsHindiState extends State<MySubsHindi> {
   final double _boxWidth = (RouterConf.blockH) * 15;
   final double _boxHeight = (RouterConf.blockV) * 8;
   final TextStyle _defStyle = TextStyle(
-    fontSize: RouterConf.blockH * 3.6,
+    fontSize: RouterConf.blockH * 3.2,
     color: Colors.white,
     fontFamily: "Lato",
     fontWeight: FontWeight.w700,

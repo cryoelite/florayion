@@ -35,7 +35,7 @@ class TransectState {
   Future<int> get transectNumber async {
     final QuerySnapshot userData = await Firestore.instance
         .collection("userData")
-        .document(await UserName().getName())
+        .document(await UserDetails().getName())
         .collection("Data")
         .getDocuments();
 

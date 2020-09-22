@@ -24,7 +24,8 @@ class SubmitToDBandFB {
   Future<void> submitToDb() async {
     Position pos = await Geolocator()
         .getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
-      final String posVal="${pos.latitude}+${pos.longitude}+${pos.altitude}+${pos.accuracy}";
+    final String posVal =
+        "${pos.latitude}+${pos.longitude}+${pos.altitude}+${pos.accuracy}";
     int id = await filedb.insertTask(
       TasksCompanion(
         ff: Value(this.tempff),
@@ -39,9 +40,9 @@ class SubmitToDBandFB {
 
   Future<int> randValChecker() async {
     final userData = Firestore.instance.collection('userAU');
-    final name = await UserName().getName();
+    final name = await UserDetails().getName();
 
-    final String randVal = await UserName().getRandVal();
+    final String randVal = await UserDetails().getRandVal();
     final QuerySnapshot getter =
         await userData.document(name).collection('keys').getDocuments();
 

@@ -36,13 +36,13 @@ class SubmitterData {
   }
 
   Future setter() async {
-    final List<String> posVal=pos.split("+");
+    final List<String> posVal = pos.split("+");
     final QuerySnapshot idFind = await userData
-        .document(await UserName().getName())
+        .document(await UserDetails().getName())
         .collection("Data")
         .getDocuments();
     final QuerySnapshot transectFind = await userData
-        .document(await UserName().getName())
+        .document(await UserDetails().getName())
         .collection("Data")
         .getDocuments();
     int maxTransect = 0;
@@ -55,11 +55,11 @@ class SubmitterData {
     );
     id = idFind.documents.length;
     print(id);
-    print(await UserName().getName());
+    print(await UserDetails().getName());
     print(
         "Max Transect ${maxTransect.toString()} and internal transect ${this.transect.toString()}");
     await userData
-        .document(await UserName().getName())
+        .document(await UserDetails().getName())
         .collection("Data")
         .document(id.toString())
         .setData(
@@ -80,7 +80,7 @@ class SubmitterData {
   }
 
   Future totalEntries() async {
-    await userData.document(await UserName().getName()).setData(
+    await userData.document(await UserDetails().getName()).setData(
       {
         "TotalEntries": ((id + 1).toString()),
       },

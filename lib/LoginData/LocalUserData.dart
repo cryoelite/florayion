@@ -1,6 +1,6 @@
 import 'package:shared_preferences/shared_preferences.dart';
 
-class UserName {
+class UserDetails {
   static String name;
   static bool isLoggedin;
   static String randVal;
@@ -41,12 +41,12 @@ class UserName {
     return rand;
   }
 
-  Future setLang(String lang) async {
+  Future<void> setLang(String lang) async {
     final file = await SharedPreferences.getInstance();
     await file.setString("Language", lang);
   }
 
-  Future getLang() async {
+  Future<String> getLang() async {
     final file = await SharedPreferences.getInstance();
     final lang = file.getString("Language");
     return lang;

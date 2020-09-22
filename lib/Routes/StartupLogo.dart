@@ -20,10 +20,10 @@ class _StartupLogoState extends State<StartupLogo> {
   var localDataChecker;
   var lvcObject = Connectivity();
   void streamFunc(BuildContext context) async {
-    localDataChecker = await UserName.checker();
+    localDataChecker = await UserDetails.checker();
     if (await DataConnectionChecker().hasConnection == true) {
       SetLocalCollection.init();
-      proceeder(context);   
+      proceeder(context);
       streamer();
     } else {
       loginChecker();
@@ -109,12 +109,28 @@ class _StartupLogoState extends State<StartupLogo> {
         lvcObject.disabler();
         if (await checkVersion() == 1) {
           if (localDataChecker == 1) {
-            Navigator.pushNamedAndRemoveUntil(
-              context,
-              '/second',
-              (_) => false,
-            );
+            final String lang = await UserDetails().getLang();
+            if (lang == "Hindi") {
+              Navigator.pushNamedAndRemoveUntil(
+                context,
+                '/fifth',
+                (_) => false,
+              );
+            } else if (lang == "English") {
+              Navigator.pushNamedAndRemoveUntil(
+                context,
+                '/second',
+                (_) => false,
+              );
+            } else {
+              Navigator.pushNamedAndRemoveUntil(
+                context,
+                '/second',
+                (_) => false,
+              );
+            }
           } else {
+            await UserDetails().setLang("English");
             Navigator.pushNamedAndRemoveUntil(
               context,
               '/first',

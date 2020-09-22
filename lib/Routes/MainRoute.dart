@@ -221,6 +221,7 @@ class _MBXState extends State<MBX> {
   final filedb = FDB();
   SyncState syncState = SyncState.START;
   UpdateState updateState = UpdateState.OFF;
+  String lang = "English";
 
   Future<void> transectState(BuildContext context) async {
     final Map<bool, int> value = await TransectState().getTransectState;
@@ -293,7 +294,7 @@ class _MBXState extends State<MBX> {
   }
 
   Future checkLogin() async {
-    if (await UserName.checker() != 1) {
+    if (await UserDetails.checker() != 1) {
       Navigator.pushNamedAndRemoveUntil(
         context,
         '/first',
@@ -360,6 +361,10 @@ class _MBXState extends State<MBX> {
     }
   }
 
+  Future setLang() async {
+    await UserDetails().setLang(lang);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Material(
@@ -388,6 +393,7 @@ class _MBXState extends State<MBX> {
                   ),
                 ),
               ), */
+
               Container(
                 child: Material(
                   color: Colors.transparent,
@@ -406,9 +412,10 @@ class _MBXState extends State<MBX> {
                       } else {
                         resetter();
                         filedb.close();
+
                         Navigator.pushNamedAndRemoveUntil(
                           context,
-                          '/second',
+                          '/fifth',
                           (_) => false,
                         );
                       }
@@ -419,14 +426,22 @@ class _MBXState extends State<MBX> {
             ],
           ),
         ),
-        body: Container(
-          color: Color(0xFF1BCEEC),
-          child: SizedBox(
-            height: RouterConf.vArea,
-            width: RouterConf.hArea,
-            child: buildStack(context),
-          ),
-        ),
+        body: FutureBuilder(
+            future: setLang(),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.done) {
+                return Container(
+                  color: Color(0xFF1BCEEC),
+                  child: SizedBox(
+                    height: RouterConf.vArea,
+                    width: RouterConf.hArea,
+                    child: buildStack(context),
+                  ),
+                );
+              } else {
+                return Container();
+              }
+            }),
       ),
     );
   }

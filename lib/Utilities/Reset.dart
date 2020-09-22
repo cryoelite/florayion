@@ -5,13 +5,13 @@ import '../LoginData/keySign.dart';
 
 class Reset {
   Future resetApp(BuildContext context) async {
-    final name = await UserName().getName();
-    final randVal = await UserName().getRandVal();
+    final name = await UserDetails().getName();
+    final randVal = await UserDetails().getRandVal();
     print("name $name and key $randVal");
     final encTemp = ENCRV(name);
     await encTemp.deleteKey(randVal);
-    await UserName.setLog(false);
-    await UserName.deleter();
+    await UserDetails.setLog(false);
+    await UserDetails.deleter();
     Navigator.pushNamedAndRemoveUntil(
       context,
       '/',

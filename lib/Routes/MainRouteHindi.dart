@@ -14,7 +14,7 @@ import '../Utilities/routeConfig.dart';
 import '../Utilities/CreateDocCount.dart';
 import '../CollectorData/SubmitToDBandFB.dart';
 import '../CollectorData/moordb.dart';
-import 'MySubmissions.dart';
+import 'MySubmissionsHindi.dart';
 
 import '../Utilities/Reset.dart';
 import '../CollectorData/transectState.dart';
@@ -221,7 +221,7 @@ class _MBXHindiState extends State<MBXHindi> {
   final filedb = FDB();
   SyncState syncState = SyncState.START;
   UpdateState updateState = UpdateState.OFF;
-
+  final String lang = "Hindi";
   Future<void> transectState(BuildContext context) async {
     final Map<bool, int> value = await TransectState().getTransectState;
     transectCount = value.values.first;
@@ -293,7 +293,7 @@ class _MBXHindiState extends State<MBXHindi> {
   }
 
   Future checkLogin() async {
-    if (await UserName.checker() != 1) {
+    if (await UserDetails.checker() != 1) {
       Navigator.pushNamedAndRemoveUntil(
         context,
         '/first',
@@ -360,6 +360,10 @@ class _MBXHindiState extends State<MBXHindi> {
     }
   }
 
+  Future setLang() async {
+    await UserDetails().setLang(lang);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Material(
@@ -419,14 +423,18 @@ class _MBXHindiState extends State<MBXHindi> {
             ],
           ),
         ),
-        body: Container(
-          color: Color(0xFF1BCEEC),
-          child: SizedBox(
-            height: RouterConf.vArea,
-            width: RouterConf.hArea,
-            child: buildStack(context),
-          ),
-        ),
+        body: FutureBuilder(
+            future: setLang(),
+            builder: (context, snapshot) {
+              return Container(
+                color: Color(0xFF1BCEEC),
+                child: SizedBox(
+                  height: RouterConf.vArea,
+                  width: RouterConf.hArea,
+                  child: buildStack(context),
+                ),
+              );
+            }),
       ),
     );
   }
@@ -612,7 +620,7 @@ class _MBXHindiState extends State<MBXHindi> {
                                       Navigator.push(
                                         context,
                                         MaterialPageRoute(
-                                          builder: (context) => MySubs(),
+                                          builder: (context) => MySubsHindi(),
                                         ),
                                       );
                                     },

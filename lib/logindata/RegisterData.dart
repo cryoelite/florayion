@@ -15,8 +15,8 @@ class RegisterData {
         userName: userPp,
       });
       final encr = ENCRV(userName);
-      await UserName.setter(userName);
-      await UserName.writeIn(await encr.encrvDo());
+      await UserDetails.setter(userName);
+      await UserDetails.writeIn(await encr.encrvDo());
       return 1;
     } else {
       return 0;
